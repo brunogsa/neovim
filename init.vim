@@ -45,6 +45,9 @@ Plug 'vim-utils/vim-troll-stopper'
 Plug 'ntpeters/vim-better-whitespace'
 Plug 'raimondi/yaifa'
 
+Plug 'rking/ag.vim'
+Plug 'ctrlpvim/ctrlp.vim'
+
 " Highlight
 " =================
 Plug 'Yggdroot/indentLine'
@@ -60,12 +63,14 @@ Plug 'hail2u/vim-css3-syntax'
 
 " Auto Completion
 " =================
+" Default / Fast mechanism
+Plug 'vim-scripts/SyntaxComplete'
+
+" Slower / Better mechanism
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 
-Plug 'vim-scripts/SyntaxComplete'
 Plug 'wellle/tmux-complete.vim'
-
-Plug 'carlitux/deoplete-ternjs', { 'do': 'npm install -g tern' }
+Plug 'carlitux/deoplete-ternjs'
 Plug 'myhere/vim-nodejs-complete'
 Plug 'othree/jspc.vim'
 
@@ -186,6 +191,8 @@ nmap <Leader>lj :SplitjoinJoin<CR>
 " ===============
 let g:indentLine_char = '┆'
 let g:indentLine_color_term = 32
+let g:indentLine_faster = 1
+let g:indentLine_maxLines = 512
 
 
 " limelight.vim
@@ -241,31 +248,42 @@ let g:switch_mapping = "çç"
 " ===============
 let g:deoplete#enable_at_startup = 1
 let g:deoplete#enable_smart_case = 1
-let g:deoplete#auto_complete_start_length = 1
 let g:deoplete#enable_refresh_always = 1
-let g:deoplete#auto_complete_delay = 50
-let g:deoplete#disable_auto_complete = 1
+let g:deoplete#disable_auto_complete = 0
 
 let g:deoplete#omni#functions = {}
 
 let g:deoplete#omni#functions.javascript = [
     \ 'tern#Complete',
     \ 'jspc#omni',
-    \ 'syntaxcomplete#Complete',
-    \ 'webcomplete#complete'
+    \ 'syntaxcomplete#Complete'
 \]
 
-" Let <Tab> do the completion
-inoremap <silent><expr> <Tab>
+" Let <TAB> do the completion
+inoremap <silent><expr> <TAB>
     \ pumvisible() ? "\<C-n>" :
+    \ <SID>check_back_space() ? "\<TAB>" :
     \ deoplete#mappings#manual_complete()
+
+function! s:check_back_space() abort "{{{
+    let col = col('.') - 1
+    return !col || getline('.')[col - 1]  =~ '\s'
+endfunction"}}}
 
 " Close the documentation window when completion is done
 autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | pclose | endif
 
 
+" deoplete-ternjs
+" ===============
+" Use deoplete.
+let g:tern_request_timeout = 1
+let g:tern_show_signature_in_pum = '0'
+
+
 " neomake
 " ===============
+" FIXME: Not working
 autocmd! BufEnter,BufWritePost * Neomake
 let g:neomake_open_list = 2
 let g:neomake_verbose = 1
@@ -292,10 +310,29 @@ let g:neomake_javascript_enabled_makers = ['eslint']
 let g:neomake_javascript_eslint_exe='/usr/local/bin/eslint_d'
 
 
+" ag.vim
+" ===============
+let g:ag_prg = "/usr/bin/ag --vimgrep"
+let g:ag_working_path_mode = "r"
+
+
+" ctrlp.vim
+" ===============
+let g:ctrlp_map = '<c-p>'
+let g:ctrlp_cmd = 'CtrlPMixed'
+
+" Search on project
+let g:ctrlp_working_path_mode = 'r'
+
+" Ignore files from .gitignore
+let g:ctrlp_user_command = ['.git', 'cd %s && git ls-files -co --exclude-standard']
+
+
 " ===============================================
 " Core Settings
 " ===============================================
 
+set cmdheight=2
 
 " Avoid issues with UTF-8
 set encoding=utf-8
@@ -326,6 +363,12 @@ set title
 " Share clipboard with system
 set clipboard=unnamed,unnamedplus
 
+" Send deleted thing with 'x' and 'c' to black hole
+nnoremap x "_x
+vnoremap X "_X
+nnoremap c "_c
+vnoremap C "_C
+
 " No annoying backup files
 set nobackup
 set nowritebackup
@@ -336,6 +379,7 @@ map <silent> <Left> h
 map <silent> <Down> gj
 map <silent> <Up> gk
 map <silent> <Right> l
+
 
 " ===============================================
 " Interface
@@ -372,16 +416,12 @@ let g:html_indent_inctags = "html,body,head"
 " Automatically set wrap when starting a vim diff
 autocmd FilterWritePre * if &diff | setlocal wrap< | endif
 
-" True Colors
-set t_Co=256
-
 " Colorscheme
-autocmd BufReadPost * colorscheme wasabi256
-set background=dark
+colorscheme wasabi256
 
 " Transparency in some terminals
-autocmd BufReadPost * hi Normal ctermbg=none
-autocmd BufReadPost * highlight NonText ctermbg=none
+hi Normal ctermbg=none
+highlight NonText ctermbg=none
 
 " Colorscheme for vimdiff
 if &diff
