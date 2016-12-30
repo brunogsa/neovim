@@ -114,6 +114,8 @@ Plug 'junegunn/limelight.vim', { 'on': 'Limelight!' }
 Plug 'jkramer/vim-narrow', { 'on': 'Narrow' }
 Plug 'jkramer/vim-narrow', { 'on': 'Widen' }
 
+Plug 'janko-m/vim-test', { 'on': 'TestFile Mocha' }
+
 
 " Initialize plugin system
 call plug#end()
@@ -347,7 +349,7 @@ let g:markdown_syntax_conceal = 0
 let g:markdown_fenced_languages = ['html', 'python', 'bash=sh']
 
 " Auto Disable indent lines on markdown files
-au BufReadPre,FileReadPre,BufWritePost *.md,*.markdown :IndentLinesDisable
+au BufReadPre,FileReadPre *.md,*.markdown :IndentLinesDisable
 
 
 " vim-flavored-markdown
