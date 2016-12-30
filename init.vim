@@ -52,12 +52,24 @@ Plug 'ctrlpvim/ctrlp.vim'
 Plug 'Yggdroot/indentLine'
 Plug 'vim-scripts/CursorLineCurrentWindow'
 
+" javascript
 Plug 'othree/yajs.vim'
+
+"json
 Plug 'elzr/vim-json'
+
+" jsdoc
 Plug 'othree/jsdoc-syntax.vim'
 
+" html5
 Plug 'othree/html5.vim'
+
+" css3
 Plug 'hail2u/vim-css3-syntax'
+
+" markdown
+Plug 'tpope/vim-markdown'
+Plug 'jtratner/vim-flavored-markdown'
 
 " Auto Completion
 " =================
@@ -308,7 +320,7 @@ let g:neomake_javascript_eslint_exe='/usr/local/bin/eslint_d'
 
 " ag.vim
 " ===============
-let g:ag_prg = "/usr/bin/ag --vimgrep"
+let g:ag_prg = "/usr/bin/ag"
 let g:ag_working_path_mode = "r"
 
 
@@ -327,6 +339,23 @@ let g:ctrlp_user_command = ['.git', 'cd %s && git ls-files -co --exclude-standar
 " echodoc
 " ===============
 let g:echodoc_enable_at_startup = 1
+
+
+" vim-markdown
+" ===============
+let g:markdown_syntax_conceal = 0
+let g:markdown_fenced_languages = ['html', 'python', 'bash=sh']
+
+" Auto Disable indent lines on markdown files
+au BufReadPre,FileReadPre,BufWritePost *.md,*.markdown :IndentLinesDisable
+
+
+" vim-flavored-markdown
+" ===============
+augroup markdown
+    au!
+    au BufNewFile,BufRead *.md,*.markdown setlocal filetype=ghmarkdown
+augroup END
 
 " ===============================================
 " Core Settings
