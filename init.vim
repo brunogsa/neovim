@@ -115,8 +115,6 @@ Plug 'junegunn/limelight.vim', { 'on': 'Limelight!' }
 Plug 'jkramer/vim-narrow', { 'on': 'Narrow' }
 Plug 'jkramer/vim-narrow', { 'on': 'Widen' }
 
-Plug 'janko-m/vim-test', { 'on': 'TestFile Mocha' }
-
 
 " Initialize plugin system
 call plug#end()
