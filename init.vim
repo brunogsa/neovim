@@ -24,6 +24,7 @@ Plug 'alvan/vim-closetag'
 Plug 'chrisbra/vim-diff-enhanced'
 Plug 'rickhowe/diffchar.vim'
 Plug 'AndrewRadev/linediff.vim'
+Plug 'Yggdroot/vim-mark'
 
 Plug 'tpope/vim-repeat'
 Plug 'nelstrom/vim-visual-star-search'
