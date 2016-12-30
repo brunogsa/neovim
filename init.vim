@@ -51,7 +51,6 @@ Plug 'ctrlpvim/ctrlp.vim'
 " =================
 Plug 'Yggdroot/indentLine'
 Plug 'vim-scripts/CursorLineCurrentWindow'
-Plug 'itchyny/vim-cursorword'
 
 Plug 'othree/yajs.vim'
 Plug 'elzr/vim-json'
@@ -64,6 +63,7 @@ Plug 'hail2u/vim-css3-syntax'
 " =================
 " Default / Fast mechanism
 Plug 'ajh17/vimcompletesme'
+Plug 'Shougo/echodoc.vim'
 
 " Slower / Better mechanism
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
@@ -249,6 +249,7 @@ let g:deoplete#enable_refresh_always = 1
 let g:deoplete#disable_auto_complete = 0
 let g:deoplete#max_list = 32
 let g:deoplete#max_menu_width = 16
+let g:deoplete#auto_complete_start_length = 1
 
 let g:deoplete#omni#functions = {}
 
@@ -322,6 +323,10 @@ let g:ctrlp_working_path_mode = 'r'
 " Ignore files from .gitignore
 let g:ctrlp_user_command = ['.git', 'cd %s && git ls-files -co --exclude-standard']
 
+
+" echodoc
+" ===============
+let g:echodoc_enable_at_startup = 1
 
 " ===============================================
 " Core Settings
