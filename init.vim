@@ -2,7 +2,6 @@
 " Init plugins
 " ===============================================
 
-
 " Make sure you use single quotes
 call plug#begin('~/.local/share/nvim/plugged')
 
@@ -64,7 +63,7 @@ Plug 'hail2u/vim-css3-syntax'
 " Auto Completion
 " =================
 " Default / Fast mechanism
-Plug 'vim-scripts/SyntaxComplete'
+Plug 'ajh17/vimcompletesme'
 
 " Slower / Better mechanism
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
@@ -107,11 +106,9 @@ Plug 'jkramer/vim-narrow', { 'on': 'Widen' }
 " Initialize plugin system
 call plug#end()
 
-
 " ===============================================
 " Plugin Configs
 " ===============================================
-
 
 " NERDTree
 " ===============
@@ -250,6 +247,8 @@ let g:deoplete#enable_at_startup = 1
 let g:deoplete#enable_smart_case = 1
 let g:deoplete#enable_refresh_always = 1
 let g:deoplete#disable_auto_complete = 0
+let g:deoplete#max_list = 32
+let g:deoplete#max_menu_width = 16
 
 let g:deoplete#omni#functions = {}
 
@@ -259,26 +258,22 @@ let g:deoplete#omni#functions.javascript = [
     \ 'syntaxcomplete#Complete'
 \]
 
-" Let <TAB> do the completion
-inoremap <silent><expr> <TAB>
-    \ pumvisible() ? "\<C-n>" :
-    \ <SID>check_back_space() ? "\<TAB>" :
-    \ deoplete#mappings#manual_complete()
-
-function! s:check_back_space() abort "{{{
-    let col = col('.') - 1
-    return !col || getline('.')[col - 1]  =~ '\s'
-endfunction"}}}
-
 " Close the documentation window when completion is done
 autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | pclose | endif
 
+" Fix an conflict with vim-multiple-cursors
+function g:Multiple_cursors_before()
+    let g:deoplete#disable_auto_complete = 1
+endfunction
+
+function g:Multiple_cursors_after()
+    let g:deoplete#disable_auto_complete = 0
+endfunction
 
 " deoplete-ternjs
 " ===============
 " Use deoplete.
 let g:tern_request_timeout = 1
-let g:tern_show_signature_in_pum = '0'
 
 
 " neomake
@@ -380,7 +375,6 @@ map <silent> <Down> gj
 map <silent> <Up> gk
 map <silent> <Right> l
 
-
 " ===============================================
 " Interface
 " ===============================================
@@ -441,11 +435,9 @@ set laststatus=2
 set relativenumber
 set number
 
-
 " ===============================================
 " Hotkeys
 " ===============================================
-
 
 " 'b' goes to the beginning of a line. 'e' to the end of the line.
 map b 0
