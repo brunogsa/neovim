@@ -48,6 +48,8 @@ Plug 'raimondi/yaifa'
 Plug 'Numkil/ag.nvim'
 Plug 'ctrlpvim/ctrlp.vim'
 
+Plug 'dietsche/vim-lastplace'
+
 " Highlight
 " =================
 Plug 'Yggdroot/indentLine'
@@ -357,6 +359,17 @@ augroup markdown
     au!
     au BufNewFile,BufRead *.md,*.markdown setlocal filetype=ghmarkdown
 augroup END
+
+
+" vim-json
+" ===============
+let g:vim_json_syntax_conceal = 0
+
+
+" vim-lastplace
+" ===============
+let g:lastplace_open_folds = 0
+let g:lastplace_ignore = "gitcommit,gitrebase,svn,hgcommit"
 
 " ===============================================
 " Core Settings
