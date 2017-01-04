@@ -45,7 +45,7 @@ Plug 'vim-utils/vim-troll-stopper'
 Plug 'ntpeters/vim-better-whitespace'
 Plug 'raimondi/yaifa'
 
-Plug 'rking/ag.vim'
+Plug 'Numkil/ag.nvim'
 Plug 'ctrlpvim/ctrlp.vim'
 
 " Highlight
@@ -319,7 +319,7 @@ let g:neomake_javascript_enabled_makers = ['eslint']
 let g:neomake_javascript_eslint_exe='/usr/local/bin/eslint_d'
 
 
-" ag.vim
+" ag.nvim
 " ===============
 let g:ag_prg = "/usr/bin/ag"
 let g:ag_working_path_mode = "r"
@@ -485,7 +485,37 @@ map <silent> <F2> :set number!<Cr>:set relativenumber!<Cr>
 vnoremap / <Esc>/\%V
 
 " PrettyXML: Format a line of XML
-vmap <Leader>fx :!xmllint --format --recover - 2>/dev/null<CR>
+vmap <silent> <Leader>fx :!xmllint --format --recover - 2>/dev/null<CR>
 
 " PrettyJSON: Format a line of JSON
-vmap <Leader>fj :!python -m json.tool<CR>
+vmap <silent> <Leader>fj :!python -m json.tool<CR>
+
+" Test Mocha files on Javascript projects
+map <silent> <F5> :terminal export CURRENT_GIT_ROOT=`git rev-parse --show-toplevel` && export CURRENT_TEST_DIR=`pwd` && export GETCONFIG_ROOT=$CURRENT_GIT_ROOT/config && cd $CURRENT_GIT_ROOT && mocha -g '<cword>' $CURRENT_TEST_DIR/% && unset CURRENT_GIT_ROOT CURRENT_TEST_DIR GETCONFIG_ROOT<CR>
+
+" My Mocka Runner
+" ===================
+
+" let g:MyTest_env_vars = {
+    " \ '*': [
+    " \   { 'name': 'CURRENT_GIT_ROOT', 'value': '`git rev-parse --show-toplevel`' },
+    " \   { 'name': 'CURRENT_DIR', 'value': '`pwd`' },
+    " \   { 'name': 'CURRENT_FILE_NAME', 'value': '%' },
+    " \   { 'name': 'CURRENT_FILE_PATH', 'value': '$CURRENT_DIR/$CURRENT_FILE_NAME' }
+    " \ ],
+    " \
+    " \ 'vmtd-facade-service': [
+    " \   { 'name': 'GETCONFIG_ROOT', 'value': '$CURRENT_GIT_ROOT' }
+    " \ ],
+    " \
+    " \ 'vmtd-postgres-service': [
+    " \   { 'name': 'GETCONFIG_ROOT', 'value': '$CURRENT_GIT_ROOT' }
+    " \ ],
+" \}
+
+" params: [ filter = DEFAULT_FROM_RUNNER ] [ filepath = CURRENT_FILE ] [ caseName ]
+" function Mocha(filter, filepath, case)
+" endfunction
+
+" Bindings
+
