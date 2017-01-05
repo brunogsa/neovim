@@ -74,6 +74,9 @@ Plug 'hail2u/vim-css3-syntax'
 Plug 'tpope/vim-markdown'
 Plug 'jtratner/vim-flavored-markdown'
 
+" sql
+Plug 'exu/pgsql.vim'
+
 " Auto Completion
 " =================
 " Default / Fast mechanism
@@ -370,6 +373,11 @@ let g:vim_json_syntax_conceal = 0
 " ===============
 let g:lastplace_open_folds = 0
 let g:lastplace_ignore = "gitcommit,gitrebase,svn,hgcommit"
+
+
+" pgsql.vim
+" ===============
+let g:sql_type_default = 'pgsql'
 
 " ===============================================
 " Core Settings
