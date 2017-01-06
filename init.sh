@@ -9,8 +9,10 @@ pip install --upgrade pip
 sudo npm install -g eslint_d
 sudo npm install -g tern
 sudo apt-get install -y silversearcher-ag
+
 git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
 ~/.fzf/install
+export FZF_CTRL_T_COMMAND='ag -g "" `git rev-parse --show-toplevel`'
 
 # Install it
 sudo add-apt-repository ppa:neovim-ppa/unstable
