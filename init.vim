@@ -46,7 +46,9 @@ Plug 'ntpeters/vim-better-whitespace'
 Plug 'raimondi/yaifa'
 
 Plug 'Numkil/ag.nvim'
-Plug 'ctrlpvim/ctrlp.vim'
+
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf.vim'
 
 Plug 'dietsche/vim-lastplace'
 
@@ -379,11 +381,29 @@ let g:lastplace_ignore = "gitcommit,gitrebase,svn,hgcommit"
 " ===============
 let g:sql_type_default = 'pgsql'
 
+
+" fzf + fzf.vim
+" ===============
+nnoremap <silent> <C-t> :ProjectFiles<CR>
+
+function! s:find_git_root()
+  return system('git rev-parse --show-toplevel 2> /dev/null')[:-2]
+endfunction
+
+command! ProjectFiles execute 'Files' s:find_git_root()
+
 " ===============================================
 " Core Settings
 " ===============================================
 
 set cmdheight=2
+
+" Improve Performance
+set ttyfast
+set regexpengine=1
+set synmaxcol=120
+syntax sync minlines=64
+syntax sync maxlines=128
 
 " Avoid issues with UTF-8
 set encoding=utf-8
