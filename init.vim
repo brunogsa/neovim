@@ -60,7 +60,7 @@ Plug 'vim-scripts/CursorLineCurrentWindow'
 " javascript
 Plug 'othree/yajs.vim'
 
-"json
+" json
 Plug 'elzr/vim-json'
 
 " jsdoc
@@ -96,6 +96,7 @@ Plug 'othree/jspc.vim'
 " Lint
 " =================
 Plug 'neomake/neomake'
+Plug 'tpope/vim-git'
 
 " Performance
 " =================
@@ -109,6 +110,7 @@ Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
 Plug 'justinmk/vim-sneak'
 Plug 'terryma/vim-multiple-cursors'
 Plug 'kshenoy/vim-signature'
+Plug 'yuttie/comfortable-motion.vim'
 
 Plug 'AndrewRadev/switch.vim'
 Plug 'andrewradev/splitjoin.vim', { 'on': 'SplitjoinSplit' }
@@ -133,6 +135,7 @@ call plug#end()
 " NERDTree
 " ===============
 map <F8> :NERDTreeToggle<CR>
+let NERDTreeHijackNetrw=1
 
 
 " vim-mark
