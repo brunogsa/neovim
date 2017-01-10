@@ -448,6 +448,34 @@ map <silent> <Down> gj
 map <silent> <Up> gk
 map <silent> <Right> l
 
+" Indentation options
+set autoindent
+set smartindent
+set cindent
+set preserveindent
+set copyindent
+
+" Spaces for identation
+set expandtab
+set smarttab
+
+" The size of your indentation
+set tabstop=2
+set shiftwidth=2
+set softtabstop=2
+set shiftround
+
+" Indentation for HTML
+let g:html_indent_script1 = "inc"
+let g:html_indent_style1 = "inc"
+let g:html_indent_inctags = "html,body,head"
+
+" Automatically set wrap when starting a vim diff
+autocmd FilterWritePre * if &diff | setlocal wrap< | endif
+
+" Virtual edit preferences: in block wise
+set virtualedit=block
+
 " ===============================================
 " Interface
 " ===============================================
@@ -457,31 +485,8 @@ syntax on
 " Add a line above the cursor
 set cursorline
 
-" Indentation options
-set autoindent
-set smartindent
-set cindent
-set preserveindent
-set copyindent
-set shiftround
-set smarttab
-set wrap
-
-" Uncomment it for Spaces, instead of Tabs
-set expandtab
-
-" The size of your indentation
-set tabstop=2
-set shiftwidth=2
-set softtabstop=2
-
-" Indentation for HTML
-let g:html_indent_script1 = "inc"
-let g:html_indent_style1 = "inc"
-let g:html_indent_inctags = "html,body,head"
-
-" Automatically set wrap when starting a vim diff
-autocmd FilterWritePre * if &diff | setlocal wrap< | endif
+" No wrap
+set nowrap
 
 " Colorscheme
 colorscheme wasabi256
@@ -497,8 +502,17 @@ endif
 
 " General vision
 set lbr
-set tw=250
-set scrolloff=5
+set scrolloff=999       " Cursor is always in the middle of screen
+
+" Keep search results at the center of the screen
+nnoremap n nzz
+nnoremap N Nzz
+
+nnoremap * *zz
+nnoremap # #zz
+
+nnoremap g* g*zz
+nnoremap g# g#zz
 
 " Status Line
 set noruler
@@ -511,29 +525,37 @@ set number
 " ===============================================
 " Hotkeys
 " ===============================================
+" Leader is SPACE
+let mapleader = "\<Space>"
+
+" Pressing many ESCs disable highlight from searches
+nnoremap <silenct> <ESC><ESC> :nohlsearch<CR><ESC>
 
 " 'b' goes to the beginning of a line. 'e' to the end of the line.
-map b 0
-map e $
+noremap b 0
+noremap e $
 
 " Easier to align
 xnoremap > >gv
 xnoremap < <gv
 
 " F2 toggles the number lines
-map <silent> <F2> :set number!<Cr>:set relativenumber!<Cr>
+noremap <silent> <F2> :set number!<Cr>:set relativenumber!<Cr>
 
 " Search only in visual selection
 vnoremap / <Esc>/\%V
 
 " PrettyXML: Format a line of XML
-vmap <silent> <Leader>fx :!xmllint --format --recover - 2>/dev/null<CR>
+vnoremap <silent> <Leader>fx :!xmllint --format --recover - 2>/dev/null<CR>
 
 " PrettyJSON: Format a line of JSON
-vmap <silent> <Leader>fj :!python -m json.tool<CR>
+vnoremap <silent> <Leader>fj :!python -m json.tool<CR>
+
+" Toggle quickfix
+nnoremap <leader>q :copen<CR>
 
 " Test Mocha files on Javascript projects
-map <silent> <F5> :terminal export CURRENT_GIT_ROOT=`git rev-parse --show-toplevel` && export CURRENT_TEST_DIR=`pwd` && export GETCONFIG_ROOT=$CURRENT_GIT_ROOT/config && cd $CURRENT_GIT_ROOT && mocha -g '<cword>' $CURRENT_TEST_DIR/% && unset CURRENT_GIT_ROOT CURRENT_TEST_DIR GETCONFIG_ROOT<CR>
+noremap <silent> <F5> :terminal export CURRENT_GIT_ROOT=`git rev-parse --show-toplevel` && export CURRENT_TEST_DIR=`pwd` && export GETCONFIG_ROOT=$CURRENT_GIT_ROOT/config && cd $CURRENT_GIT_ROOT && mocha -g '<cword>' $CURRENT_TEST_DIR/% && unset CURRENT_GIT_ROOT CURRENT_TEST_DIR GETCONFIG_ROOT<CR>
 
 " My Mocka Runner
 " ===================
