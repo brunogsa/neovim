@@ -522,6 +522,10 @@ set number
 map b 0
 map e $
 
+" Easier to align
+xnoremap > >gv
+xnoremap < <gv
+
 " F2 toggles the number lines
 map <silent> <F2> :set number!<Cr>:set relativenumber!<Cr>
 
