@@ -43,7 +43,7 @@ Plug 'rhysd/vim-textobj-anyblock'
 
 Plug 'vim-utils/vim-troll-stopper'
 Plug 'ntpeters/vim-better-whitespace'
-Plug 'raimondi/yaifa'
+Plug 'tpope/vim-sleuth'
 
 Plug 'Numkil/ag.nvim'
 
@@ -193,12 +193,6 @@ let g:lightline = {
         \ 'separator': { 'left': '', 'right': '' },
         \ 'subseparator': { 'left': '|', 'right': '|' }
         \ }
-
-
-" yaifa
-" ===============
-let g:yafa_tab_width = 4
-let g:yafa_indentation = 1
 
 
 " splitjoin.vim
