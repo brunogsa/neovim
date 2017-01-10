@@ -13,7 +13,7 @@ Plug 'neovim/python-client'
 Plug 'itchyny/lightline.vim'
 
 Plug 'henrik/vim-indexed-search'
-Plug 'scrooloose/nerdcommenter'
+Plug 'tomtom/tcomment_vim'
 
 Plug 'Raimondi/delimitMate'
 Plug 'tpope/vim-surround'
@@ -146,21 +146,6 @@ map <2-LeftMouse> \m
 
 " Maximum colors available
 let g:mwDefaultHighlightingPalette = 'maximum'
-
-
-" nerdcommenter
-" ===============
-map '' <Leader>c<Space>
-vmap '' <Leader>c<Space>
-
-" Add spaces after comment delimiters by default
-let g:NERDSpaceDelims = 1
-
-" Use compact syntax for prettified multi-line comments
-let g:NERDCompactSexyComs = 1
-
-" Allow commenting and inverting empty lines (useful when commenting a region)
-let g:NERDCommentEmptyLines = 0
 
 
 " delimitMate
@@ -388,6 +373,11 @@ function! s:find_git_root()
 endfunction
 
 command! ProjectFiles execute 'Files' s:find_git_root()
+
+
+" tcomment_vim
+" ===============
+let g:tcomment#blank_lines = 0
 
 " ===============================================
 " Core Settings
