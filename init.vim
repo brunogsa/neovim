@@ -10,10 +10,7 @@ set mouse=
 
 " Improve Performance
 set ttyfast
-set scrolljump=5
-
 set regexpengine=1
-set lazyredraw
 
 set synmaxcol=120
 syntax sync minlines=512
@@ -203,15 +200,15 @@ Plug 'chrisbra/vim-diff-enhanced'
 Plug 'rickhowe/diffchar.vim'
 Plug 'AndrewRadev/linediff.vim'
 
-Plug 'Yggdroot/vim-mark'
+" Plug 'Yggdroot/vim-mark'
 " Configs
   " FIXME: Not working, I don't know why
-  nmap <Leader>h \m
-  vmap <Leader>h \m
-  nmap <2-LeftMouse> \m
+  " nmap <Leader>h \m
+  " vmap <Leader>h \m
+  " nmap <2-LeftMouse> \m
 
   " Maximum colors available
-  let g:mwDefaultHighlightingPalette = 'maximum'
+  " let g:mwDefaultHighlightingPalette = 'maximum'
 " *******
 
 Plug 'tpope/vim-repeat'
@@ -381,33 +378,33 @@ Plug 'othree/jspc.vim'
 " Lint
 " =================
 
-Plug 'neomake/neomake'
+" Plug 'neomake/neomake'
 " Configs
   " FIXME: Not working
-  autocmd! BufEnter,BufWritePost * Neomake
-  let g:neomake_open_list = 2
-  let g:neomake_verbose = 1
+  " autocmd! BufEnter,BufWritePost * Neomake
+  " let g:neomake_open_list = 2
+  " let g:neomake_verbose = 1
 
-  let neomake_javascript_enabled_makers = ['eslint']
+  " let neomake_javascript_enabled_makers = ['eslint']
 
-  let g:neomake_warning_sign = {
-    \ 'text': 'W',
-    \ 'texthl': 'WarningMsg',
-  \}
+  " let g:neomake_warning_sign = {
+    " \ 'text': 'W',
+    " \ 'texthl': 'WarningMsg',
+  " \}
 
-  let g:neomake_error_sign = {
-    \ 'text': 'E',
-    \ 'texthl': 'ErrorMsg',
-  \}
+  " let g:neomake_error_sign = {
+    " \ 'text': 'E',
+    " \ 'texthl': 'ErrorMsg',
+  " \}
 
   " ESLint
-  let g:neomake_javascript_eslint_maker = {
-    \ 'args': ['--no-color'],
-    \ 'errorformat': '%f: line %l\, col %c\, %m',
-  \}
+  " let g:neomake_javascript_eslint_maker = {
+    " \ 'args': ['--no-color'],
+    " \ 'errorformat': '%f: line %l\, col %c\, %m',
+  " \}
 
-  let g:neomake_javascript_enabled_makers = ['eslint']
-  let g:neomake_javascript_eslint_exe='/usr/local/bin/eslint_d'
+  " let g:neomake_javascript_enabled_makers = ['eslint']
+  " let g:neomake_javascript_eslint_exe='/usr/local/bin/eslint_d'
 " *******
 
 Plug 'tpope/vim-git'
@@ -514,7 +511,7 @@ set relativenumber
 
 " No wrap
 set wrap
-set textwidth=120
+set textwidth=256
 
 " Colorscheme
 colorscheme wasabi256
