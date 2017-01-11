@@ -1,4 +1,136 @@
 " ===============================================
+" Core Settings
+" ===============================================
+
+" More visibility for statuses
+set cmdheight=2
+
+" Disable mouse
+set mouse=
+
+" Improve Performance
+set ttyfast
+set scrolljump=5
+
+set regexpengine=1
+set lazyredraw
+
+set synmaxcol=120
+syntax sync minlines=512
+syntax sync maxlines=1024
+
+set timeoutlen=1000
+set ttimeoutlen=20
+
+" Avoid issues with UTF-8
+set encoding=utf-8
+scriptencoding utf-8
+
+" Fold options. I prefer fold by identation
+set foldmethod=indent
+set foldlevelstart=2
+set list lcs=tab:\┆\
+
+" Search options
+set incsearch
+set smartcase
+set nohlsearch
+
+" Split options
+set splitbelow
+set splitright
+
+" Completion options
+set wildmode=longest,list
+set wildmenu
+set completeopt=longest,menu
+
+" Set vim title automatically
+set title
+
+" Share clipboard with system
+set clipboard=unnamed,unnamedplus
+
+" Send deleted thing with 'x' and 'c' to black hole
+nnoremap x "_x
+vnoremap X "_X
+nnoremap c "_c
+vnoremap C "_C
+
+" No annoying backup files
+set nobackup
+set nowritebackup
+set noswapfile
+
+" Efficient way to move through your code using the Arrow Keys
+map <silent> <Left> h
+map <silent> <Down> gj
+map <silent> <Up> gk
+map <silent> <Right> l
+
+" Indentation options
+set autoindent
+set smartindent
+set cindent
+set preserveindent
+set copyindent
+
+" Spaces for identation
+set expandtab
+set smarttab
+
+" The size of your indentation
+set tabstop=2
+set shiftwidth=2
+set softtabstop=2
+set shiftround
+
+" Indentation for HTML
+let g:html_indent_script1 = "inc"
+let g:html_indent_style1 = "inc"
+let g:html_indent_inctags = "html,body,head"
+
+" Automatically set wrap when starting a vim diff
+autocmd FilterWritePre * if &diff | setlocal wrap< | endif
+
+" Virtual edit preferences: in block wise
+set virtualedit=block
+
+
+" ===============================================
+" Hotkeys
+" ===============================================
+" Leader is SPACE
+let mapleader = "\<Space>"
+
+" 'b' goes to the beginning of a line. 'e' to the end of the line.
+noremap b 0
+noremap e $
+
+" Easier to align
+xnoremap > >gv
+xnoremap < <gv
+
+" Toggles the number lines
+map <silent> <leader>n :set number!<Cr>:set relativenumber!<Cr>
+
+" Search only in visual selection
+vmap / <Esc>/\%V
+
+" PrettyXML: Format a line of XML
+vmap <silent> <Leader>fx :!xmllint --format --recover - 2>/dev/null<CR>
+
+" PrettyJSON: Format a line of JSON
+vmap <silent> <Leader>fj :!python -m json.tool<CR>
+
+" Selected last pasted text
+nmap gp V']
+
+" Test Mocha files on Javascript projects
+map <silent> <F5> :terminal export CURRENT_GIT_ROOT=`git rev-parse --show-toplevel` && export CURRENT_TEST_DIR=`pwd` && export GETCONFIG_ROOT=$CURRENT_GIT_ROOT/config && cd $CURRENT_GIT_ROOT && mocha -g '<cword>' $CURRENT_TEST_DIR/% && unset CURRENT_GIT_ROOT CURRENT_TEST_DIR GETCONFIG_ROOT<CR>
+
+
+" ===============================================
 " Init plugins
 " ===============================================
 
@@ -34,9 +166,19 @@ Plug 'itchyny/lightline.vim'
 
 Plug 'henrik/vim-indexed-search'
 
-Plug 'tomtom/tcomment_vim'
+Plug 'scrooloose/nerdcommenter'
 " Configs
-  let g:tcomment#blank_lines = 2
+  nmap '' <Leader>c<Space>
+  vmap '' <Leader>c<Space>
+
+  " Add spaces after comment delimiters by default
+  let g:NERDSpaceDelims = 1
+
+  " Use compact syntax for prettified multi-line comments
+  let g:NERDCompactSexyComs = 1
+
+  " Allow commenting and inverting empty lines (useful when commenting a region)
+  let g:NERDCommentEmptyLines = 0
 " *******
 
 Plug 'Valloric/ListToggle'
@@ -63,8 +205,10 @@ Plug 'AndrewRadev/linediff.vim'
 
 Plug 'Yggdroot/vim-mark'
 " Configs
-  xnoremap <Leader>h \m
-  xnoremap <2-LeftMouse> \m
+  " FIXME: Not working, I don't know why
+  nmap <Leader>h \m
+  vmap <Leader>h \m
+  nmap <2-LeftMouse> \m
 
   " Maximum colors available
   let g:mwDefaultHighlightingPalette = 'maximum'
@@ -104,7 +248,7 @@ Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 " Configs
   " Find files using ProjectFiles
-  nnoremap <silent> <C-t> :ProjectFiles<CR>
+  nmap <silent> <C-t> :ProjectFiles<CR>
 
   function! s:find_git_root()
     return system('git rev-parse --show-toplevel 2> /dev/null')[:-2]
@@ -114,7 +258,7 @@ Plug 'junegunn/fzf.vim'
 
   " Better command history with q:
   command! CmdHist call fzf#vim#command_history({'right': '40'})
-nnoremap q: :CmdHist<CR>
+nmap q: :CmdHist<CR>
 " *******
 
 Plug 'dietsche/vim-lastplace'
@@ -285,7 +429,7 @@ Plug 'tmux-plugins/vim-tmux-focus-events'
 
 Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
 " Configs
-  noremap <leader>t :NERDTreeToggle<CR>
+  map <leader>t :NERDTreeToggle<CR>
   let NERDTreeHijackNetrw=1
 " *******
 
@@ -294,28 +438,28 @@ Plug 'justinmk/vim-sneak'
   let g:sneak#s_next = 1
 
   "'s', sneak with 2 chars
-  nnoremap f <Plug>Sneak_s
-  nnoremap F <Plug>Sneak_S
-  xnoremap f <Plug>Sneak_s
-  xnoremap F <Plug>Sneak_S
-  onoremap f <Plug>Sneak_s
-  onoremap F <Plug>Sneak_S
+  nmap f <Plug>Sneak_s
+  nmap F <Plug>Sneak_S
+  xmap f <Plug>Sneak_s
+  xmap F <Plug>Sneak_S
+  omap f <Plug>Sneak_s
+  omap F <Plug>Sneak_S
 
   "replace 'f' with 1-char Sneak
-  nnoremap f <Plug>Sneak_f
-  nnoremap F <Plug>Sneak_F
-  xnoremap f <Plug>Sneak_f
-  xnoremap F <Plug>Sneak_F
-  onoremap f <Plug>Sneak_f
-  onoremap F <Plug>Sneak_F
+  nmap f <Plug>Sneak_f
+  nmap F <Plug>Sneak_F
+  xmap f <Plug>Sneak_f
+  xmap F <Plug>Sneak_F
+  omap f <Plug>Sneak_f
+  omap F <Plug>Sneak_F
 
   "replace 't' with 1-char Sneak
-  nnoremap t <Plug>Sneak_t
-  nnoremap T <Plug>Sneak_T
-  xnoremap t <Plug>Sneak_t
-  xnoremap T <Plug>Sneak_T
-  onoremap t <Plug>Sneak_t
-  onoremap T <Plug>Sneak_T
+  nmap t <Plug>Sneak_t
+  nmap T <Plug>Sneak_T
+  xmap t <Plug>Sneak_t
+  xmap T <Plug>Sneak_T
+  omap t <Plug>Sneak_t
+  omap T <Plug>Sneak_T
 " *******
 
 Plug 'terryma/vim-multiple-cursors'
@@ -330,8 +474,8 @@ Plug 'AndrewRadev/switch.vim'
 Plug 'andrewradev/splitjoin.vim', { 'on': 'SplitjoinSplit' }
 Plug 'andrewradev/splitjoin.vim', { 'on': 'SplitjoinJoin' }
 " Configs
-  nnoremap <Leader>ls :SplitjoinSplit<CR>
-  nnoremap <Leader>lj :SplitjoinJoin<CR>
+  nmap <Leader>ls :SplitjoinSplit<CR>
+  nmap <Leader>lj :SplitjoinJoin<CR>
 " *******
 
 Plug 'godlygeek/tabular', { 'on': 'Tabularize' }
@@ -356,111 +500,21 @@ call plug#end()
 
 
 " ===============================================
-" Core Settings
-" ===============================================
-
-" More visibility for statuses
-set cmdheight=2
-
-" Improve Performance
-set ttyfast
-set scrolljump=5
-
-set regexpengine=1
-set lazyredraw
-
-set synmaxcol=120
-syntax sync minlines=512
-syntax sync maxlines=1024
-
-set timeoutlen=1000
-set ttimeoutlen=20
-
-" Avoid issues with UTF-8
-set encoding=utf-8
-scriptencoding utf-8
-
-" Fold options. I prefer fold by identation
-set foldmethod=indent
-set foldlevelstart=2
-set list lcs=tab:\┆\
-
-" Search options
-set incsearch
-set smartcase
-set nohlsearch
-
-" Split options
-set splitbelow
-set splitright
-
-" Completion options
-set wildmode=longest,list
-set wildmenu
-set completeopt=longest,menu
-
-" Set vim title automatically
-set title
-
-" Share clipboard with system
-set clipboard=unnamed,unnamedplus
-
-" Send deleted thing with 'x' and 'c' to black hole
-nnoremap x "_x
-vnoremap X "_X
-nnoremap c "_c
-vnoremap C "_C
-
-" No annoying backup files
-set nobackup
-set nowritebackup
-set noswapfile
-
-" Efficient way to move through your code using the Arrow Keys
-noremap <silent> <Left> h
-noremap <silent> <Down> gj
-noremap <silent> <Up> gk
-noremap <silent> <Right> l
-
-" Indentation options
-set autoindent
-set smartindent
-set cindent
-set preserveindent
-set copyindent
-
-" Spaces for identation
-set expandtab
-set smarttab
-
-" The size of your indentation
-set tabstop=2
-set shiftwidth=2
-set softtabstop=2
-set shiftround
-
-" Indentation for HTML
-let g:html_indent_script1 = "inc"
-let g:html_indent_style1 = "inc"
-let g:html_indent_inctags = "html,body,head"
-
-" Automatically set wrap when starting a vim diff
-autocmd FilterWritePre * if &diff | setlocal wrap< | endif
-
-" Virtual edit preferences: in block wise
-set virtualedit=block
-
-" ===============================================
 " Interface
 " ===============================================
 
 syntax on
 
-" Add a line above the cursor
+" Add a line above the cursor - Disable for better performance
 set cursorline
 
+" Line numbers - Disable for better performance
+set number
+set relativenumber
+
 " No wrap
-set nowrap
+set wrap
+set textwidth=120
 
 " Colorscheme
 colorscheme wasabi256
@@ -491,65 +545,3 @@ nnoremap g# g#zz
 " Status Line
 set noruler
 set laststatus=2
-
-" ===============================================
-" Hotkeys
-" ===============================================
-" Leader is SPACE
-let mapleader = "\<Space>"
-
-" Pressing many ESCs disable highlight from searches
-nnoremap <silenct> <ESC><ESC> :nohlsearch<CR><ESC>
-
-" 'b' goes to the beginning of a line. 'e' to the end of the line.
-noremap b 0
-noremap e $
-
-" Easier to align
-xnoremap > >gv
-xnoremap < <gv
-
-" Toggles the number lines
-noremap <silent> <leader>n :set number!<Cr>:set relativenumber!<Cr>
-
-" Search only in visual selection
-vnoremap / <Esc>/\%V
-
-" PrettyXML: Format a line of XML
-vnoremap <silent> <Leader>fx :!xmllint --format --recover - 2>/dev/null<CR>
-
-" PrettyJSON: Format a line of JSON
-vnoremap <silent> <Leader>fj :!python -m json.tool<CR>
-
-" Selected last pasted text
-nnoremap gp `[v`]
-
-" Test Mocha files on Javascript projects
-noremap <silent> <F5> :terminal export CURRENT_GIT_ROOT=`git rev-parse --show-toplevel` && export CURRENT_TEST_DIR=`pwd` && export GETCONFIG_ROOT=$CURRENT_GIT_ROOT/config && cd $CURRENT_GIT_ROOT && mocha -g '<cword>' $CURRENT_TEST_DIR/% && unset CURRENT_GIT_ROOT CURRENT_TEST_DIR GETCONFIG_ROOT<CR>
-
-" My Mocka Runner
-" ===================
-
-" let g:MyTest_env_vars = {
-    " \ '*': [
-    " \   { 'name': 'CURRENT_GIT_ROOT', 'value': '`git rev-parse --show-toplevel`' },
-    " \   { 'name': 'CURRENT_DIR', 'value': '`pwd`' },
-    " \   { 'name': 'CURRENT_FILE_NAME', 'value': '%' },
-    " \   { 'name': 'CURRENT_FILE_PATH', 'value': '$CURRENT_DIR/$CURRENT_FILE_NAME' }
-    " \ ],
-    " \
-    " \ 'vmtd-facade-service': [
-    " \   { 'name': 'GETCONFIG_ROOT', 'value': '$CURRENT_GIT_ROOT' }
-    " \ ],
-    " \
-    " \ 'vmtd-postgres-service': [
-    " \   { 'name': 'GETCONFIG_ROOT', 'value': '$CURRENT_GIT_ROOT' }
-    " \ ],
-" \}
-
-" params: [ filter = DEFAULT_FROM_RUNNER ] [ filepath = CURRENT_FILE ] [ caseName ]
-" function Mocha(filter, filepath, case)
-" endfunction
-
-" Bindings
-
