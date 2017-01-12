@@ -378,33 +378,20 @@ Plug 'othree/jspc.vim'
 " Lint
 " =================
 
-" Plug 'neomake/neomake'
+Plug 'vim-syntastic/syntastic'
 " Configs
-  " FIXME: Not working
-  " autocmd! BufEnter,BufWritePost * Neomake
-  " let g:neomake_open_list = 2
-  " let g:neomake_verbose = 1
+  let g:syntastic_auto_loc_list = 1
+  let g:syntastic_loc_list_height = 3
+  let g:syntastic_check_on_wq = 1
+  let g:syntastic_always_populate_loc_list = 1
+  let g:statline_syntastic = 0
 
-  " let neomake_javascript_enabled_makers = ['eslint']
+  let g:syntastic_mode_map = { "mode": "active" }
+  let syntastic_aggregate_errors = 1
 
-  " let g:neomake_warning_sign = {
-    " \ 'text': 'W',
-    " \ 'texthl': 'WarningMsg',
-  " \}
-
-  " let g:neomake_error_sign = {
-    " \ 'text': 'E',
-    " \ 'texthl': 'ErrorMsg',
-  " \}
-
-  " ESLint
-  " let g:neomake_javascript_eslint_maker = {
-    " \ 'args': ['--no-color'],
-    " \ 'errorformat': '%f: line %l\, col %c\, %m',
-  " \}
-
-  " let g:neomake_javascript_enabled_makers = ['eslint']
-  " let g:neomake_javascript_eslint_exe='/usr/local/bin/eslint_d'
+  " JavaScript Checkers
+  let g:syntastic_javascript_checkers = ['eslint']
+  let g:syntastic_javascript_eslint_exec = 'eslint_d'
 " *******
 
 Plug 'tpope/vim-git'
