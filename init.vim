@@ -2,8 +2,7 @@
 " Core Settings
 " ===============================================
 
-" More visibility for statuses
-set cmdheight=2
+set cmdheight=1
 
 " Disable mouse
 set mouse=
@@ -161,7 +160,13 @@ Plug 'itchyny/lightline.vim'
   \}
 " *******
 
-Plug 'henrik/vim-indexed-search'
+Plug 'gelguy/Cmd2.vim'
+" Configs
+  cmap <F12> <Plug>(Cmd2Suggest)
+  nmap : :<F12>
+  nmap / /<F12>
+  nmap ? ?<F12>
+" *******
 
 Plug 'scrooloose/nerdcommenter'
 " Configs
@@ -211,6 +216,19 @@ Plug 'lfv89/vim-interestingwords'
     \ '22', '11', '19', '94', '89', '147', '52', '234']
 " *******
 
+Plug 'henrik/vim-indexed-search'
+" Configs
+  let g:indexed_search_mappings = 0
+
+  " Requires a lot of integrations...
+  autocmd VimEnter * nnoremap <silent> n nzz:ShowSearchIndex<CR>
+  autocmd VimEnter * nnoremap <silent> N Nzz:ShowSearchIndex<CR>
+
+  autocmd VimEnter * nnoremap <silent> * *zz:ShowSearchIndex<CR>
+  autocmd VimEnter * nnoremap <silent> # #zz:ShowSearchIndex<CR>
+" *******
+"
+
 Plug 'tpope/vim-repeat'
 Plug 'nelstrom/vim-visual-star-search'
 Plug 'rhysd/clever-f.vim'
@@ -255,7 +273,7 @@ Plug 'junegunn/fzf.vim'
 
   " Better command history with q:
   command! CmdHist call fzf#vim#command_history({'right': '40'})
-nmap q: :CmdHist<CR>
+nmap <silent> q: :CmdHist<CR>
 " *******
 
 Plug 'dietsche/vim-lastplace'
@@ -326,11 +344,6 @@ Plug 'exu/pgsql.vim'
 
 " Default / Fast mechanism
 Plug 'ajh17/vimcompletesme'
-
-Plug 'Shougo/echodoc.vim'
-" Configs
-  let g:echodoc_enable_at_startup = 1
-" *******
 
 " Slower / Better mechanism
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
@@ -516,16 +529,9 @@ endif
 set lbr
 set scrolloff=999       " Cursor is always in the middle of screen
 
-" Keep search results at the center of the screen
-nnoremap n nzz
-nnoremap N Nzz
-
-nnoremap * *zz
-nnoremap # #zz
-
-nnoremap g* g*zz
-nnoremap g# g#zz
-
 " Status Line
 set noruler
 set laststatus=2
+
+" More visible search
+highlight IncSearch guibg=red ctermbg=red term=underline
