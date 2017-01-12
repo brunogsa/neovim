@@ -200,15 +200,15 @@ Plug 'chrisbra/vim-diff-enhanced'
 Plug 'rickhowe/diffchar.vim'
 Plug 'AndrewRadev/linediff.vim'
 
-" Plug 'Yggdroot/vim-mark'
+Plug 'lfv89/vim-interestingwords'
 " Configs
-  " FIXME: Not working, I don't know why
-  " nmap <Leader>h \m
-  " vmap <Leader>h \m
-  " nmap <2-LeftMouse> \m
+  nnoremap <silent> <leader>h :call InterestingWords('n')<cr>
+  vnoremap <silent> <leader>h :call InterestingWords('v')<cr>
+  nnoremap <silent> <leader>H :call UncolorAllWords()<cr>
 
-  " Maximum colors available
-  " let g:mwDefaultHighlightingPalette = 'maximum'
+  " [Ligh] green, yellow, blue, orange, purple, teal, red, gray - [Dark] same
+  let g:interestingWordsTermColors = ['115', '190', '27', '202', '165', '87', '196', '250',
+    \ '22', '11', '19', '94', '89', '147', '52', '234']
 " *******
 
 Plug 'tpope/vim-repeat'
