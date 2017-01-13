@@ -468,8 +468,7 @@ Plug 'AndrewRadev/switch.vim'
   let g:switch_mapping = "çç"
 " *******
 
-Plug 'andrewradev/splitjoin.vim', { 'on': 'SplitjoinSplit' }
-Plug 'andrewradev/splitjoin.vim', { 'on': 'SplitjoinJoin' }
+Plug 'andrewradev/splitjoin.vim'
 " Configs
   nmap <Leader>ls :SplitjoinSplit<CR>
   nmap <Leader>lj :SplitjoinJoin<CR>
