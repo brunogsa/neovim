@@ -2,7 +2,7 @@
 " Core Settings
 " ===============================================
 
-set cmdheight=1
+set cmdheight=2
 
 " Disable mouse
 set mouse=
@@ -160,14 +160,6 @@ Plug 'itchyny/lightline.vim'
   \}
 " *******
 
-Plug 'gelguy/Cmd2.vim'
-" Configs
-  cmap <F12> <Plug>(Cmd2Suggest)
-  nmap : :<F12>
-  nmap / /<F12>
-  nmap ? ?<F12>
-" *******
-
 Plug 'scrooloose/nerdcommenter'
 " Configs
   nmap '' <Leader>c<Space>
@@ -227,7 +219,8 @@ Plug 'henrik/vim-indexed-search'
   autocmd VimEnter * nnoremap <silent> * *zz:ShowSearchIndex<CR>
   autocmd VimEnter * nnoremap <silent> # #zz:ShowSearchIndex<CR>
 " *******
-"
+
+Plug 'tpope/vim-endwise'
 
 Plug 'tpope/vim-repeat'
 Plug 'nelstrom/vim-visual-star-search'
@@ -364,6 +357,10 @@ Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
       \ 'syntaxcomplete#Complete'
   \]
 
+  let g:deoplete#omni#functions.ruby = [
+      \ 'syntaxcomplete#Complete'
+  \]
+
   " Close the documentation window when completion is done
   autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | pclose | endif
 
@@ -424,6 +421,15 @@ Plug 'tmux-plugins/vim-tmux-focus-events'
 " Luxury
 " =================
 
+" This is a dependency for SQLUtilities
+Plug 'vim-scripts/Align'
+
+Plug 'vim-scripts/SQLUtilities'
+" Configs
+  let g:sqlutil_load_default_maps = 0
+  vmap <Leader>fs :SQLUFormatter<CR>
+" *******
+
 Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
 " Configs
   map <leader>t :NERDTreeToggle<CR>
@@ -463,11 +469,6 @@ Plug 'terryma/vim-multiple-cursors'
 Plug 'kshenoy/vim-signature'
 Plug 'yuttie/comfortable-motion.vim'
 
-Plug 'AndrewRadev/switch.vim'
-" Configs
-  let g:switch_mapping = "çç"
-" *******
-
 Plug 'andrewradev/splitjoin.vim'
 " Configs
   nmap <Leader>ls :SplitjoinSplit<CR>
@@ -475,10 +476,9 @@ Plug 'andrewradev/splitjoin.vim'
 " *******
 
 Plug 'godlygeek/tabular', { 'on': 'Tabularize' }
-Plug 'rhlobo/vim-super-retab', { 'on': 'Space2Tab' }
 Plug 'rhlobo/vim-super-retab', { 'on': 'Tab2Space' }
 
-Plug 'junegunn/limelight.vim', { 'on': 'Limelight!' }
+Plug 'junegunn/limelight.vim', { 'on': 'Limelight' }
 " Configs
   let g:limelight_conceal_ctermfg = 'gray'
   let g:limelight_conceal_ctermfg = 240
@@ -488,7 +488,6 @@ Plug 'junegunn/limelight.vim', { 'on': 'Limelight!' }
 " *******
 
 Plug 'jkramer/vim-narrow', { 'on': 'Narrow' }
-Plug 'jkramer/vim-narrow', { 'on': 'Widen' }
 
 
 " Initialize plugin system
