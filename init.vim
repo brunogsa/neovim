@@ -119,6 +119,9 @@ vmap <silent> <Leader>fx :!xmllint --format --recover - 2>/dev/null<CR>
 " PrettyJSON: Format a line of JSON
 vmap <silent> <Leader>fj :!python -m json.tool<CR>
 
+" PrettyPSQL: Format a line of PSQL
+vmap <silent> <Leader>fp :!pg_format -f 0 -s 2 -u 0<CR>
+
 " Selected last pasted text
 nmap gp V']
 
@@ -420,15 +423,6 @@ Plug 'tmux-plugins/vim-tmux-focus-events'
 
 " Luxury
 " =================
-
-" This is a dependency for SQLUtilities
-Plug 'vim-scripts/Align'
-
-Plug 'vim-scripts/SQLUtilities'
-" Configs
-  let g:sqlutil_load_default_maps = 0
-  vmap <Leader>fs :SQLUFormatter<CR>
-" *******
 
 Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
 " Configs

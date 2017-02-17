@@ -14,6 +14,12 @@ git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
 ~/.fzf/install
 export FZF_CTRL_T_COMMAND='ag -g "" `git rev-parse --show-toplevel`'
 
+git clone https://github.com/darold/pgFormatter
+cd pgFormatter
+perl Makefile.PL
+make && sudo make install
+cd -
+
 # Install it
 sudo add-apt-repository ppa:neovim-ppa/unstable
 sudo apt-get update
