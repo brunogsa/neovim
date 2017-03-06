@@ -482,6 +482,7 @@ Plug 'junegunn/limelight.vim', { 'on': 'Limelight' }
 " *******
 
 Plug 'jkramer/vim-narrow', { 'on': 'Narrow' }
+Plug 'junegunn/goyo.vim', { 'on': 'Goyo' }
 
 
 " Initialize plugin system
