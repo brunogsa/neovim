@@ -479,10 +479,21 @@ Plug 'junegunn/limelight.vim', { 'on': 'Limelight' }
   let g:limelight_paragraph_span = 3
   let g:limelight_bop = '^\s'
   let g:limelight_eop = '\ze\n^\s'
+
+  vmap <Leader>vl :Limelight<CR>
+  nmap <Leader>vl :Limelight!!<CR>
 " *******
 
 Plug 'jkramer/vim-narrow', { 'on': 'Narrow' }
+" Configs
+  vmap <Leader>vn :Narrow<CR>
+  nmap <Leader>vw :Widen<CR>
+" *******
+
 Plug 'junegunn/goyo.vim', { 'on': 'Goyo' }
+" Configs
+  nmap <Leader>vg :Goyo<CR>
+" *******
 
 
 " Initialize plugin system
