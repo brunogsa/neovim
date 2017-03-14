@@ -269,7 +269,7 @@ Plug 'junegunn/fzf.vim'
 
   " Better command history with q:
   command! CmdHist call fzf#vim#command_history({'right': '40'})
-nmap <silent> q: :CmdHist<CR>
+  nmap <silent> q: :CmdHist<CR>
 " *******
 
 Plug 'dietsche/vim-lastplace'
@@ -288,6 +288,9 @@ Plug 'Yggdroot/indentLine'
   let g:indentLine_color_term = 32
   let g:indentLine_faster = 1
   let g:indentLine_maxLines = 512
+
+  " Disable it on markdown files
+  autocmd VimEnter *.md IndentLinesDisable
 " *******
 
 Plug 'vim-scripts/CursorLineCurrentWindow'
