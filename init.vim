@@ -283,6 +283,12 @@ Plug 'dietsche/vim-lastplace'
 " =================
 
 Plug 'leafgarland/typescript-vim'
+" Configs
+  let g:typescript_compiler_binary = 'tsc'
+  let g:typescript_compiler_options = ''
+" *******
+
+Plug 'HerringtonDarkholme/yats.vim'
 
 Plug 'Yggdroot/indentLine'
 " Configs
@@ -369,6 +375,11 @@ Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
       \ 'syntaxcomplete#Complete'
   \]
 
+  let g:deoplete#omni#functions.typescript = [
+      \ 'tsuquyomi#complete',
+      \ 'syntaxcomplete#Complete'
+  \]
+
   " Close the documentation window when completion is done
   autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | pclose | endif
 
@@ -392,6 +403,15 @@ Plug 'carlitux/deoplete-ternjs'
 Plug 'myhere/vim-nodejs-complete'
 Plug 'othree/jspc.vim'
 
+" Pre-Reqs
+  Plug 'Shougo/vimproc.vim', { 'do': 'make' }
+" *******
+Plug 'Quramy/tsuquyomi'
+" Configs
+  let g:tsuquyomi_completion_detail = 1
+  let g:tsuquyomi_disable_quickfix = 1
+" *******
+
 
 " Lint
 " =================
@@ -410,6 +430,9 @@ Plug 'vim-syntastic/syntastic'
   " JavaScript Checkers
   let g:syntastic_javascript_checkers = ['eslint']
   let g:syntastic_javascript_eslint_exec = 'eslint_d'
+
+  " TypeScript Checkers
+  let g:syntastic_typescript_checkers = ['tsuquyomi']
 " *******
 
 Plug 'tpope/vim-git'
