@@ -440,7 +440,7 @@ Plug 'shime/vim-livedown', { 'do': 'sudo npm install -g livedown', 'on': 'Livedo
   let g:livedown_open = 1
 
   " the browser to use
-  let g:livedown_browser = "firefox"
+  let g:livedown_browser = "google-chrome"
 " *******
 
 Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
