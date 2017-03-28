@@ -282,6 +282,8 @@ Plug 'dietsche/vim-lastplace'
 " Highlight
 " =================
 
+Plug 'leafgarland/typescript-vim'
+
 Plug 'Yggdroot/indentLine'
 " Configs
   let g:indentLine_char = '┆'
@@ -426,6 +428,20 @@ Plug 'tmux-plugins/vim-tmux-focus-events'
 
 " Luxury
 " =================
+
+Plug 'shime/vim-livedown', { 'do': 'sudo npm install -g livedown', 'on': 'LivedownPreview' }
+" Configs
+  nmap <leader>vp :LivedownPreview<CR>
+
+  " should markdown preview get shown automatically upon opening markdown buffer
+  let g:livedown_autorun = 0
+
+  " should the browser window pop-up upon previewing
+  let g:livedown_open = 1
+
+  " the browser to use
+  let g:livedown_browser = "firefox"
+" *******
 
 Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
 " Configs
