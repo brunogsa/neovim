@@ -163,6 +163,8 @@ Plug 'itchyny/lightline.vim'
   \}
 " *******
 
+Plug 'jeetsukumaran/vim-buffergator'
+
 Plug 'scrooloose/nerdcommenter'
 " Configs
   nmap '' <Leader>c<Space>
@@ -410,6 +412,7 @@ Plug 'Quramy/tsuquyomi'
 " Configs
   let g:tsuquyomi_completion_detail = 1
   let g:tsuquyomi_disable_quickfix = 1
+  let g:tsuquyomi_disable_default_mappings = 1
 " *******
 
 
@@ -454,7 +457,7 @@ Plug 'tmux-plugins/vim-tmux-focus-events'
 
 Plug 'shime/vim-livedown', { 'do': 'sudo npm install -g livedown', 'on': 'LivedownPreview' }
 " Configs
-  nmap <leader>vp :LivedownPreview<CR>
+  nmap <Leader>vp :LivedownPreview<CR>
 
   " should markdown preview get shown automatically upon opening markdown buffer
   let g:livedown_autorun = 0
