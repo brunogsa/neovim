@@ -107,6 +107,12 @@ noremap e $
 xnoremap > >gv
 xnoremap < <gv
 
+" Resize windows
+nnoremap <silent><Leader><right> :vertical resize -5<cr>
+nnoremap <silent><Leader><left> :vertical resize +5<cr>
+nnoremap <silent><Leader><up> :resize +5<cr>
+nnoremap <silent><Leader><down> :resize -5<cr>
+
 " Toggles the number lines
 map <silent> <leader>n :set number!<Cr>:set relativenumber!<Cr>
 
@@ -162,6 +168,8 @@ Plug 'itchyny/lightline.vim'
     \ 'subseparator': { 'left': '|', 'right': '|' }
   \}
 " *******
+
+Plug 'szw/vim-maximizer'
 
 Plug 'scrooloose/nerdcommenter'
 " Configs
