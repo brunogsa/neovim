@@ -163,8 +163,6 @@ Plug 'itchyny/lightline.vim'
   \}
 " *******
 
-Plug 'jeetsukumaran/vim-buffergator'
-
 Plug 'scrooloose/nerdcommenter'
 " Configs
   nmap '' <Leader>c<Space>
@@ -272,6 +270,25 @@ Plug 'junegunn/fzf.vim'
   " Better command history with q:
   command! CmdHist call fzf#vim#command_history({'right': '40'})
   nmap <silent> q: :CmdHist<CR>
+
+  " Buffer Explorer
+  function! s:buflist()
+    redir => ls
+    silent ls
+    redir END
+    return split(ls, '\n')
+  endfunction
+
+  function! s:bufopen(e)
+    execute 'buffer' matchstr(a:e, '^[ 0-9]*')
+  endfunction
+
+  nnoremap <silent> <Leader>b :call fzf#run({
+  \   'source':  reverse(<sid>buflist()),
+  \   'sink':    function('<sid>bufopen'),
+  \   'options': '+m',
+  \   'down':    len(<sid>buflist()) + 2
+  \ })<CR>
 " *******
 
 Plug 'dietsche/vim-lastplace'
