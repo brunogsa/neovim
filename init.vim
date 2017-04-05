@@ -372,6 +372,9 @@ Plug 'exu/pgsql.vim'
   let g:sql_type_default = 'pgsql'
 " *******
 
+" pug
+Plug 'digitaltoad/vim-pug'
+
 
 " Auto Completion
 " =================
@@ -393,18 +396,26 @@ Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
   let g:deoplete#omni#functions = {}
 
   let g:deoplete#omni#functions.javascript = [
-      \ 'tern#Complete',
-      \ 'jspc#omni',
-      \ 'syntaxcomplete#Complete'
+    \ 'tern#Complete',
+    \ 'jspc#omni',
+    \ 'syntaxcomplete#Complete',
+    \ 'tmuxcomplete#complete'
   \]
 
   let g:deoplete#omni#functions.ruby = [
-      \ 'syntaxcomplete#Complete'
+    \ 'syntaxcomplete#Complete',
+    \ 'tmuxcomplete#complete'
   \]
 
   let g:deoplete#omni#functions.typescript = [
-      \ 'tsuquyomi#complete',
-      \ 'syntaxcomplete#Complete'
+    \ 'tsuquyomi#complete',
+    \ 'syntaxcomplete#Complete',
+    \ 'tmuxcomplete#complete'
+  \]
+
+  let g:deoplete#omni#functions.pug = [
+    \ 'syntaxcomplete#Complete',
+    \ 'tmuxcomplete#complete'
   \]
 
   " Close the documentation window when completion is done
