@@ -348,6 +348,9 @@ Plug 'othree/html5.vim'
 " css3
 Plug 'hail2u/vim-css3-syntax'
 
+" scss
+Plug 'cakebaker/scss-syntax.vim'
+
 " markdown
 Plug 'tpope/vim-markdown'
 " Configs
