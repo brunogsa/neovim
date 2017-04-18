@@ -120,19 +120,13 @@ map <silent> <leader>n :set number!<Cr>:set relativenumber!<Cr>
 vmap / <Esc>/\%V
 
 " PrettyXML: Format a line of XML
-vmap <silent> <Leader>fx :!xmllint --format --recover - 2>/dev/null<CR>
-
-" PrettyJSON: Format a line of JSON
-vmap <silent> <Leader>fj :!python -m json.tool<CR>
+vmap <silent> <Leader>fxml :!xmllint --format --recover - 2>/dev/null<CR>
 
 " PrettyPSQL: Format a line of PSQL
-vmap <silent> <Leader>fp :!pg_format -f 0 -s 2 -u 0<CR>
+vmap <silent> <Leader>fpsql :!pg_format -f 0 -s 2 -u 0<CR>
 
 " Selected last pasted text
 nmap gp V']
-
-" Test Mocha files on Javascript projects
-map <silent> <F5> :terminal export CURRENT_GIT_ROOT=`git rev-parse --show-toplevel` && export CURRENT_TEST_DIR=`pwd` && export GETCONFIG_ROOT=$CURRENT_GIT_ROOT/config && cd $CURRENT_GIT_ROOT && mocha -g '<cword>' $CURRENT_TEST_DIR/% && unset CURRENT_GIT_ROOT CURRENT_TEST_DIR GETCONFIG_ROOT<CR>
 
 
 " ===============================================
@@ -493,6 +487,39 @@ Plug 'tmux-plugins/vim-tmux-focus-events'
 
 " Luxury
 " =================
+
+Plug 'maksimr/vim-jsbeautify'
+" Configs
+  vmap <buffer> <leader>fjs :call RangeJsBeautify()<cr>
+  vmap <buffer> <leader>fjson :call RangeJsonBeautify()<cr>
+  vmap <buffer> <leader>fjsx :call RangeJsxBeautify()<cr>
+  vmap <buffer> <leader>fhtml :call RangeHtmlBeautify()<cr>
+  vmap <buffer> <leader>fcss :call RangeCSSBeautify()<cr>
+
+  " For additional configs, see: https://github.com/beautify-web/js-beautify
+  let g:config_Beautifier = {
+    \ 'js': {
+      \ 'indent_style': 'space',
+      \ 'indent_size': '2'
+    \},
+    \ 'json': {
+      \ 'indent_style': 'space',
+      \ 'indent_size': '2'
+    \},
+    \ 'jsx': {
+      \ 'indent_style': 'space',
+      \ 'indent_size': '2'
+    \},
+    \ 'html': {
+      \ 'indent_style': 'space',
+      \ 'indent_size': '2'
+    \},
+    \ 'css': {
+      \ 'indent_style': 'space',
+      \ 'indent_size': '2'
+    \}
+  \}
+" *******
 
 Plug 'shime/vim-livedown', { 'do': 'sudo npm install -g livedown', 'on': 'LivedownPreview' }
 " Configs
