@@ -163,6 +163,7 @@ Plug 'itchyny/lightline.vim'
   \}
 " *******
 
+Plug 'danro/rename.vim'
 Plug 'szw/vim-maximizer'
 
 Plug 'scrooloose/nerdcommenter'
