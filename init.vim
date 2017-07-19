@@ -605,6 +605,7 @@ Plug 'jkramer/vim-narrow', { 'on': 'Narrow' }
 Plug 'junegunn/goyo.vim', { 'on': 'Goyo' }
 " Configs
   nmap <Leader>vg :Goyo<CR>
+  let g:goyo_width = 120
 " *******
 
 
