@@ -99,9 +99,8 @@ set virtualedit=block
 " Leader is SPACE
 let mapleader = "\<Space>"
 
-" 'b' goes to the beginning of a line. 'e' to the end of the line.
-noremap b 0
-noremap e $
+" Move to the end of a line in a smarter way
+noremap <End> g_
 
 " Easier to align
 xnoremap > >gv
