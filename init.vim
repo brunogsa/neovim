@@ -113,7 +113,7 @@ nnoremap <silent><Leader><up> :resize +5<cr>
 nnoremap <silent><Leader><down> :resize -5<cr>
 
 " Toggles the number lines
-map <silent> <leader>n :set number!<Cr>:set relativenumber!<Cr>
+map <silent> <leader>tn :set number!<Cr>:set relativenumber!<Cr>
 
 " Search only in visual selection
 vmap / <Esc>/\%V
@@ -182,8 +182,8 @@ Plug 'scrooloose/nerdcommenter'
 
 Plug 'Valloric/ListToggle'
 " Configs
-  let g:lt_location_list_toggle_map = '<leader>l'
-  let g:lt_quickfix_list_toggle_map = '<leader>q'
+  let g:lt_location_list_toggle_map = '<leader>tl'
+  let g:lt_quickfix_list_toggle_map = '<leader>tq'
 " *******
 
 Plug 'Raimondi/delimitMate'
