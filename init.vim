@@ -454,6 +454,9 @@ Plug 'neomake/neomake'
 
   " JavaScript Checkers
   let g:neomake_javascript_enabled_makers = ['eslint_d']
+
+  " TypeScript Checkers
+  let g:neomake_typescript_enabled_makers = []
 " *******
 
 Plug 'tpope/vim-git'
