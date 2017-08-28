@@ -162,11 +162,6 @@ Plug 'itchyny/lightline.vim'
   \}
 " *******
 
-Plug 'airblade/vim-rooter'
-" Configs
-  let g:rooter_change_directory_for_non_project_files = ''
-" *******
-
 Plug 'danro/rename.vim'
 Plug 'szw/vim-maximizer'
 
