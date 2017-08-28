@@ -441,20 +441,19 @@ Plug 'othree/jspc.vim'
 " Lint
 " =================
 
-Plug 'vim-syntastic/syntastic'
+Plug 'neomake/neomake'
 " Configs
-  let g:syntastic_auto_loc_list = 1
-  let g:syntastic_loc_list_height = 3
-  let g:syntastic_check_on_wq = 1
-  let g:syntastic_always_populate_loc_list = 1
-  let g:statline_syntastic = 0
+  autocmd! BufWritePost,BufEnter * Neomake
 
-  let g:syntastic_mode_map = { "mode": "active" }
-  let syntastic_aggregate_errors = 1
+  let g:neomake_place_signs = 1
+  let g:neomake_open_list = 2
+  let g:neomake_list_height = 4
+
+  let g:neomake_highlight_columns = 1
+  let g:neomake_highlight_lines = 0
 
   " JavaScript Checkers
-  let g:syntastic_javascript_checkers = ['eslint']
-  let g:syntastic_javascript_eslint_exec = 'eslint_d'
+  let g:neomake_javascript_enabled_makers = ['eslint_d']
 " *******
 
 Plug 'tpope/vim-git'
