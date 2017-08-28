@@ -449,19 +449,27 @@ Plug 'othree/jspc.vim'
 Plug 'neomake/neomake'
 " Configs
   autocmd! BufWritePost,BufEnter * Neomake
+  let g:neomake_verbose = 0
 
   let g:neomake_place_signs = 1
   let g:neomake_open_list = 2
   let g:neomake_list_height = 4
 
-  let g:neomake_highlight_columns = 1
+  let g:neomake_highlight_columns = 0
   let g:neomake_highlight_lines = 0
+
+  let g:neomake_error_sign = {'text': '✖', 'texthl': 'NeomakeErrorSign'}
+  let g:neomake_warning_sign = {'text': '!', 'texthl': 'NeomakeMessageSign'}
 
   " JavaScript Checkers
   let g:neomake_javascript_enabled_makers = ['eslint_d']
 
   " TypeScript Checkers
-  let g:neomake_typescript_enabled_makers = []
+  let g:neomake_typescript_tsc_maker = {
+    \ 'args': ['--skipLibCheck'],
+  \}
+
+  let g:neomake_typescript_enabled_makers = ['tsc']
 " *******
 
 Plug 'tpope/vim-git'
