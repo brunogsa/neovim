@@ -444,11 +444,16 @@ Plug 'othree/jspc.vim'
 Plug 'neomake/neomake'
 " Configs
   autocmd! BufWritePost,BufEnter * Neomake
-  let g:neomake_verbose = 0
+  let g:quickfixsigns_protect_sign_rx = '^neomake_'
+  let g:neomake_ft_maker_remove_invalid_entries = 0
+
+  " XXX: Use it for debug, if necessary
+  " let g:neomake_logfile = '/home/bagostini/neomake.debug'
 
   let g:neomake_place_signs = 1
   let g:neomake_open_list = 2
   let g:neomake_list_height = 4
+  let g:neomake_echo_current_error = 1
 
   let g:neomake_highlight_columns = 0
   let g:neomake_highlight_lines = 0
@@ -457,6 +462,13 @@ Plug 'neomake/neomake'
   let g:neomake_warning_sign = {'text': '!', 'texthl': 'NeomakeMessageSign'}
 
   " JavaScript Checkers
+  let g:neomake_javascript_eslint_d_maker = {
+    \ 'exe': '/usr/bin/eslint_d',
+    \ 'append_file': 0,
+    \ 'args': ['-f', 'compact', '%:p'],
+    \ 'errorformat': '%E%f: line %l\, col %c\, Error - %m,%W%f: line %l\, col %c\, Warning - %m'
+  \}
+
   let g:neomake_javascript_enabled_makers = ['eslint_d']
 
   " TypeScript Checkers
