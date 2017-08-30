@@ -466,14 +466,33 @@ Plug 'neomake/neomake'
     \ 'exe': '/usr/bin/eslint_d',
     \ 'append_file': 0,
     \ 'args': ['-f', 'compact', '%:p'],
-    \ 'errorformat': '%E%f: line %l\, col %c\, Error - %m,%W%f: line %l\, col %c\, Warning - %m'
+    \ 'errorformat': '%E%f: line %l\, col %c\, Error - %m, %W%f: line %l\, col %c\, Warning - %m'
   \}
 
   let g:neomake_javascript_enabled_makers = ['eslint_d']
 
   " TypeScript Checkers
   let g:neomake_typescript_tsc_maker = {
-    \ 'args': ['--skipLibCheck'],
+    \ 'exe': '/usr/bin/tsc',
+    \ 'append_file': 0,
+    \ 'args': [
+      \ '--experimentalDecorators',
+      \ '--forceConsistentCasingInFileNames',
+      \ '--lib',
+      \ 'es2016,dom',
+      \ '--moduleResolution',
+      \ 'node',
+      \ '--noEmit',
+      \ '--noImplicitThis',
+      \ '--noUnusedLocals',
+      \ '--noUnusedParameters',
+      \ '--skipLibCheck',
+      \ '--strictNullChecks',
+      \ '-t',
+      \ 'ES5',
+      \ '%:p'
+    \],
+    \ 'errorformat': '%E%f(%l\,%c): error %m, %W%f(%l\,%c): warning %m'
   \}
 
   let g:neomake_typescript_enabled_makers = ['tsc']
