@@ -1,4 +1,34 @@
 " ===============================================
+" Auxiliar Functions
+" ===============================================
+
+" Private
+function! GlobPathList(path, pattern, suf) abort
+  if v:version >= 705 || (v:version == 704 && has('patch279'))
+    return globpath(a:path, a:pattern, a:suf, 1)
+  endif
+  return split(globpath(a:path, a:pattern, a:suf), '\n')
+endfunction
+
+" Public
+function! FindGlobFile(glob, ...) abort
+  let curDir = a:0 ? a:1 : expand('%:p:h')
+  let fileFound = []
+  while 1
+    let fileFound = GlobPathList(curDir, a:glob, 1)
+    if !empty(fileFound)
+      return fileFound[0]
+    endif
+    let lastFolder = curDir
+    let curDir = fnamemodify(curDir, ':h')
+    if curDir ==# lastFolder
+      break
+    endif
+  endwhile
+  return ''
+endfunction
+
+" ===============================================
 " Core Settings
 " ===============================================
 
@@ -492,10 +522,19 @@ Plug 'neomake/neomake'
       \ 'ES5',
       \ '%:p'
     \],
-    \ 'errorformat': '%E%f(%l\,%c): error %m, %W%f(%l\,%c): warning %m'
+    \ 'errorformat': '%E%f(%l\,%c): error %m'
   \}
 
-  let g:neomake_typescript_enabled_makers = ['tsc']
+  let tslintConfig = FindGlobFile('tslint.json')
+
+  let g:neomake_typescript_tslint_maker = {
+    \ 'exe': '/usr/bin/tslint',
+    \ 'append_file': 0,
+    \ 'args': ['--config', tslintConfig, '%:p'],
+    \ 'errorformat': '%E%f[%l\, %c]: %m'
+  \}
+
+  let g:neomake_typescript_enabled_makers = ['tsc', 'tslint']
 " *******
 
 Plug 'tpope/vim-git'
