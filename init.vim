@@ -603,7 +603,7 @@ Plug 'shime/vim-livedown', { 'do': 'sudo npm install -g livedown', 'on': 'Livedo
 
 Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
 " Configs
-  map <leader>t :NERDTreeToggle<CR>
+  map <leader>tt :NERDTreeToggle<CR>
   let NERDTreeHijackNetrw=1
 " *******
 
