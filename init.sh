@@ -38,4 +38,5 @@ sudo ln -s ~/neovim/init.vim ~/.config/nvim/
 sudo ln -s ~/neovim/colors ~/.config/nvim/
 sudo ln -s ~/neovim/.tern-project ~
 
+echo "alias vim=nvim" >> ~/.bashrc
 echo "Done!"
