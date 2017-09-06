@@ -535,6 +535,18 @@ Plug 'neomake/neomake'
   \}
 
   let g:neomake_typescript_enabled_makers = ['tsc', 'tslint']
+
+  " Lua Checkers
+  let g:neomake_lua_luac_maker = {
+    \ 'exe': '/usr/bin/luac',
+    \ 'append_file': 0,
+    \ 'args': ['-p', '%:p'],
+    \ 'errorformat': '%E/usr/bin/luac: %f:%l: %m'
+  \}
+
+  " luac: rc.lua:26: ')' expected (to close '(' at line 25) near '='
+
+  let g:neomake_lua_enabled_makers = ['luac']
 " *******
 
 Plug 'tpope/vim-git'

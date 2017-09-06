@@ -20,6 +20,9 @@ perl Makefile.PL
 make && sudo make install
 cd -
 
+sudo apt-get install -y luarocks lua-check
+sudo luarocks install luacheck
+
 # Install it
 sudo add-apt-repository ppa:neovim-ppa/unstable
 sudo apt-get update
