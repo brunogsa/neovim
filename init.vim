@@ -333,6 +333,8 @@ Plug 'dietsche/vim-lastplace'
 " Highlight
 " =================
 
+Plug 'posva/vim-vue'
+
 Plug 'leafgarland/typescript-vim'
 " Configs
   let g:typescript_compiler_binary = 'tsc'
