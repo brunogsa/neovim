@@ -333,6 +333,7 @@ Plug 'dietsche/vim-lastplace'
 " Highlight
 " =================
 
+Plug 'ap/vim-css-color'
 Plug 'posva/vim-vue'
 
 Plug 'leafgarland/typescript-vim'
