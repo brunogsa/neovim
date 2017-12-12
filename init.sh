@@ -7,7 +7,7 @@ sudo apt-get install -y software-properties-common
 sudo apt-get -y upgradeudo apt-get install -y python-dev python-pip python3-dev python3-pip
 sudo apt-get install -y python-pip python3-pip
 sudo pip install --upgrade pip
-sudo npm install -g eslint_d
+sudo npm install -g eslint_d babel-eslint eslint-config-airbnb eslint-plugin-jsx-a11y eslint-plugin-react eslint-plugin-import
 sudo npm install -g tern
 sudo apt-get install -y silversearcher-ag
 
