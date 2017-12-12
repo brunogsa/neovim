@@ -360,6 +360,13 @@ Plug 'vim-scripts/CursorLineCurrentWindow'
 " javascript
 Plug 'othree/yajs.vim'
 
+" jsx
+Plug 'mxw/vim-jsx'
+" Configs
+  " Enable on js files as well
+  let g:jsx_ext_required = 0
+" *******
+
 " json
 Plug 'elzr/vim-json'
 " Configs
