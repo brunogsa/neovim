@@ -15,11 +15,15 @@ sudo pip install --upgrade pip
 sudo apt-get install -y luarocks lua-check rubygems ruby-dev
 sudo luarocks install luacheck
 
-# Install nvm, node and npm
-touch ~/.bash_profile
-wget -qO- https://raw.githubusercontent.com/creationix/nvm/v0.33.8/install.sh | bash
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
-nvm install node
+# Install node and npm
+cd ~
+wget https://nodejs.org/dist/v8.9.4/node-v8.9.4-linux-x64.tar.xz
+tar -xf node-v8.9.4-linux-x64.tar.xz
+rm -f node-v8.9.4-linux-x64.tar.xz
+sudo cp node-v8.9.4-linux-x64/bin/node /usr/bin/
+sudo node-v8.9.4-linux-x64/bin/npm install -g npm
+node -v
+npm -v
+rm -fr node-v8.9.4-linux-x64
 
 sudo reboot
