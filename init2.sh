@@ -4,6 +4,7 @@ set -e
 # Install integrations..
 
 # Globally install ESLint and Tern stuff
+node -v
 npm install -g eslint_d babel-eslint eslint-config-airbnb eslint-plugin-jsx-a11y eslint-plugin-react eslint-plugin-import eslint-config-standard eslint-plugin-node eslint-plugin-promise eslint-plugin-standard
 npm install -g tern
 
