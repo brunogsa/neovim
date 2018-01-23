@@ -502,14 +502,14 @@ Plug 'neomake/neomake'
   let g:neomake_warning_sign = {'text': '!', 'texthl': 'NeomakeMessageSign'}
 
   " JavaScript Checkers
-  let g:neomake_javascript_eslint_d_maker = {
-    \ 'exe': '/usr/bin/eslint_d',
+  let g:neomake_javascript_eslint_maker = {
+    \ 'exe': '/usr/bin/eslint',
     \ 'append_file': 0,
     \ 'args': ['-f', 'compact', '%:p'],
     \ 'errorformat': '%E%f: line %l\, col %c\, Error - %m, %W%f: line %l\, col %c\, Warning - %m'
   \}
 
-  let g:neomake_javascript_enabled_makers = ['eslint_d']
+  let g:neomake_javascript_enabled_makers = ['eslint']
 
   " TypeScript Checkers
   let g:neomake_typescript_tsc_maker = {
