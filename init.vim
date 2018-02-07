@@ -162,7 +162,7 @@ nmap gp V']
 " Init plugins
 " ===============================================
 
-" Make sure you use single quotes
+" Make sure you use single quotes. It's here the plugins are stored
 call plug#begin('~/.local/share/nvim/plugged')
 
 
