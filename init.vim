@@ -225,8 +225,11 @@ Plug 'Raimondi/delimitMate'
 Plug 'tpope/vim-surround'
 Plug 'Valloric/MatchTagAlways'
 Plug 'vim-scripts/matchit.zip'
-Plug 'alvan/vim-closetag'
 
+Plug 'alvan/vim-closetag'
+" Configs
+  let g:closetag_filenames = "*.html,*.xhtml,*.phtml,*.php,*.jsx,*.js"
+" *******
 
 Plug 'chrisbra/vim-diff-enhanced'
 Plug 'rickhowe/diffchar.vim'
