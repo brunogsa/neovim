@@ -419,12 +419,12 @@ Plug 'digitaltoad/vim-pug'
 " Auto Completion
 " =================
 
-" Default / Fast mechanism
-Plug 'ajh17/vimcompletesme'
-
 " Slower / Better mechanism
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 " Configs
+  inoremap <silent><expr><tab> pumvisible() ? "\<c-n>" : "\<tab>"
+  inoremap <silent><expr><s-tab> pumvisible() ? "\<c-p>" : "\<s-tab>"
+
   let g:deoplete#enable_at_startup = 1
   let g:deoplete#enable_smart_case = 1
   let g:deoplete#enable_refresh_always = 0
