@@ -192,7 +192,6 @@ Plug 'itchyny/lightline.vim'
   \}
 " *******
 
-Plug 'danro/rename.vim'
 Plug 'szw/vim-maximizer'
 
 Plug 'scrooloose/nerdcommenter'
@@ -284,12 +283,6 @@ Plug 'ntpeters/vim-better-whitespace'
 
 Plug 'tpope/vim-sleuth'
 
-Plug 'Numkil/ag.nvim'
-" Configs
-  let g:ag_prg = "/usr/bin/ag"
-  let g:ag_working_path_mode = "r"
-" *******
-
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 " Configs
@@ -337,15 +330,16 @@ Plug 'dietsche/vim-lastplace'
 " =================
 
 Plug 'ap/vim-css-color'
-Plug 'posva/vim-vue'
+Plug 'posva/vim-vue', { 'for': 'vue' }
 
-Plug 'leafgarland/typescript-vim'
+Plug 'leafgarland/typescript-vim', { 'for': 'typescript' }
 " Configs
   let g:typescript_compiler_binary = 'tsc'
   let g:typescript_compiler_options = ''
 " *******
 
-Plug 'HerringtonDarkholme/yats.vim'
+" typescript
+Plug 'HerringtonDarkholme/yats.vim', { 'for': 'typescript' }
 
 Plug 'Yggdroot/indentLine'
 " Configs
@@ -361,35 +355,35 @@ Plug 'Yggdroot/indentLine'
 Plug 'vim-scripts/CursorLineCurrentWindow'
 
 " javascript
-Plug 'othree/yajs.vim'
+Plug 'othree/yajs.vim', { 'for': ['javascript', 'javascript.jsx'] }
 
 " jsx
-Plug 'mxw/vim-jsx'
+Plug 'mxw/vim-jsx', { 'for': ['javascript', 'javascript.jsx'] }
 " Configs
   " Enable on js files as well
   let g:jsx_ext_required = 0
 " *******
 
 " json
-Plug 'elzr/vim-json'
+Plug 'elzr/vim-json', { 'for': 'json' }
 " Configs
   let g:vim_json_syntax_conceal = 0
 " *******
 
 " jsdoc
-Plug 'othree/jsdoc-syntax.vim'
+Plug 'othree/jsdoc-syntax.vim', { 'for': ['javascript', 'javascript.jsx'] }
 
 " html5
-Plug 'othree/html5.vim'
+Plug 'othree/html5.vim', { 'for': 'html' }
 
 " css3
-Plug 'hail2u/vim-css3-syntax'
+Plug 'hail2u/vim-css3-syntax', { 'for': 'css' }
 
 " scss
-Plug 'cakebaker/scss-syntax.vim'
+Plug 'cakebaker/scss-syntax.vim', { 'for': 'scss' }
 
 " markdown
-Plug 'tpope/vim-markdown'
+Plug 'tpope/vim-markdown', { 'for': 'ghmarkdown' }
 " Configs
   let g:markdown_syntax_conceal = 0
   let g:markdown_fenced_languages = ['html', 'python', 'bash=sh']
@@ -398,7 +392,7 @@ Plug 'tpope/vim-markdown'
   au BufReadPre,FileReadPre *.md,*.markdown :IndentLinesDisable
 " *******
 
-Plug 'jtratner/vim-flavored-markdown'
+Plug 'jtratner/vim-flavored-markdown', { 'for': 'ghmarkdown' }
 " Configs
   augroup markdown
     au!
@@ -407,13 +401,10 @@ Plug 'jtratner/vim-flavored-markdown'
 " *******
 
 " sql
-Plug 'exu/pgsql.vim'
+Plug 'exu/pgsql.vim', { 'for': 'sql' }
 " Configs
   let g:sql_type_default = 'pgsql'
 " *******
-
-" pug
-Plug 'digitaltoad/vim-pug'
 
 
 " Auto Completion
@@ -472,13 +463,13 @@ Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 
 Plug 'wellle/tmux-complete.vim'
 
-Plug 'carlitux/deoplete-ternjs'
+Plug 'carlitux/deoplete-ternjs', { 'for': ['javascript', 'javascript.jsx'] }
 " Configs
   let g:tern_request_timeout = 1
 " *******
 
-Plug 'myhere/vim-nodejs-complete'
-Plug 'othree/jspc.vim'
+Plug 'myhere/vim-nodejs-complete', { 'for': ['javascript', 'javascript.jsx'] }
+Plug 'othree/jspc.vim', { 'for': ['javascript', 'javascript.jsx'] }
 
 
 " Lint
@@ -562,7 +553,7 @@ Plug 'neomake/neomake'
   let g:neomake_lua_enabled_makers = ['luac']
 " *******
 
-Plug 'tpope/vim-git'
+Plug 'tpope/vim-git', { 'for': 'gitcommit' }
 
 
 " Performance
@@ -579,7 +570,7 @@ Plug 'tmux-plugins/vim-tmux-focus-events'
 " Luxury
 " =================
 
-Plug 'maksimr/vim-jsbeautify'
+Plug 'maksimr/vim-jsbeautify', { 'for': ['javascript', 'javascript.jsx', 'html', 'css', 'scss', 'sass', 'json'] }
 " Configs
   vmap <buffer> <leader>fjs :call RangeJsBeautify()<cr>
   vmap <buffer> <leader>fjson :call RangeJsonBeautify()<cr>
@@ -612,7 +603,7 @@ Plug 'maksimr/vim-jsbeautify'
   \}
 " *******
 
-Plug 'prettier/vim-prettier', { 'do': 'sudo npm install' }
+Plug 'prettier/vim-prettier', { 'do': 'sudo npm install', 'for': ['javascript', 'javascript.jsx', 'html', 'css', 'scss', 'sass', 'json'] }
 " Configs
   nmap <Leader>fjs <Plug>(Prettier)
   nmap <Leader>fjson <Plug>(Prettier)
@@ -671,7 +662,7 @@ Plug 'prettier/vim-prettier', { 'do': 'sudo npm install' }
   let g:prettier#config#prose_wrap = 'preserve'
 " *******
 
-Plug 'shime/vim-livedown', { 'do': 'sudo npm install -g livedown', 'on': 'LivedownPreview' }
+Plug 'shime/vim-livedown', { 'do': 'sudo npm install -g livedown', 'on': 'LivedownPreview', 'for': 'ghmarkdown' }
 " Configs
   nmap <Leader>vp :LivedownPreview<CR>
 
@@ -732,31 +723,6 @@ Plug 'andrewradev/splitjoin.vim'
 
 Plug 'godlygeek/tabular', { 'on': 'Tabularize' }
 Plug 'rhlobo/vim-super-retab', { 'on': 'Tab2Space' }
-
-Plug 'junegunn/limelight.vim', { 'on': 'Limelight' }
-" Configs
-  let g:limelight_conceal_ctermfg = 'gray'
-  let g:limelight_conceal_ctermfg = 240
-  let g:limelight_paragraph_span = 3
-  let g:limelight_bop = '^\s'
-  let g:limelight_eop = '\ze\n^\s'
-
-  vmap <Leader>vl :Limelight<CR>
-  nmap <Leader>vl :Limelight!!<CR>
-" *******
-
-Plug 'jkramer/vim-narrow', { 'on': 'Narrow' }
-" Configs
-  vmap <Leader>vn :Narrow<CR>
-  nmap <Leader>vw :Widen<CR>
-" *******
-
-Plug 'junegunn/goyo.vim', { 'on': 'Goyo' }
-" Configs
-  nmap <Leader>vg :Goyo<CR>
-  let g:goyo_width = 120
-" *******
-
 
 " Initialize plugin system
 call plug#end()
