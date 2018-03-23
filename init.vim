@@ -499,7 +499,7 @@ Plug 'neomake/neomake'
   let g:neomake_javascript_eslint_maker = {
     \ 'exe': '/usr/bin/eslint',
     \ 'append_file': 0,
-    \ 'args': ['-f', 'compact', '%:p'],
+    \ 'args': ['--no-ignore', '-f', 'compact', '%:p'],
     \ 'errorformat': '%E%f: line %l\, col %c\, Error - %m, %W%f: line %l\, col %c\, Warning - %m'
   \}
 
