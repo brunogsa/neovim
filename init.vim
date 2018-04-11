@@ -373,6 +373,9 @@ Plug 'elzr/vim-json', { 'for': 'json' }
 " jsdoc
 Plug 'othree/jsdoc-syntax.vim', { 'for': ['javascript', 'javascript.jsx'] }
 
+" GraphQL
+Plug 'jparise/vim-graphql', { 'for': ['javascript', 'graphql'] }
+
 " html5
 Plug 'othree/html5.vim', { 'for': 'html' }
 
