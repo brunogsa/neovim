@@ -276,10 +276,6 @@ Plug 'rhysd/vim-textobj-anyblock'
 Plug 'vim-utils/vim-troll-stopper'
 
 Plug 'ntpeters/vim-better-whitespace'
-" Configs
-  " Automatically remove trailling spaces on save
-  autocmd BufWritePre <buffer> StripWhitespace
-" *******
 
 Plug 'tpope/vim-sleuth'
 
