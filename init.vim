@@ -284,7 +284,7 @@ Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 " Configs
   " Find files using ProjectFiles
-  nmap <silent> <C-t> :ProjectFiles<CR>
+  nmap <silent> <Leader>t :ProjectFiles<CR>
 
   function! s:find_git_root()
     return system('git rev-parse --show-toplevel 2> /dev/null')[:-2]
@@ -294,7 +294,7 @@ Plug 'junegunn/fzf.vim'
 
   " Better command history with q:
   command! CmdHist call fzf#vim#command_history({'right': '40'})
-  nmap <silent> q: :CmdHist<CR>
+  nmap <silent> <Leader>r :CmdHist<CR>
 
   " Buffer Explorer
   function! s:buflist()
@@ -712,7 +712,6 @@ Plug 'justinmk/vim-sneak'
 " *******
 
 Plug 'terryma/vim-multiple-cursors'
-Plug 'kshenoy/vim-signature'
 Plug 'yuttie/comfortable-motion.vim'
 
 Plug 'andrewradev/splitjoin.vim'
