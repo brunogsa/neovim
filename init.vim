@@ -732,6 +732,7 @@ call plug#end()
 " ===============================================
 
 syntax on
+autocmd BufWinEnter * :syntax sync fromstart
 
 " Add a line above the cursor - Disable for better performance
 set cursorline
