@@ -42,11 +42,11 @@ set ttyfast
 set regexpengine=1
 
 set synmaxcol=120
-syntax sync minlines=512
-syntax sync maxlines=1024
+syntax sync minlines=1024
+syntax sync maxlines=2048
 
-set timeoutlen=1000
-set ttimeoutlen=20
+set timeoutlen=512
+set ttimeoutlen=16
 
 " Avoid issues with UTF-8
 set encoding=utf-8
@@ -262,6 +262,7 @@ Plug 'tpope/vim-endwise'
 Plug 'tpope/vim-repeat'
 Plug 'nelstrom/vim-visual-star-search'
 Plug 'rhysd/clever-f.vim'
+
 Plug 'sickill/vim-pasta'
 Plug 'conradirwin/vim-bracketed-paste'
 
@@ -273,8 +274,8 @@ Plug 'kana/vim-smartword'
 Plug 'glts/vim-textobj-comment'
 Plug 'paradigm/TextObjectify'
 Plug 'rhysd/vim-textobj-anyblock'
-Plug 'vim-utils/vim-troll-stopper'
 
+Plug 'vim-utils/vim-troll-stopper'
 Plug 'ntpeters/vim-better-whitespace'
 
 Plug 'tpope/vim-sleuth'
@@ -740,9 +741,8 @@ set cursorline
 set number
 set relativenumber
 
-" No wrap
 set wrap
-set textwidth=256
+set textwidth=128
 
 " Colorscheme
 colorscheme wasabi256
