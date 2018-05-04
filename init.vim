@@ -89,10 +89,10 @@ set nowritebackup
 set noswapfile
 
 " Efficient way to move through your code using the Arrow Keys
-map <silent> <Left> h
-map <silent> <Down> gj
-map <silent> <Up> gk
-map <silent> <Right> l
+map <silent> <left> h
+map <silent> <down> gj
+map <silent> <up> gk
+map <silent> <right> l
 
 " Indentation options
 set autoindent
@@ -127,35 +127,35 @@ set virtualedit=block
 " Hotkeys
 " ===============================================
 " Leader is SPACE
-let mapleader = "\<Space>"
+let mapleader = "\<space>"
 
 " Move to the beginning of the indentation level
 noremap <home> ^
 
 " Move to the end of a line in a smarter way
-noremap <End> g_
+noremap <end> g_
 
 " Easier to align
 xnoremap > >gv
 xnoremap < <gv
 
 " Resize windows
-nnoremap <silent><Leader><right> :vertical resize -5<cr>
-nnoremap <silent><Leader><left> :vertical resize +5<cr>
-nnoremap <silent><Leader><up> :resize +5<cr>
-nnoremap <silent><Leader><down> :resize -5<cr>
+nnoremap <silent><leader><right> :vertical resize -5<cr>
+nnoremap <silent><leader><left> :vertical resize +5<cr>
+nnoremap <silent><leader><up> :resize +5<cr>
+nnoremap <silent><leader><down> :resize -5<cr>
 
 " Toggles the number lines
-map <silent> <leader>tn :set number!<Cr>:set relativenumber!<Cr>
+map <silent> <leader>tn :set number!<cr>:set relativenumber!<cr>
 
 " Search only in visual selection
-vmap / <Esc>/\%V
+vmap / <esc>/\%V
 
 " PrettyXML: Format a line of XML
-vmap <silent> <Leader>fxml :!xmllint --format --recover - 2>/dev/null<CR>
+vmap <silent> <leader>fxml :!xmllint --format --recover - 2>/dev/null<cr>
 
 " PrettyPSQL: Format a line of PSQL
-vmap <silent> <Leader>fpsql :!pg_format -f 0 -s 2 -u 0<CR>
+vmap <silent> <leader>fpsql :!pg_format -f 0 -s 2 -u 0<cr>
 
 " Selected last pasted text
 nmap gp V']
@@ -199,8 +199,8 @@ Plug 'szw/vim-maximizer'
 
 Plug 'scrooloose/nerdcommenter'
 " Configs
-  nmap '' <Leader>c<Space>
-  vmap '' <Leader>c<Space>
+  nmap '' <leader>c<space>
+  vmap '' <leader>c<space>
 
   " Add spaces after comment delimiters by default
   let g:NERDSpaceDelims = 1
@@ -253,11 +253,11 @@ Plug 'henrik/vim-indexed-search'
   let g:indexed_search_mappings = 0
 
   " Requires a lot of integrations...
-  autocmd VimEnter * nnoremap <silent> n nzz:ShowSearchIndex<CR>
-  autocmd VimEnter * nnoremap <silent> N Nzz:ShowSearchIndex<CR>
+  autocmd VimEnter * nnoremap <silent> n nzz:ShowSearchIndex<cr>
+  autocmd VimEnter * nnoremap <silent> N Nzz:ShowSearchIndex<cr>
 
-  autocmd VimEnter * nnoremap <silent> * *zz:ShowSearchIndex<CR>
-  autocmd VimEnter * nnoremap <silent> # #zz:ShowSearchIndex<CR>
+  autocmd VimEnter * nnoremap <silent> * *zz:ShowSearchIndex<cr>
+  autocmd VimEnter * nnoremap <silent> # #zz:ShowSearchIndex<cr>
 " *******
 
 Plug 'tpope/vim-endwise'
@@ -287,7 +287,7 @@ Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 " Configs
   " Find files using ProjectFiles
-  nmap <silent> <Leader>t :ProjectFiles<CR>
+  nmap <silent> <leader>t :ProjectFiles<cr>
 
   function! s:find_git_root()
     return system('git rev-parse --show-toplevel 2> /dev/null')[:-2]
@@ -297,7 +297,7 @@ Plug 'junegunn/fzf.vim'
 
   " Better command history with q:
   command! CmdHist call fzf#vim#command_history({'right': '40'})
-  nmap <silent> <Leader>r :CmdHist<CR>
+  nmap <silent> <leader>r :CmdHist<cr>
 
   " Buffer Explorer
   function! s:buflist()
@@ -311,12 +311,12 @@ Plug 'junegunn/fzf.vim'
     execute 'buffer' matchstr(a:e, '^[ 0-9]*')
   endfunction
 
-  nnoremap <silent> <Leader>b :call fzf#run({
+  nnoremap <silent> <leader>b :call fzf#run({
   \   'source':  reverse(<sid>buflist()),
   \   'sink':    function('<sid>bufopen'),
   \   'options': '+m',
   \   'down':    len(<sid>buflist()) + 2
-  \ })<CR>
+  \ })<cr>
 " *******
 
 Plug 'dietsche/vim-lastplace'
@@ -608,13 +608,13 @@ Plug 'maksimr/vim-jsbeautify', { 'for': ['javascript', 'javascript.jsx', 'html',
 
 Plug 'prettier/vim-prettier', { 'do': 'sudo npm install', 'for': ['javascript', 'javascript.jsx', 'html', 'css', 'scss', 'sass', 'json'] }
 " Configs
-  nmap <Leader>fjs <Plug>(Prettier)
-  nmap <Leader>fjson <Plug>(Prettier)
-  nmap <Leader>fjsx <Plug>(Prettier)
-  nmap <Leader>fhtml <Plug>(Prettier)
-  nmap <Leader>fcss <Plug>(Prettier)
-  nmap <Leader>fscss <Plug>(Prettier)
-  nmap <Leader>fsass <Plug>(Prettier)
+  nmap <leader>fjs <Plug>(Prettier)
+  nmap <leader>fjson <Plug>(Prettier)
+  nmap <leader>fjsx <Plug>(Prettier)
+  nmap <leader>fhtml <Plug>(Prettier)
+  nmap <leader>fcss <Plug>(Prettier)
+  nmap <leader>fscss <Plug>(Prettier)
+  nmap <leader>fsass <Plug>(Prettier)
 
   let g:prettier#autoformat = 0
 
@@ -667,7 +667,7 @@ Plug 'prettier/vim-prettier', { 'do': 'sudo npm install', 'for': ['javascript', 
 
 Plug 'shime/vim-livedown', { 'do': 'sudo npm install -g livedown', 'on': 'LivedownPreview', 'for': 'ghmarkdown' }
 " Configs
-  nmap <Leader>vp :LivedownPreview<CR>
+  nmap <leader>vp :LivedownPreview<cr>
 
   " should markdown preview get shown automatically upon opening markdown buffer
   let g:livedown_autorun = 0
@@ -681,7 +681,7 @@ Plug 'shime/vim-livedown', { 'do': 'sudo npm install -g livedown', 'on': 'Livedo
 
 Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
 " Configs
-  map <leader>tt :NERDTreeToggle<CR>
+  map <leader>tt :NERDTreeToggle<cr>
   let NERDTreeHijackNetrw=1
 " *******
 
@@ -719,8 +719,8 @@ Plug 'yuttie/comfortable-motion.vim'
 
 Plug 'andrewradev/splitjoin.vim'
 " Configs
-  nmap <Leader>ls :SplitjoinSplit<CR>
-  nmap <Leader>lj :SplitjoinJoin<CR>
+  nmap <leader>ls :SplitjoinSplit<cr>
+  nmap <leader>lj :SplitjoinJoin<cr>
 " *******
 
 Plug 'godlygeek/tabular', { 'on': 'Tabularize' }
