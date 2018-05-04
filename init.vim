@@ -89,10 +89,10 @@ set nowritebackup
 set noswapfile
 
 " Efficient way to move through your code using the Arrow Keys
-map <silent> <left> h
-map <silent> <down> gj
-map <silent> <up> gk
-map <silent> <right> l
+noremap <silent> <left> h
+noremap <silent> <down> gj
+noremap <silent> <up> gk
+noremap <silent> <right> l
 
 " Indentation options
 set autoindent
@@ -146,19 +146,19 @@ nnoremap <silent><leader><up> :resize +5<cr>
 nnoremap <silent><leader><down> :resize -5<cr>
 
 " Toggles the number lines
-map <silent> <leader>tn :set number!<cr>:set relativenumber!<cr>
+noremap <silent> <leader>tn :set number!<cr>:set relativenumber!<cr>
 
 " Search only in visual selection
-vmap / <esc>/\%V
+vnoremap / <esc>/\%V
 
 " PrettyXML: Format a line of XML
-vmap <silent> <leader>fxml :!xmllint --format --recover - 2>/dev/null<cr>
+vnoremap <silent> <leader>fxml :!xmllint --format --recover - 2>/dev/null<cr>
 
 " PrettyPSQL: Format a line of PSQL
-vmap <silent> <leader>fpsql :!pg_format -f 0 -s 2 -u 0<cr>
+vnoremap <silent> <leader>fpsql :!pg_format -f 0 -s 2 -u 0<cr>
 
 " Selected last pasted text
-nmap gp V']
+nnoremap gp V']
 
 
 " ===============================================
@@ -287,7 +287,7 @@ Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 " Configs
   " Find files using ProjectFiles
-  nmap <silent> <leader>t :ProjectFiles<cr>
+  nnoremap <silent> <leader>t :ProjectFiles<cr>
 
   function! s:find_git_root()
     return system('git rev-parse --show-toplevel 2> /dev/null')[:-2]
@@ -297,7 +297,7 @@ Plug 'junegunn/fzf.vim'
 
   " Better command history with q:
   command! CmdHist call fzf#vim#command_history({'right': '40'})
-  nmap <silent> <leader>r :CmdHist<cr>
+  nnoremap <silent> <leader>r :CmdHist<cr>
 
   " Buffer Explorer
   function! s:buflist()
@@ -575,11 +575,11 @@ Plug 'tmux-plugins/vim-tmux-focus-events'
 
 Plug 'maksimr/vim-jsbeautify', { 'for': ['javascript', 'javascript.jsx', 'html', 'css', 'scss', 'sass', 'json'] }
 " Configs
-  vmap <buffer> <leader>fjs :call RangeJsBeautify()<cr>
-  vmap <buffer> <leader>fjson :call RangeJsonBeautify()<cr>
-  vmap <buffer> <leader>fjsx :call RangeJsxBeautify()<cr>
-  vmap <buffer> <leader>fhtml :call RangeHtmlBeautify()<cr>
-  vmap <buffer> <leader>fcss :call RangeCSSBeautify()<cr>
+  vnoremap <buffer> <leader>fjs :call RangeJsBeautify()<cr>
+  vnoremap <buffer> <leader>fjson :call RangeJsonBeautify()<cr>
+  vnoremap <buffer> <leader>fjsx :call RangeJsxBeautify()<cr>
+  vnoremap <buffer> <leader>fhtml :call RangeHtmlBeautify()<cr>
+  vnoremap <buffer> <leader>fcss :call RangeCSSBeautify()<cr>
 
   " For additional configs, see: https://github.com/beautify-web/js-beautify
   let g:config_Beautifier = {
@@ -608,13 +608,13 @@ Plug 'maksimr/vim-jsbeautify', { 'for': ['javascript', 'javascript.jsx', 'html',
 
 Plug 'prettier/vim-prettier', { 'do': 'sudo npm install', 'for': ['javascript', 'javascript.jsx', 'html', 'css', 'scss', 'sass', 'json'] }
 " Configs
-  nmap <leader>fjs <Plug>(Prettier)
-  nmap <leader>fjson <Plug>(Prettier)
-  nmap <leader>fjsx <Plug>(Prettier)
-  nmap <leader>fhtml <Plug>(Prettier)
-  nmap <leader>fcss <Plug>(Prettier)
-  nmap <leader>fscss <Plug>(Prettier)
-  nmap <leader>fsass <Plug>(Prettier)
+  nnoremap <leader>fjs <Plug>(Prettier)
+  nnoremap <leader>fjson <Plug>(Prettier)
+  nnoremap <leader>fjsx <Plug>(Prettier)
+  nnoremap <leader>fhtml <Plug>(Prettier)
+  nnoremap <leader>fcss <Plug>(Prettier)
+  nnoremap <leader>fscss <Plug>(Prettier)
+  nnoremap <leader>fsass <Plug>(Prettier)
 
   let g:prettier#autoformat = 0
 
@@ -667,7 +667,7 @@ Plug 'prettier/vim-prettier', { 'do': 'sudo npm install', 'for': ['javascript', 
 
 Plug 'shime/vim-livedown', { 'do': 'sudo npm install -g livedown', 'on': 'LivedownPreview', 'for': 'ghmarkdown' }
 " Configs
-  nmap <leader>vp :LivedownPreview<cr>
+  nnoremap <leader>vp :LivedownPreview<cr>
 
   " should markdown preview get shown automatically upon opening markdown buffer
   let g:livedown_autorun = 0
@@ -681,7 +681,7 @@ Plug 'shime/vim-livedown', { 'do': 'sudo npm install -g livedown', 'on': 'Livedo
 
 Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
 " Configs
-  map <leader>tt :NERDTreeToggle<cr>
+  noremap <leader>tt :NERDTreeToggle<cr>
   let NERDTreeHijackNetrw=1
 " *******
 
@@ -690,28 +690,28 @@ Plug 'justinmk/vim-sneak'
   let g:sneak#s_next = 1
 
   "'s', sneak with 2 chars
-  nmap f <Plug>Sneak_s
-  nmap F <Plug>Sneak_S
-  xmap f <Plug>Sneak_s
-  xmap F <Plug>Sneak_S
-  omap f <Plug>Sneak_s
-  omap F <Plug>Sneak_S
+  nnoremap f <Plug>Sneak_s
+  nnoremap F <Plug>Sneak_S
+  xnoremap f <Plug>Sneak_s
+  xnoremap F <Plug>Sneak_S
+  onoremap f <Plug>Sneak_s
+  onoremap F <Plug>Sneak_S
 
   "replace 'f' with 1-char Sneak
-  nmap f <Plug>Sneak_f
-  nmap F <Plug>Sneak_F
-  xmap f <Plug>Sneak_f
-  xmap F <Plug>Sneak_F
-  omap f <Plug>Sneak_f
-  omap F <Plug>Sneak_F
+  nnoremap f <Plug>Sneak_f
+  nnoremap F <Plug>Sneak_F
+  xnoremap f <Plug>Sneak_f
+  xnoremap F <Plug>Sneak_F
+  onoremap f <Plug>Sneak_f
+  onoremap F <Plug>Sneak_F
 
   "replace 't' with 1-char Sneak
-  nmap t <Plug>Sneak_t
-  nmap T <Plug>Sneak_T
-  xmap t <Plug>Sneak_t
-  xmap T <Plug>Sneak_T
-  omap t <Plug>Sneak_t
-  omap T <Plug>Sneak_T
+  nnoremap t <Plug>Sneak_t
+  nnoremap T <Plug>Sneak_T
+  xnoremap t <Plug>Sneak_t
+  xnoremap T <Plug>Sneak_T
+  onoremap t <Plug>Sneak_t
+  onoremap T <Plug>Sneak_T
 " *******
 
 Plug 'terryma/vim-multiple-cursors'
@@ -719,8 +719,8 @@ Plug 'yuttie/comfortable-motion.vim'
 
 Plug 'andrewradev/splitjoin.vim'
 " Configs
-  nmap <leader>ls :SplitjoinSplit<cr>
-  nmap <leader>lj :SplitjoinJoin<cr>
+  nnoremap <leader>ls :SplitjoinSplit<cr>
+  nnoremap <leader>lj :SplitjoinJoin<cr>
 " *******
 
 Plug 'godlygeek/tabular', { 'on': 'Tabularize' }
