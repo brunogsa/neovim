@@ -129,6 +129,9 @@ set virtualedit=block
 " Leader is SPACE
 let mapleader = "\<Space>"
 
+" Move to the beginning of the indentation level
+noremap <home> ^
+
 " Move to the end of a line in a smarter way
 noremap <End> g_
 
