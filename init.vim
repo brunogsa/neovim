@@ -83,6 +83,9 @@ vnoremap X "_X
 nnoremap c "_c
 vnoremap C "_C
 
+" Add ; in the end of the line
+nnoremap <silent> ;; mqA;<esc>`q
+
 " No annoying backup files
 set nobackup
 set nowritebackup
@@ -130,9 +133,11 @@ set virtualedit=block
 let mapleader = "\<space>"
 
 " Move to the beginning of the indentation level
+noremap <S-left> ^
 noremap <home> ^
 
 " Move to the end of a line in a smarter way
+noremap <S-right> g_
 noremap <end> g_
 
 " Easier to align
