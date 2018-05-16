@@ -83,8 +83,9 @@ vnoremap X "_X
 nnoremap c "_c
 vnoremap C "_C
 
-" Add ; in the end of the line
+" Add ; or , in the end of the line
 nnoremap <silent> ;; mqA;<esc>`q
+nnoremap <silent> ,, mqA,<esc>`q
 
 " No annoying backup files
 set nobackup
