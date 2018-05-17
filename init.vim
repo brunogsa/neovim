@@ -747,11 +747,11 @@ autocmd BufWinEnter * :syntax sync fromstart
 set cursorline
 
 " Line numbers - Disable for better performance
-set number
-set relativenumber
+" set number
+" set relativenumber
 
 set wrap
-set textwidth=128
+set textwidth=120
 
 " Colorscheme
 colorscheme wasabi256
