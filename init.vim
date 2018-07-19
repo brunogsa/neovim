@@ -279,7 +279,6 @@ Plug 'michaeljsmith/vim-indent-object'
 Plug 'vim-scripts/argtextobj.vim'
 Plug 'Julian/vim-textobj-variable-segment'
 Plug 'kana/vim-textobj-user'
-Plug 'kana/vim-smartword'
 Plug 'glts/vim-textobj-comment'
 Plug 'paradigm/TextObjectify'
 Plug 'rhysd/vim-textobj-anyblock'
@@ -694,14 +693,6 @@ Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
 Plug 'justinmk/vim-sneak'
 " Configs
   let g:sneak#s_next = 1
-
-  "'s', sneak with 2 chars
-  nnoremap f <Plug>Sneak_s
-  nnoremap F <Plug>Sneak_S
-  xnoremap f <Plug>Sneak_s
-  xnoremap F <Plug>Sneak_S
-  onoremap f <Plug>Sneak_s
-  onoremap F <Plug>Sneak_S
 
   "replace 'f' with 1-char Sneak
   nnoremap f <Plug>Sneak_f
