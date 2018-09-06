@@ -363,11 +363,7 @@ Plug 'vim-scripts/CursorLineCurrentWindow'
 Plug 'othree/yajs.vim', { 'for': ['javascript', 'javascript.jsx'] }
 
 " jsx
-Plug 'mxw/vim-jsx', { 'for': ['javascript', 'javascript.jsx'] }
-" Configs
-  " Enable on js files as well
-  let g:jsx_ext_required = 0
-" *******
+Plug 'neoclide/vim-jsx-improve', { 'for': ['javascript', 'javascript.jsx'] }
 
 " json
 Plug 'elzr/vim-json', { 'for': 'json' }
@@ -379,7 +375,7 @@ Plug 'elzr/vim-json', { 'for': 'json' }
 Plug 'othree/jsdoc-syntax.vim', { 'for': ['javascript', 'javascript.jsx'] }
 
 " GraphQL
-Plug 'jparise/vim-graphql', { 'for': ['javascript', 'graphql'] }
+Plug 'jparise/vim-graphql', { 'for': 'graphql' }
 
 " html5
 Plug 'othree/html5.vim', { 'for': 'html' }
