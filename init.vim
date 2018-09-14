@@ -486,7 +486,7 @@ Plug 'neomake/neomake'
   let g:neomake_ft_maker_remove_invalid_entries = 0
 
   " XXX: Use it for debug, if necessary
-  " let g:neomake_logfile = '/home/bagostini/neomake.debug'
+  " let g:neomake_logfile = '/home/brunogsa/neomake.debug'
 
   let g:neomake_place_signs = 1
   let g:neomake_open_list = 2
