@@ -41,8 +41,8 @@ set mouse=
 set ttyfast
 set regexpengine=1
 
-set synmaxcol=120
-syntax sync minlines=1024
+set synmaxcol=150
+syntax sync minlines=256
 syntax sync maxlines=2048
 
 set timeoutlen=512
@@ -152,7 +152,7 @@ nnoremap <silent><leader><up> :resize +5<cr>
 nnoremap <silent><leader><down> :resize -5<cr>
 
 " Toggles the number lines
-noremap <silent> <leader>tn :set number!<cr>:set relativenumber!<cr>
+noremap <silent> <leader>tn :set number!<cr>
 
 " Search only in visual selection
 vnoremap / <esc>/\%V
@@ -738,7 +738,7 @@ set cursorline
 " set relativenumber
 
 set wrap
-set textwidth=120
+set textwidth=150
 
 " Colorscheme
 colorscheme wasabi256
