@@ -114,6 +114,7 @@ set tabstop=2
 set shiftwidth=2
 set softtabstop=2
 set shiftround
+set list!
 
 " Indentation for HTML
 let g:html_indent_script1 = "inc"
