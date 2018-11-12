@@ -664,20 +664,6 @@ Plug 'prettier/vim-prettier', { 'do': 'sudo npm install', 'for': ['javascript', 
   let g:prettier#config#prose_wrap = 'preserve'
 " *******
 
-Plug 'shime/vim-livedown', { 'do': 'sudo npm install -g livedown', 'on': 'LivedownPreview', 'for': 'ghmarkdown' }
-" Configs
-  nnoremap <leader>vp :LivedownPreview<cr>
-
-  " should markdown preview get shown automatically upon opening markdown buffer
-  let g:livedown_autorun = 0
-
-  " should the browser window pop-up upon previewing
-  let g:livedown_open = 1
-
-  " the browser to use
-  let g:livedown_browser = "google-chrome"
-" *******
-
 Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
 " Configs
   noremap <leader>tt :NERDTreeToggle<cr>
