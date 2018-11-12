@@ -360,6 +360,9 @@ Plug 'pangloss/vim-javascript', { 'for': ['javascript', 'javascript.jsx'] }
   let g:javascript_plugin_flow = 0
 " *******
 
+" ejs
+au BufNewFile,BufRead *.ejs set filetype=json
+
 " jsx
 Plug 'neoclide/vim-jsx-improve', { 'for': ['javascript', 'javascript.jsx'] }
 
