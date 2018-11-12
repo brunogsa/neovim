@@ -354,7 +354,11 @@ Plug 'Yggdroot/indentLine'
 Plug 'vim-scripts/CursorLineCurrentWindow'
 
 " javascript
-Plug 'othree/yajs.vim', { 'for': ['javascript', 'javascript.jsx'] }
+Plug 'pangloss/vim-javascript', { 'for': ['javascript', 'javascript.jsx'] }
+" Configs
+  let g:javascript_plugin_jsdoc = 1
+  let g:javascript_plugin_flow = 0
+" *******
 
 " jsx
 Plug 'neoclide/vim-jsx-improve', { 'for': ['javascript', 'javascript.jsx'] }
@@ -364,9 +368,6 @@ Plug 'elzr/vim-json', { 'for': 'json' }
 " Configs
   let g:vim_json_syntax_conceal = 0
 " *******
-
-" jsdoc
-Plug 'othree/jsdoc-syntax.vim', { 'for': ['javascript', 'javascript.jsx'] }
 
 " GraphQL
 Plug 'jparise/vim-graphql', { 'for': 'graphql' }
