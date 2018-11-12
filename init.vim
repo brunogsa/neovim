@@ -225,15 +225,8 @@ Plug 'Valloric/ListToggle'
   let g:lt_quickfix_list_toggle_map = '<leader>tq'
 " *******
 
-Plug 'Raimondi/delimitMate'
-" Configs
-  let delimitMate_matchpairs = "(:),[:],{:}"
-  let delimitMate_expand_cr = 1
-" *******
-
 Plug 'tpope/vim-surround'
-Plug 'Valloric/MatchTagAlways'
-Plug 'vim-scripts/matchit.zip'
+Plug 'andymass/vim-matchup'
 
 Plug 'alvan/vim-closetag'
 " Configs
