@@ -361,7 +361,7 @@ Plug 'pangloss/vim-javascript', { 'for': ['javascript', 'javascript.jsx'] }
 " *******
 
 " ejs
-au BufNewFile,BufRead *.ejs set filetype=json
+Plug 'nikvdp/ejs-syntax', { 'for': ['ejs'] }
 
 " jsx
 Plug 'neoclide/vim-jsx-improve', { 'for': ['javascript', 'javascript.jsx'] }
