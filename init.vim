@@ -233,6 +233,11 @@ Plug 'alvan/vim-closetag'
   let g:closetag_filenames = "*.html,*.xhtml,*.phtml,*.php,*.jsx,*.js"
 " *******
 
+Plug 'jiangmiao/auto-pairs'
+" Configs
+  let g:AutoPairsFlyMode = 1
+" *******
+
 Plug 'chrisbra/vim-diff-enhanced'
 Plug 'rickhowe/diffchar.vim'
 Plug 'AndrewRadev/linediff.vim'
