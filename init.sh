@@ -9,13 +9,15 @@ sudo apt-get install -y software-properties-common
 # Install python and pip
 sudo apt-get install -y python-dev python-pip python3-dev python3-pip
 sudo apt-get install -y python-pip python3-pip
-sudo pip install --upgrade pip
+sudo pip3 install --upgrade pip
+sudo pip3 install pynvim
+sudo pip3 install --upgrade pynvim
 
 # Install Lua
 sudo apt-get install -y luarocks lua-check rubygems ruby-dev
 sudo luarocks install luacheck
 
-# Install node and npm
+# Install node, npm and n
 cd ~
 wget https://nodejs.org/dist/v8.9.4/node-v8.9.4-linux-x64.tar.xz
 tar -xf node-v8.9.4-linux-x64.tar.xz
@@ -25,5 +27,8 @@ sudo node-v8.9.4-linux-x64/bin/npm install -g npm
 node -v
 npm -v
 rm -fr node-v8.9.4-linux-x64
+sudo npm i -g n
+sudo n lts
+sudo npm i -g npm
 
 sudo reboot
