@@ -235,7 +235,7 @@ Plug 'alvan/vim-closetag'
 
 Plug 'jiangmiao/auto-pairs'
 " Configs
-  let g:AutoPairsFlyMode = 1
+  let g:AutoPairsFlyMode = 0
 " *******
 
 Plug 'chrisbra/vim-diff-enhanced'
