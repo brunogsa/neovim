@@ -610,7 +610,20 @@ Plug 'maksimr/vim-jsbeautify', { 'for': ['javascript', 'javascript.jsx', 'html',
   \}
 " *******
 
-Plug 'prettier/vim-prettier', { 'do': 'sudo npm install', 'for': ['javascript', 'javascript.jsx', 'html', 'css', 'scss', 'sass', 'json'] }
+Plug 'prettier/vim-prettier', {
+\ 'do': 'yarn install',
+\ 'branch': 'release/1.x',
+\ 'for': [
+  \ 'javascript',
+  \ 'javascript.jsx',
+  \ 'typescript',
+  \ 'css',
+  \ 'scss',
+  \ 'sass',
+  \ 'json',
+  \ 'html'
+  \ ]
+\ }
 " Configs
   nnoremap <leader>fjs <Plug>(Prettier)
   nnoremap <leader>fjson <Plug>(Prettier)
