@@ -28,6 +28,20 @@ function! FindGlobFile(glob, ...) abort
   return ''
 endfunction
 
+" Public
+function! SynGroup()
+  let l:s = synID(line('.'), col('.'), 1)
+  echo synIDattr(l:s, 'name') . ' -> ' . synIDattr(synIDtrans(l:s), 'name')
+endfun
+
+" Public
+function! SynStack()
+  if !exists("*synstack")
+    return
+  endif
+  echo map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")')
+endfunc
+
 " ===============================================
 " Core Settings
 " ===============================================
@@ -283,7 +297,6 @@ Plug 'paradigm/TextObjectify'
 Plug 'rhysd/vim-textobj-anyblock'
 
 Plug 'vim-utils/vim-troll-stopper'
-Plug 'ntpeters/vim-better-whitespace'
 
 Plug 'tpope/vim-sleuth'
 
@@ -382,6 +395,18 @@ Plug 'jparise/vim-graphql', { 'for': 'graphql' }
 
 " html5
 Plug 'othree/html5.vim', { 'for': 'html' }
+
+" golang
+Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries', 'for': 'go' }
+" Configs
+  let g:go_fmt_autosave = 0
+  let g:go_mod_fmt_autosave = 0
+  let g:go_def_mapping_enabled = 1
+  let g:go_textobj_enabled = 0
+  let g:go_textobj_include_function_doc = 0
+  let g:go_textobj_include_variable = 0
+  let g:go_fold_enable = []
+" *******
 
 " css3
 Plug 'hail2u/vim-css3-syntax', { 'for': 'css' }
