@@ -31,4 +31,7 @@ sudo npm i -g n
 sudo n lts
 sudo npm i -g npm
 
+# Install go
+sudo snap install go --classic
+
 sudo reboot

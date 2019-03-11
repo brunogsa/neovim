@@ -579,10 +579,10 @@ Plug 'neomake/neomake'
     \ 'args': ['-p', '%:p'],
     \ 'errorformat': '%E/usr/bin/luac: %f:%l: %m'
   \}
-
-  " luac: rc.lua:26: ')' expected (to close '(' at line 25) near '='
-
   let g:neomake_lua_enabled_makers = ['luac']
+
+  " Golang Checkers
+  let g:neomake_go_enabled_makers = ['go', 'golint']
 " *******
 
 Plug 'tpope/vim-git', { 'for': 'gitcommit' }
