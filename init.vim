@@ -480,6 +480,12 @@ Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
     \ 'tmuxcomplete#complete'
   \]
 
+  let g:deoplete#omni#functions.go = [
+    \ 'gocode#Complete',
+    \ 'syntaxcomplete#Complete',
+    \ 'tmuxcomplete#complete'
+  \]
+
   " Close the documentation window when completion is done
   autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | pclose | endif
 
@@ -517,7 +523,12 @@ Plug 'neomake/neomake'
   " let g:neomake_logfile = '/home/brunogsa/neomake.debug'
 
   let g:neomake_place_signs = 1
+
   let g:neomake_open_list = 2
+
+  " Golint shows errors of all files in any file, so it must be disabled for a better experience
+  au BufReadPre,FileReadPre *.go let g:neomake_open_list = 0
+
   let g:neomake_list_height = 4
   let g:neomake_echo_current_error = 1
 
