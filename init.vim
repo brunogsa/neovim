@@ -46,14 +46,13 @@ endfunc
 " Core Settings
 " ===============================================
 
-set cmdheight=2
-
 " Disable mouse
 set mouse=
 
 " Improve Performance
 set ttyfast
 set regexpengine=1
+set modelines=0
 
 set synmaxcol=150
 syntax sync minlines=256
@@ -69,7 +68,9 @@ scriptencoding utf-8
 " Fold options. I prefer fold by identation
 set foldmethod=indent
 set foldlevelstart=2
-set list lcs=tab:\┆\
+set foldnestmax=4
+set listchars=nbsp:˽,trail:˽,tab:\┆\ 
+set list
 
 " Search options
 set incsearch
@@ -128,7 +129,6 @@ set tabstop=2
 set shiftwidth=2
 set softtabstop=2
 set shiftround
-set list!
 
 " Indentation for HTML
 let g:html_indent_script1 = "inc"
@@ -767,6 +767,9 @@ call plug#end()
 
 syntax on
 autocmd BufWinEnter * :syntax sync fromstart
+
+" Larger bottom command panel, better for seeing auxiliar messages
+set cmdheight=2
 
 " Add a line above the cursor - Disable for better performance
 set cursorline
