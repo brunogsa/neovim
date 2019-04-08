@@ -1,8 +1,8 @@
 ## How to install
 
 ```sh
-./init.sh
-./init2.sh
+./install.sh
+./install2.sh
 
 vim +PlugInstall +qall
 ```
