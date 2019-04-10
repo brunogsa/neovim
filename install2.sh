@@ -24,6 +24,13 @@ perl Makefile.PL
 make && sudo make install
 cd -
 
+# Install nerd-fonts
+sudo rm -fr nerd-fonts && git clone https://github.com/ryanoasis/nerd-fonts
+cd nerd-fonts
+sudo chmod +x install.sh
+./install.sh
+cd -
+
 # Install it
 sudo add-apt-repository ppa:neovim-ppa/unstable
 sudo apt-get update

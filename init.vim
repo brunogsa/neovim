@@ -195,8 +195,11 @@ call plug#begin('~/.local/share/nvim/plugged')
 
 Plug 'neovim/python-client'
 
+Plug 'ryanoasis/vim-devicons'
 Plug 'itchyny/lightline.vim'
 " Configs
+  let g:lightline#bufferline#enable_devicons = 1
+
   let g:lightline = {
     \ 'colorscheme': 'seoul256',
     \ 'active': {
@@ -211,9 +214,21 @@ Plug 'itchyny/lightline.vim'
     \   'readonly': '(&filetype!="help"&& &readonly)',
     \   'modified': '(&filetype!="help"&&(&modified||!&modifiable))'
     \ },
+    \ 'component_function': {
+    \   'filetype': 'MyFiletype',
+    \   'fileformat': 'MyFileformat',
+    \ },
     \ 'separator': { 'left': '', 'right': '' },
     \ 'subseparator': { 'left': '|', 'right': '|' }
   \}
+
+  function! MyFiletype()
+    return winwidth(0) > 70 ? (strlen(&filetype) ? &filetype . ' ' . WebDevIconsGetFileTypeSymbol() : 'no ft') : ''
+  endfunction
+
+  function! MyFileformat()
+    return winwidth(0) > 70 ? (&fileformat . ' ' . WebDevIconsGetFileFormatSymbol()) : ''
+  endfunction
 " *******
 
 Plug 'szw/vim-maximizer'
