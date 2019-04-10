@@ -460,24 +460,32 @@ Plug 'exu/pgsql.vim', { 'for': 'sql' }
 " Slower / Better mechanism
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 " Configs
+  set runtimepath+=~/.local/share/nvim/plugged/deoplete.nvim/
+  let g:deoplete#enable_at_startup = 1
+
   inoremap <silent><expr><tab> pumvisible() ? "\<c-n>" : "\<tab>"
   inoremap <silent><expr><s-tab> pumvisible() ? "\<c-p>" : "\<s-tab>"
 
-  let g:deoplete#enable_at_startup = 1
-  let g:deoplete#enable_smart_case = 1
-  let g:deoplete#enable_refresh_always = 0
-  let g:deoplete#disable_auto_complete = 0
-  let g:deoplete#max_list = 32
-  let g:deoplete#max_menu_width = 16
-  let g:deoplete#auto_complete_start_length = 1
+  " Close the documentation window when completion is done
+  autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | pclose | endif
+
+  call deoplete#custom#option({
+    \ 'auto_complete': v:true,
+    \ 'camel_case': v:false,
+    \ 'ignore_case': v:false,
+    \ 'smart_case': v:false,
+    \ 'max_list': 32,
+    \ 'num_processes': 0,
+    \ 'min_pattern_length': 1
+  \ })
 
   let g:deoplete#omni#functions = {}
 
   let g:deoplete#omni#functions.javascript = [
-    \ 'tern#Complete',
-    \ 'jspc#omni',
     \ 'syntaxcomplete#Complete',
-    \ 'tmuxcomplete#complete'
+    \ 'tmuxcomplete#complete',
+    \ 'tern#Complete',
+    \ 'jspc#omni'
   \]
 
   let g:deoplete#omni#functions.ruby = [
@@ -501,9 +509,6 @@ Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
     \ 'tmuxcomplete#complete'
   \]
 
-  " Close the documentation window when completion is done
-  autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | pclose | endif
-
   " Fix an conflict with vim-multiple-cursors
   function g:Multiple_cursors_before()
       let g:deoplete#disable_auto_complete = 1
@@ -518,7 +523,7 @@ Plug 'wellle/tmux-complete.vim'
 
 Plug 'carlitux/deoplete-ternjs', { 'for': ['javascript', 'javascript.jsx'] }
 " Configs
-  let g:tern_request_timeout = 1
+  let g:tern_request_timeout = 2
 " *******
 
 Plug 'myhere/vim-nodejs-complete', { 'for': ['javascript', 'javascript.jsx'] }
