@@ -50,5 +50,6 @@ ln -s ~/neovim/init.vim ~/.config/nvim/
 ln -s ~/neovim/colors ~/.config/nvim/
 ln -s ~/neovim/.tern-project ~
 
+echo "alias sudo=sudo " >> ~/.bashrc
 echo "alias vim=nvim" >> ~/.bashrc
 echo "Done!"
