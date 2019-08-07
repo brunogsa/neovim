@@ -274,7 +274,7 @@ Plug 'AndrewRadev/linediff.vim'
 Plug 'junegunn/limelight.vim'
 " *******
   vnoremap <silent> <leader>r :Limelight<cr>
-  nnoremap <silent> <leader>r :Limelight!<cr>
+  nnoremap <silent> <leader>r :Limelight!!<cr>
 
   let g:limelight_conceal_ctermfg = 'gray'
   let g:limelight_conceal_ctermfg = 240
