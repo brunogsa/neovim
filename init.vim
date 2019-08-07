@@ -271,6 +271,17 @@ Plug 'chrisbra/vim-diff-enhanced'
 Plug 'rickhowe/diffchar.vim'
 Plug 'AndrewRadev/linediff.vim'
 
+Plug 'junegunn/limelight.vim'
+" *******
+  vnoremap <silent> <leader>r :Limelight<cr>
+  nnoremap <silent> <leader>r :Limelight!<cr>
+
+  let g:limelight_conceal_ctermfg = 'gray'
+  let g:limelight_conceal_ctermfg = 240
+
+  let g:limelight_priority = -1
+"
+
 Plug 'lfv89/vim-interestingwords'
 " Configs
   nnoremap <silent> <leader>h :call InterestingWords('n')<cr>
@@ -329,7 +340,7 @@ Plug 'junegunn/fzf.vim'
 
   " Better command history with q:
   command! CmdHist call fzf#vim#command_history({'right': '40'})
-  nnoremap <silent> <leader>r :CmdHist<cr>
+  nnoremap <silent> <C-S-r> :CmdHist<cr>
 
   " Buffer Explorer
   function! s:buflist()
