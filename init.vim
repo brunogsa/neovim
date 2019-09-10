@@ -265,7 +265,7 @@ Plug 'alvan/vim-closetag'
 Plug 'jiangmiao/auto-pairs'
 " Configs
   let g:AutoPairsFlyMode = 0
-  let g:AutoPairsShortcutBackInsert = '<S-b>'
+  let g:AutoPairsShortcutBackInsert = '<C-S-b>'
 " *******
 
 Plug 'chrisbra/vim-diff-enhanced'
