@@ -6,6 +6,9 @@ set -e
 # Globally install ESLint and Tern stuff
 sudo npm install -g eslint babel-eslint eslint-config-node eslint-config-airbnb eslint-plugin-jsx-a11y eslint-plugin-react eslint-plugin-import eslint-config-standard eslint-plugin-node eslint-plugin-promise eslint-plugin-standard tern prettier eslint-plugin-cypress eslint-plugin-chai-friendly
 
+# tslint installation
+sudo npm install -g tslint
+
 # golint installation
 sudo apt-get install -y golint
 

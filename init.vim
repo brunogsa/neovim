@@ -582,7 +582,7 @@ Plug 'neomake/neomake'
 
   " TypeScript Checkers
   let g:neomake_typescript_tsc_maker = {
-    \ 'exe': '/usr/bin/tsc',
+    \ 'exe': '/usr/local/bin/tsc',
     \ 'append_file': 0,
     \ 'args': [
       \ '--experimentalDecorators',
@@ -607,7 +607,7 @@ Plug 'neomake/neomake'
   let tslintConfig = FindGlobFile('tslint.json')
 
   let g:neomake_typescript_tslint_maker = {
-    \ 'exe': '/usr/bin/tslint',
+    \ 'exe': '/usr/local/bin/tslint',
     \ 'append_file': 0,
     \ 'args': ['--config', tslintConfig, '%:p'],
     \ 'errorformat': '%E%f[%l\, %c]: %m'

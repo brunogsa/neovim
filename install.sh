@@ -31,6 +31,9 @@ sudo npm i -g n
 sudo n lts
 sudo npm i -g npm
 
+# Install typescript
+sudo npm i -g typescript
+
 # Install go
 sudo snap install go --classic
 
