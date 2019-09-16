@@ -341,7 +341,7 @@ Plug 'junegunn/fzf.vim'
 
   " Better command history with q:
   command! CmdHist call fzf#vim#command_history({'right': '40'})
-  nnoremap <silent> <C-S-r> :CmdHist<cr>
+  nnoremap <silent> <C-A-r> :CmdHist<cr>
 
   " Buffer Explorer
   function! s:buflist()
