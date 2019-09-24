@@ -4,7 +4,7 @@
 ./install.sh
 ./install2.sh
 
-vim +PlugInstall +qall
+nvim +PlugInstall +qall
 ```
 
 Your computer will reboot 2 times in the process :B
