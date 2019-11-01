@@ -376,6 +376,14 @@ Plug 'dietsche/vim-lastplace'
 Plug 'ap/vim-css-color'
 Plug 'posva/vim-vue', { 'for': 'vue' }
 
+
+Plug 'hashivim/vim-terraform'
+" Configs
+  let g:terraform_align = 0
+  let g:terraform_fold_sections = 0
+  let g:terraform_fmt_on_save = 0
+" *******
+
 Plug 'leafgarland/typescript-vim', { 'for': 'typescript' }
 " Configs
   let g:typescript_compiler_binary = 'tsc'
