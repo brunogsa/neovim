@@ -4,7 +4,7 @@ set -e
 # Install integrations..
 
 # Globally install ESLint and Tern stuff
-sudo npm install -g eslint babel-eslint eslint-config-node eslint-config-airbnb eslint-plugin-jsx-a11y eslint-plugin-react eslint-plugin-import eslint-config-standard eslint-plugin-node eslint-plugin-promise eslint-plugin-standard tern prettier eslint-plugin-cypress eslint-plugin-chai-friendly
+sudo npm install -g eslint babel-eslint eslint-config-node eslint-config-airbnb eslint-plugin-jsx-a11y eslint-plugin-react eslint-plugin-import eslint-config-standard eslint-plugin-node eslint-plugin-promise eslint-plugin-standard tern prettier eslint-plugin-cypress eslint-plugin-chai-friendly @typescript-eslint/eslint-plugin @typescript-eslint/parser eslint-config-airbnb-typescript
 
 # tslint installation
 sudo npm install -g tslint

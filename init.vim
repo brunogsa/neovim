@@ -582,7 +582,7 @@ Plug 'neomake/neomake'
   let g:neomake_javascript_eslint_maker = {
     \ 'exe': '/usr/bin/eslint',
     \ 'append_file': 0,
-    \ 'args': ['--no-ignore', '-f', 'compact', '%:p'],
+    \ 'args': ['--no-ignore', '-f', 'compact', '--ext', '.js', '%:p'],
     \ 'errorformat': '%E%f: line %l\, col %c\, Error - %m, %W%f: line %l\, col %c\, Warning - %m'
   \}
 
@@ -593,10 +593,13 @@ Plug 'neomake/neomake'
     \ 'exe': '/usr/local/bin/tsc',
     \ 'append_file': 0,
     \ 'args': [
-      \ '--experimentalDecorators',
+      \ '--allowJs',
       \ '--forceConsistentCasingInFileNames',
+      \ '--esModuleInterop',
+      \ '--jsx',
+      \ 'preserve',
       \ '--lib',
-      \ 'es2016,dom',
+      \ 'es2017,dom',
       \ '--moduleResolution',
       \ 'node',
       \ '--noEmit',
@@ -605,8 +608,6 @@ Plug 'neomake/neomake'
       \ '--noUnusedParameters',
       \ '--skipLibCheck',
       \ '--strictNullChecks',
-      \ '-t',
-      \ 'ES5',
       \ '%:p'
     \],
     \ 'errorformat': '%E%f(%l\,%c): error %m'
@@ -621,7 +622,14 @@ Plug 'neomake/neomake'
     \ 'errorformat': '%E%f[%l\, %c]: %m'
   \}
 
-  let g:neomake_typescript_enabled_makers = ['tsc', 'tslint']
+  let g:neomake_typescript_eslint_maker = {
+    \ 'exe': '/usr/local/bin/eslint',
+    \ 'append_file': 0,
+    \ 'args': ['--no-ignore', '-f', 'compact', '--ext', '.ts', '%:p'],
+    \ 'errorformat': '%E%f: line %l\, col %c\, Error - %m, %W%f: line %l\, col %c\, Warning - %m'
+  \}
+
+  let g:neomake_typescript_enabled_makers = ['eslint']
 
   " Lua Checkers
   let g:neomake_lua_luac_maker = {
