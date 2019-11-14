@@ -603,6 +603,7 @@ Plug 'neomake/neomake'
       \ '--moduleResolution',
       \ 'node',
       \ '--noEmit',
+      \ '--noImplicitAny',
       \ '--noImplicitThis',
       \ '--noUnusedLocals',
       \ '--noUnusedParameters',
