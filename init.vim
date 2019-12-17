@@ -373,11 +373,15 @@ Plug 'dietsche/vim-lastplace'
 " Highlight
 " =================
 
+Plug 'martinda/Jenkinsfile-vim-syntax', { 'for': 'Jenkinsfile' }
+Plug 'vim-scripts/groovy.vim', { 'for': 'Jenkinsfile' }
+
 Plug 'ap/vim-css-color'
+
 Plug 'posva/vim-vue', { 'for': 'vue' }
 
 
-Plug 'hashivim/vim-terraform'
+Plug 'hashivim/vim-terraform', { 'for': 'terraform' }
 " Configs
   let g:terraform_align = 0
   let g:terraform_fold_sections = 0
