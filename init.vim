@@ -402,13 +402,14 @@ Plug 'hashivim/vim-terraform', { 'for': 'terraform' }
   let g:terraform_fmt_on_save = 0
 " *******
 
+" typescript highlight for .ts and .d.ts files
 Plug 'leafgarland/typescript-vim', { 'for': 'typescript' }
 " Configs
   let g:typescript_compiler_binary = 'tsc'
   let g:typescript_compiler_options = ''
 " *******
 
-" typescript
+" extend typescript + DOM keywords
 Plug 'HerringtonDarkholme/yats.vim', { 'for': 'typescript' }
 
 Plug 'Yggdroot/indentLine'
@@ -531,11 +532,6 @@ Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
     \ 'tmuxcomplete#complete'
   \]
 
-  let g:deoplete#omni#functions.typescript = [
-    \ 'syntaxcomplete#Complete',
-    \ 'tmuxcomplete#complete'
-  \]
-
   let g:deoplete#omni#functions.pug = [
     \ 'syntaxcomplete#Complete',
     \ 'tmuxcomplete#complete'
@@ -567,6 +563,19 @@ Plug 'carlitux/deoplete-ternjs', { 'for': ['javascript', 'javascript.jsx'] }
 Plug 'myhere/vim-nodejs-complete', { 'for': ['javascript', 'javascript.jsx'] }
 Plug 'othree/jspc.vim', { 'for': ['javascript', 'javascript.jsx'] }
 
+" WARN: If you got errors, try running :UpdateRemotePlugins inside a .ts file
+" WARN: Requires a tsconfig.json file, so you'll may have to create a symbolic link for it
+Plug 'mhartington/nvim-typescript', { 'do': './install.sh', 'for': 'typescript' }
+" Configs
+  let g:nvim_typescript#quiet_startup = 0
+  let g:nvim_typescript#type_info_on_hold = 0
+  let g:nvim_typescript#signature_complete = 1
+  let g:nvim_typescript#default_mappings = 0
+  let g:nvim_typescript#completion_mark = '[TS]'
+
+  autocmd CursorMoved *.ts TSType
+" *******
+
 
 " Lint
 " =================
@@ -582,12 +591,9 @@ Plug 'neomake/neomake'
 
   let g:neomake_place_signs = 1
 
-  let g:neomake_open_list = 2
+  let g:neomake_open_list = 0
 
-  " Golint shows errors of all files in any file, so it must be disabled for a better experience
-  au BufReadPre,FileReadPre *.go let g:neomake_open_list = 0
-
-  let g:neomake_list_height = 4
+  let g:neomake_list_height = 2
   let g:neomake_echo_current_error = 1
 
   let g:neomake_highlight_columns = 0
@@ -648,7 +654,7 @@ Plug 'neomake/neomake'
     \ 'errorformat': '%E%f: line %l\, col %c\, Error - %m, %W%f: line %l\, col %c\, Warning - %m'
   \}
 
-  let g:neomake_typescript_enabled_makers = ['eslint']
+  let g:neomake_typescript_enabled_makers = ['eslint', 'tslint']
 
   " Lua Checkers
   let g:neomake_lua_luac_maker = {
