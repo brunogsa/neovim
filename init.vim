@@ -108,10 +108,10 @@ set nowritebackup
 set noswapfile
 
 " Efficient way to move through your code using the Arrow Keys
-noremap <silent> <left> h
-noremap <silent> <down> gj
-noremap <silent> <up> gk
-noremap <silent> <right> l
+nnoremap <silent> <left> h
+nnoremap <silent> <down> gj
+nnoremap <silent> <up> gk
+nnoremap <silent> <right> l
 
 " Indentation options
 set autoindent
@@ -149,34 +149,34 @@ set virtualedit=block
 let mapleader = "\<space>"
 
 " Move to the beginning of the indentation level
-noremap <S-left> ^
-noremap <home> ^
+nnoremap <S-left> ^
+nnoremap <home> ^
 
 " Move to the end of a line in a smarter way
-noremap <S-right> g_
-noremap <end> g_
+nnoremap <S-right> g_
+nnoremap <end> g_
 
 " Easier to align
 xnoremap > >gv
 xnoremap < <gv
 
 " Resize windows
-nnoremap <silent><leader><right> :vertical resize -5<cr>
-nnoremap <silent><leader><left> :vertical resize +5<cr>
-nnoremap <silent><leader><up> :resize +5<cr>
-nnoremap <silent><leader><down> :resize -5<cr>
+" nnoremap <silent><leader><right> :vertical resize -5<cr>
+" nnoremap <silent><leader><left> :vertical resize +5<cr>
+" nnoremap <silent><leader><up> :resize +5<cr>
+" nnoremap <silent><leader><down> :resize -5<cr>
 
 " Toggles the number lines
-noremap <silent> <leader>tn :set number!<cr>
+nnoremap <silent> <leader>tn :set number!<cr>
 
 " Search only in visual selection
 vnoremap / <esc>/\%V
 
 " PrettyXML: Format a line of XML
-vnoremap <silent> <leader>fxml :!xmllint --format --recover - 2>/dev/null<cr>
+vnoremap <silent> <leader>Fxml :!xmllint --format --recover - 2>/dev/null<cr>
 
 " PrettyPSQL: Format a line of PSQL
-vnoremap <silent> <leader>fpsql :!pg_format -f 0 -s 2 -u 0<cr>
+vnoremap <silent> <leader>Fpsql :!pg_format -f 0 -s 2 -u 0<cr>
 
 " Selected last pasted text
 nnoremap gp V']
@@ -194,6 +194,14 @@ call plug#begin('~/.local/share/nvim/plugged')
 " =================
 
 Plug 'neovim/python-client'
+
+Plug 'liuchengxu/vim-which-key'
+" Configs
+  set timeoutlen=500
+
+  nnoremap <silent> <leader> :<c-u>WhichKey '<Space>'<CR>
+  vnoremap <silent> <leader> :<c-u>WhichKeyVisual '<Space>'<CR>
+" *******
 
 Plug 'ryanoasis/vim-devicons'
 Plug 'itchyny/lightline.vim'
@@ -232,12 +240,13 @@ Plug 'itchyny/lightline.vim'
 " *******
 
 Plug 'szw/vim-maximizer'
+"Configs
+  let g:maximizer_set_default_mapping = 0
+  nnoremap <silent><leader><F3> :MaximizerToggle<CR>
+" *******
 
 Plug 'scrooloose/nerdcommenter'
 " Configs
-  nmap '' <leader>c<space>
-  vmap '' <leader>c<space>
-
   " Add spaces after comment delimiters by default
   let g:NERDSpaceDelims = 1
 
@@ -270,18 +279,23 @@ Plug 'jiangmiao/auto-pairs'
 
 Plug 'chrisbra/vim-diff-enhanced'
 Plug 'rickhowe/diffchar.vim'
+
 Plug 'AndrewRadev/linediff.vim'
+" Configs
+  vnoremap <silent> <leader>d :Linediff<cr>
+  nnoremap <silent> <leader>D :LinediffReset<cr>
+" *******
 
 Plug 'junegunn/limelight.vim'
-" *******
-  vnoremap <silent> <leader>r :Limelight<cr>
-  nnoremap <silent> <leader>r :Limelight!!<cr>
+" Configs
+  vnoremap <silent> <leader>v :Limelight<cr>
+  nnoremap <silent> <leader>v :Limelight!!<cr>
 
   let g:limelight_conceal_ctermfg = 'gray'
   let g:limelight_conceal_ctermfg = 240
 
   let g:limelight_priority = -1
-"
+" *******
 
 Plug 'lfv89/vim-interestingwords'
 " Configs
@@ -331,7 +345,7 @@ Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 " Configs
   " Find files using ProjectFiles
-  nnoremap <silent> <leader>t :ProjectFiles<cr>
+  nnoremap <silent> <leader>f :ProjectFiles<cr>
 
   function! s:find_git_root()
     return system('git rev-parse --show-toplevel 2> /dev/null')[:-2]
@@ -341,7 +355,7 @@ Plug 'junegunn/fzf.vim'
 
   " Better command history with q:
   command! CmdHist call fzf#vim#command_history({'right': '40'})
-  nnoremap <silent> <C-A-r> :CmdHist<cr>
+  nnoremap <silent> <leader>r :CmdHist<cr>
 
   " Buffer Explorer
   function! s:buflist()
@@ -668,11 +682,11 @@ Plug 'tmux-plugins/vim-tmux-focus-events'
 
 Plug 'maksimr/vim-jsbeautify', { 'for': ['javascript', 'javascript.jsx', 'html', 'css', 'scss', 'sass', 'json'] }
 " Configs
-  vnoremap <buffer> <leader>fjs :call RangeJsBeautify()<cr>
-  vnoremap <buffer> <leader>fjson :call RangeJsonBeautify()<cr>
-  vnoremap <buffer> <leader>fjsx :call RangeJsxBeautify()<cr>
-  vnoremap <buffer> <leader>fhtml :call RangeHtmlBeautify()<cr>
-  vnoremap <buffer> <leader>fcss :call RangeCSSBeautify()<cr>
+  vnoremap <buffer> <leader>Fjs :call RangeJsBeautify()<cr>
+  vnoremap <buffer> <leader>Fjson :call RangeJsonBeautify()<cr>
+  vnoremap <buffer> <leader>Fjsx :call RangeJsxBeautify()<cr>
+  vnoremap <buffer> <leader>Fhtml :call RangeHtmlBeautify()<cr>
+  vnoremap <buffer> <leader>Fcss :call RangeCSSBeautify()<cr>
 
   " For additional configs, see: https://github.com/beautify-web/js-beautify
   let g:config_Beautifier = {
@@ -714,13 +728,13 @@ Plug 'prettier/vim-prettier', {
   \ ]
 \ }
 " Configs
-  nnoremap <leader>fjs <Plug>(Prettier)
-  nnoremap <leader>fjson <Plug>(Prettier)
-  nnoremap <leader>fjsx <Plug>(Prettier)
-  nnoremap <leader>fhtml <Plug>(Prettier)
-  nnoremap <leader>fcss <Plug>(Prettier)
-  nnoremap <leader>fscss <Plug>(Prettier)
-  nnoremap <leader>fsass <Plug>(Prettier)
+  nnoremap <leader>Fjs <Plug>(Prettier)
+  nnoremap <leader>Fjson <Plug>(Prettier)
+  nnoremap <leader>Fjsx <Plug>(Prettier)
+  nnoremap <leader>Fhtml <Plug>(Prettier)
+  nnoremap <leader>Fcss <Plug>(Prettier)
+  nnoremap <leader>Fscss <Plug>(Prettier)
+  nnoremap <leader>Fsass <Plug>(Prettier)
 
   let g:prettier#autoformat = 0
 
@@ -773,7 +787,7 @@ Plug 'prettier/vim-prettier', {
 
 Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
 " Configs
-  noremap <leader>tt :NERDTreeToggle<cr>
+  nnoremap <leader>tp :NERDTreeToggle<cr>
   let NERDTreeHijackNetrw=1
 " *******
 
