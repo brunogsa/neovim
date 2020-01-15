@@ -567,13 +567,12 @@ Plug 'othree/jspc.vim', { 'for': ['javascript', 'javascript.jsx'] }
 " WARN: Requires a tsconfig.json file, so you'll may have to create a symbolic link for it
 Plug 'mhartington/nvim-typescript', { 'do': './install.sh', 'for': 'typescript' }
 " Configs
+  set updatetime=1000
   let g:nvim_typescript#quiet_startup = 0
-  let g:nvim_typescript#type_info_on_hold = 0
+  let g:nvim_typescript#type_info_on_hold = 1
   let g:nvim_typescript#signature_complete = 1
   let g:nvim_typescript#default_mappings = 0
   let g:nvim_typescript#completion_mark = '[TS]'
-
-  autocmd CursorMoved *.ts TSType
 " *******
 
 
