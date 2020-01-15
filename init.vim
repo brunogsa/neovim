@@ -149,12 +149,12 @@ set virtualedit=block
 let mapleader = "\<space>"
 
 " Move to the beginning of the indentation level
-nnoremap <S-left> ^
-nnoremap <home> ^
+noremap <S-left> ^
+noremap <home> ^
 
 " Move to the end of a line in a smarter way
-nnoremap <S-right> g_
-nnoremap <end> g_
+noremap <S-right> g_
+noremap <end> g_
 
 " Easier to align
 xnoremap > >gv
