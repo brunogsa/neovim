@@ -255,6 +255,9 @@ Plug 'scrooloose/nerdcommenter'
 
   " Allow commenting and inverting empty lines (useful when commenting a region)
   let g:NERDCommentEmptyLines = 0
+
+  nmap <leader><leader> <leader>c<space>
+  vmap <leader><leader> <leader>c<space>
 " *******
 
 Plug 'Valloric/ListToggle'
