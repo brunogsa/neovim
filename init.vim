@@ -212,7 +212,7 @@ Plug 'itchyny/lightline.vim'
     \ 'colorscheme': 'seoul256',
     \ 'active': {
     \   'left': [ [ 'mode', 'paste' ],
-    \             [ 'readonly', 'filename', 'modified' ] ]
+    \             [ 'readonly', 'absolutepath', 'modified' ] ]
     \ },
     \ 'component': {
     \   'readonly': '%{&readonly?"READ-ONLY":""}',
