@@ -181,6 +181,9 @@ vnoremap <silent> <leader>Fpsql :!pg_format -f 0 -s 2 -u 0<cr>
 " Selected last pasted text
 nnoremap gp V']
 
+" View a formatted JSON is a new buffer
+vnoremap <buffer> <leader>Vjson y:vnew<cr>pV:s/\\//g<cr>V:call RangeJsonBeautify()<cr>
+
 
 " ===============================================
 " Init plugins
@@ -688,10 +691,11 @@ Plug 'tmux-plugins/vim-tmux-focus-events'
 " Luxury
 " =================
 
-Plug 'maksimr/vim-jsbeautify', { 'for': ['javascript', 'javascript.jsx', 'html', 'css', 'scss', 'sass', 'json'] }
+Plug 'maksimr/vim-jsbeautify'
 " Configs
+
   vnoremap <buffer> <leader>Fjs :call RangeJsBeautify()<cr>
-  vnoremap <buffer> <leader>Fjson :call RangeJsonBeautify()<cr>
+  vnoremap <buffer> <leader>Fjson di<cr><esc>VpV:s/\\//g<cr>V:call RangeJsonBeautify()<cr>
   vnoremap <buffer> <leader>Fjsx :call RangeJsxBeautify()<cr>
   vnoremap <buffer> <leader>Fhtml :call RangeHtmlBeautify()<cr>
   vnoremap <buffer> <leader>Fcss :call RangeCSSBeautify()<cr>
