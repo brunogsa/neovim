@@ -609,9 +609,9 @@ Plug 'neomake/neomake'
 
   " JavaScript Checkers
   let g:neomake_javascript_eslint_maker = {
-    \ 'exe': '/usr/bin/eslint',
+    \ 'exe': '/usr/local/bin/eslint',
     \ 'append_file': 0,
-    \ 'args': ['--no-ignore', '-f', 'compact', '--ext', '.js', '%:p'],
+    \ 'args': ['--no-ignore', '-f', 'compact', '--ext', '.js,.jsx', '%:p'],
     \ 'errorformat': '%E%f: line %l\, col %c\, Error - %m, %W%f: line %l\, col %c\, Warning - %m'
   \}
 
