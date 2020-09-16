@@ -68,7 +68,7 @@ scriptencoding utf-8
 " Fold options. I prefer fold by identation
 set foldmethod=indent
 set foldlevelstart=2
-set foldnestmax=4
+set foldnestmax=8
 set listchars=nbsp:˽,trail:˽,tab:\┆\ 
 set list
 
