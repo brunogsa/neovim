@@ -68,7 +68,7 @@ scriptencoding utf-8
 " Fold options. I prefer fold by identation
 set foldmethod=indent
 set foldlevelstart=2
-set foldnestmax=4
+set foldnestmax=8
 set listchars=nbsp:˽,trail:˽,tab:\┆\ 
 set list
 
@@ -387,6 +387,12 @@ Plug 'dietsche/vim-lastplace'
 " Configs
   let g:lastplace_open_folds = 0
   let g:lastplace_ignore = "gitcommit,gitrebase,svn,hgcommit"
+" *******
+
+Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && yarn install', 'for': 'ghmarkdown'  }
+" Configs
+  let g:mkdp_command_for_global = 1
+  nmap <silent> <leader>tm <Plug>MarkdownPreviewToggle
 " *******
 
 
