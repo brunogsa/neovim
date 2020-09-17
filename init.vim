@@ -513,6 +513,7 @@ Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 " Configs
   set runtimepath+=~/.local/share/nvim/plugged/deoplete.nvim/
   let g:deoplete#enable_at_startup = 1
+  let deoplete#tag#cache_limit_size = 5000000
 
   inoremap <silent><expr><tab> pumvisible() ? "\<c-n>" : "\<tab>"
   inoremap <silent><expr><s-tab> pumvisible() ? "\<c-p>" : "\<s-tab>"
@@ -522,30 +523,38 @@ Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 
   call deoplete#custom#option({
     \ 'auto_complete': v:true,
+    \ 'complete_suffix': v:true,
     \ 'camel_case': v:false,
     \ 'ignore_case': v:false,
     \ 'smart_case': v:false,
     \ 'max_list': 32,
-    \ 'num_processes': 0,
+    \ 'num_processes': 4,
     \ 'min_pattern_length': 1
   \ })
 
+  call deoplete#custom#option('sources', {
+    \ '_': [ 'around', 'buffer', 'file', 'omni', 'member', 'tag', 'mark']
+  \ })
+
   call deoplete#custom#source('omni', 'functions', {
+    \ '_': ['syntaxcomplete#Complete', 'tmuxcomplete#complete'],
     \ 'javascript': ['syntaxcomplete#Complete', 'tmuxcomplete#complete', 'tern#Complete', 'jspc#omni'],
     \ 'go': ['gocode#Complete', 'syntaxcomplete#Complete', 'tmuxcomplete#complete']
-  \})
+  \ })
 
   " Fix an conflict with vim-multiple-cursors
   function g:Multiple_cursors_before()
-      let g:deoplete#disable_auto_complete = 1
+    let g:deoplete#disable_auto_complete = 1
   endfunction
 
   function g:Multiple_cursors_after()
-      let g:deoplete#disable_auto_complete = 0
+    let g:deoplete#disable_auto_complete = 0
   endfunction
 " *******
 
+Plug 'deoplete-plugins/deoplete-tag'
 Plug 'wellle/tmux-complete.vim'
+Plug 'deoplete-plugins/deoplete-docker', { 'for': 'dockerfile' }
 
 Plug 'carlitux/deoplete-ternjs', { 'for': ['javascript', 'javascript.jsx'] }
 " Configs
@@ -566,7 +575,6 @@ Plug 'mhartington/nvim-typescript', { 'do': './install.sh', 'for': 'typescript' 
   let g:nvim_typescript#default_mappings = 0
   let g:nvim_typescript#completion_mark = '[TS]'
 " *******
-
 
 " Lint
 " =================
@@ -820,7 +828,7 @@ Plug 'andrewradev/splitjoin.vim'
 " *******
 
 Plug 'godlygeek/tabular', { 'on': 'Tabularize' }
-Plug 'rhlobo/vim-super-retab', { 'on': 'Tab2Space' }
+Plug 'rhlobo/vim-super-retab'
 
 " Initialize plugin system
 call plug#end()

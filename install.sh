@@ -37,4 +37,16 @@ sudo npm i -g typescript
 # Install go
 sudo snap install go --classic
 
+# Ctags
+sudo apt-get install -y exuberant-ctags
+
+# Install PHP, composer, phpctags
+sudo apt-get install -y php
+sudo apt-get install -y composer
+sudo chown -R $USER:$USER ~/.composer
+sudo apt-get install -y php-curl
+curl -Ss http://vim-php.com/phpctags/install/phpctags.phar > phpctags
+sudo chmod +x phpctags
+sudo mv phpctags /usr/local/bin/
+
 sudo reboot
