@@ -530,30 +530,10 @@ Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
     \ 'min_pattern_length': 1
   \ })
 
-  let g:deoplete#omni#functions = {}
-
-  let g:deoplete#omni#functions.javascript = [
-    \ 'syntaxcomplete#Complete',
-    \ 'tmuxcomplete#complete',
-    \ 'tern#Complete',
-    \ 'jspc#omni'
-  \]
-
-  let g:deoplete#omni#functions.ruby = [
-    \ 'syntaxcomplete#Complete',
-    \ 'tmuxcomplete#complete'
-  \]
-
-  let g:deoplete#omni#functions.pug = [
-    \ 'syntaxcomplete#Complete',
-    \ 'tmuxcomplete#complete'
-  \]
-
-  let g:deoplete#omni#functions.go = [
-    \ 'gocode#Complete',
-    \ 'syntaxcomplete#Complete',
-    \ 'tmuxcomplete#complete'
-  \]
+  call deoplete#custom#source('omni', 'functions', {
+    \ 'javascript': ['syntaxcomplete#Complete', 'tmuxcomplete#complete', 'tern#Complete', 'jspc#omni'],
+    \ 'go': ['gocode#Complete', 'syntaxcomplete#Complete', 'tmuxcomplete#complete']
+  \})
 
   " Fix an conflict with vim-multiple-cursors
   function g:Multiple_cursors_before()
