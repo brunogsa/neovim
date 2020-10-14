@@ -532,10 +532,6 @@ Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
     \ 'min_pattern_length': 1
   \ })
 
-  call deoplete#custom#option('sources', {
-    \ '_': [ 'around', 'buffer', 'file', 'omni', 'member', 'tag', 'mark']
-  \ })
-
   call deoplete#custom#source('omni', 'functions', {
     \ '_': ['syntaxcomplete#Complete', 'tmuxcomplete#complete'],
     \ 'javascript': ['syntaxcomplete#Complete', 'tmuxcomplete#complete', 'tern#Complete', 'jspc#omni'],
