@@ -168,7 +168,7 @@ vnoremap <silent> <leader>Fpsql :!pg_format -f 0 -s 2 -u 0<cr>
 nnoremap gp V']
 
 " View a formatted JSON is a new buffer
-vnoremap <buffer> <leader>Vjson y:vnew<cr>pV:s/\\//g<cr>V:call RangeJsonBeautify()<cr>
+vnoremap <buffer> <leader>vj y:vnew<cr>pV:s/\\//g<cr>V:call RangeJsonBeautify()<cr>
 
 
 " ===============================================
@@ -228,25 +228,16 @@ Plug 'itchyny/lightline.vim'
   endfunction
 " *******
 
-Plug 'szw/vim-maximizer'
+Plug 'szw/vim-maximizer', { 'on': 'MaximizerToggle' }
 "Configs
   let g:maximizer_set_default_mapping = 0
   nnoremap <silent><leader><F3> :MaximizerToggle<CR>
 " *******
 
-Plug 'scrooloose/nerdcommenter'
+Plug 'tpope/vim-commentary'
 " Configs
-  " Add spaces after comment delimiters by default
-  let g:NERDSpaceDelims = 1
-
-  " Use compact syntax for prettified multi-line comments
-  let g:NERDCompactSexyComs = 1
-
-  " Allow commenting and inverting empty lines (useful when commenting a region)
-  let g:NERDCommentEmptyLines = 0
-
-  nmap <leader><leader> <leader>c<space>
-  vmap <leader><leader> <leader>c<space>
+  nmap <leader><leader> gcc
+  vmap <leader><leader> gcc
 " *******
 
 Plug 'Valloric/ListToggle'
@@ -272,16 +263,16 @@ Plug 'jiangmiao/auto-pairs'
 Plug 'chrisbra/vim-diff-enhanced'
 Plug 'rickhowe/diffchar.vim'
 
-Plug 'AndrewRadev/linediff.vim'
+Plug 'AndrewRadev/linediff.vim', { 'on': ['Linediff', 'LinediffReset'] }
 " Configs
   vnoremap <silent> <leader>d :Linediff<cr>
   nnoremap <silent> <leader>D :LinediffReset<cr>
 " *******
 
-Plug 'junegunn/limelight.vim'
+Plug 'junegunn/limelight.vim', { 'on': ['Limelight', 'Limelight!!'] }
 " Configs
-  vnoremap <silent> <leader>v :Limelight<cr>
-  nnoremap <silent> <leader>v :Limelight!!<cr>
+  vnoremap <silent> <leader>V :Limelight<cr>
+  nnoremap <silent> <leader>V :Limelight!!<cr>
 
   let g:limelight_conceal_ctermfg = 'gray'
   let g:limelight_conceal_ctermfg = 240
@@ -322,52 +313,14 @@ Plug 'sickill/vim-pasta'
 Plug 'conradirwin/vim-bracketed-paste'
 
 Plug 'michaeljsmith/vim-indent-object'
-Plug 'vim-scripts/argtextobj.vim'
-Plug 'Julian/vim-textobj-variable-segment'
 Plug 'kana/vim-textobj-user'
-Plug 'glts/vim-textobj-comment'
 Plug 'paradigm/TextObjectify'
+Plug 'Julian/vim-textobj-variable-segment'
 Plug 'rhysd/vim-textobj-anyblock'
 
 Plug 'vim-utils/vim-troll-stopper'
 
 Plug 'tpope/vim-sleuth'
-
-Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
-Plug 'junegunn/fzf.vim'
-" Configs
-  " Find files using ProjectFiles
-  nnoremap <silent> <leader>f :ProjectFiles<cr>
-
-  function! s:find_git_root()
-    return system('git rev-parse --show-toplevel 2> /dev/null')[:-2]
-  endfunction
-
-  command! ProjectFiles execute 'Files' s:find_git_root()
-
-  " Better command history with q:
-  command! CmdHist call fzf#vim#command_history({'right': '40'})
-  nnoremap <silent> <leader>r :CmdHist<cr>
-
-  " Buffer Explorer
-  function! s:buflist()
-    redir => ls
-    silent ls
-    redir END
-    return split(ls, '\n')
-  endfunction
-
-  function! s:bufopen(e)
-    execute 'buffer' matchstr(a:e, '^[ 0-9]*')
-  endfunction
-
-  nnoremap <silent> <leader>b :call fzf#run({
-  \   'source':  reverse(<sid>buflist()),
-  \   'sink':    function('<sid>bufopen'),
-  \   'options': '+m',
-  \   'down':    len(<sid>buflist()) + 2
-  \ })<cr>
-" *******
 
 Plug 'dietsche/vim-lastplace'
 " Configs
@@ -375,10 +328,10 @@ Plug 'dietsche/vim-lastplace'
   let g:lastplace_ignore = "gitcommit,gitrebase,svn,hgcommit"
 " *******
 
-Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && yarn install', 'for': 'ghmarkdown'  }
+Plug 'iamcco/markdown-preview.nvim', { 'for': 'ghmarkdown', 'do': 'cd app && yarn install' }
 " Configs
   let g:mkdp_command_for_global = 1
-  nmap <silent> <leader>tm <Plug>MarkdownPreviewToggle
+  nmap <silent> <leader>vm <Plug>MarkdownPreviewToggle
 " *******
 
 
@@ -386,9 +339,6 @@ Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && yarn install', 'for': 'g
 " =================
 
 Plug 'martinda/Jenkinsfile-vim-syntax', { 'for': 'Jenkinsfile' }
-Plug 'vim-scripts/groovy.vim', { 'for': 'Jenkinsfile' }
-
-Plug 'ap/vim-css-color'
 
 Plug 'posva/vim-vue', { 'for': 'vue' }
 
@@ -424,17 +374,17 @@ Plug 'Yggdroot/indentLine'
 Plug 'vim-scripts/CursorLineCurrentWindow'
 
 " javascript
-Plug 'pangloss/vim-javascript', { 'for': ['javascript', 'javascript.jsx'] }
+Plug 'pangloss/vim-javascript', { 'for': 'javascript' }
 " Configs
   let g:javascript_plugin_jsdoc = 1
   let g:javascript_plugin_flow = 0
 " *******
 
+" jsx
+Plug 'neoclide/vim-jsx-improve', { 'for': 'javascript' }
+
 " ejs
 Plug 'nikvdp/ejs-syntax', { 'for': 'ejs' }
-
-" jsx
-Plug 'neoclide/vim-jsx-improve', { 'for': ['javascript', 'javascript.jsx'] }
 
 " json
 Plug 'elzr/vim-json', { 'for': 'json' }
@@ -449,7 +399,8 @@ Plug 'jparise/vim-graphql', { 'for': 'graphql' }
 Plug 'othree/html5.vim', { 'for': 'html' }
 
 " golang
-Plug 'fatih/vim-go', { 'for': 'go', 'do': ':GoUpdateBinaries', 'frozen': 'true' }
+" XXX: Run :GoUpdateBinaries if you wanna update its binaries or after installing it
+Plug 'fatih/vim-go', { 'for': 'go' }
 " Configs
   let g:go_fmt_autosave = 0
   let g:go_mod_fmt_autosave = 0
@@ -534,7 +485,7 @@ Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
   endfunction
 " *******
 
-Plug 'deoplete-plugins/deoplete-tag'
+Plug 'deoplete-plugins/deoplete-tag', { 'for': 'php' }
 Plug 'wellle/tmux-complete.vim'
 Plug 'deoplete-plugins/deoplete-docker', { 'for': 'dockerfile' }
 
@@ -548,7 +499,7 @@ Plug 'othree/jspc.vim', { 'for': ['javascript', 'javascript.jsx'] }
 
 " WARN: If you got errors, try running :UpdateRemotePlugins inside a .ts file
 " WARN: Requires a tsconfig.json file, so you'll may have to create a symbolic link for it
-Plug 'mhartington/nvim-typescript', { 'do': './install.sh', 'for': 'typescript' }
+Plug 'mhartington/nvim-typescript', { 'for': 'typescript', 'do': './install.sh' }
 " Configs
   set updatetime=1000
   let g:nvim_typescript#quiet_startup = 0
@@ -561,9 +512,9 @@ Plug 'mhartington/nvim-typescript', { 'do': './install.sh', 'for': 'typescript' 
 " Lint
 " =================
 
-Plug 'neomake/neomake'
+Plug 'neomake/neomake', { 'for': ['javascript', 'typescript', 'go', 'lua'] }
 " Configs
-  autocmd! BufWritePost,BufEnter * Neomake
+  autocmd! BufWritePost,BufEnter *.js,*.jsx,*.ts,*.tsx,*.go,*.lua Neomake
   let g:quickfixsigns_protect_sign_rx = '^neomake_'
   let g:neomake_ft_maker_remove_invalid_entries = 0
 
@@ -619,15 +570,6 @@ Plug 'neomake/neomake'
     \ 'errorformat': '%E%f(%l\,%c): error %m'
   \}
 
-  let tslintConfig = FindGlobFile('tslint.json')
-
-  let g:neomake_typescript_tslint_maker = {
-    \ 'exe': '/usr/local/bin/tslint',
-    \ 'append_file': 0,
-    \ 'args': ['--config', tslintConfig, '%:p'],
-    \ 'errorformat': '%E%f[%l\, %c]: %m'
-  \}
-
   let g:neomake_typescript_eslint_maker = {
     \ 'exe': '/usr/local/bin/eslint',
     \ 'append_file': 0,
@@ -635,7 +577,7 @@ Plug 'neomake/neomake'
     \ 'errorformat': '%E%f: line %l\, col %c\, Error - %m, %W%f: line %l\, col %c\, Warning - %m'
   \}
 
-  let g:neomake_typescript_enabled_makers = ['eslint', 'tslint']
+  let g:neomake_typescript_enabled_makers = ['eslint']
 
   " Lua Checkers
   let g:neomake_lua_luac_maker = {
@@ -803,14 +745,14 @@ Plug 'justinmk/vim-sneak'
 Plug 'terryma/vim-multiple-cursors'
 Plug 'yuttie/comfortable-motion.vim'
 
-Plug 'andrewradev/splitjoin.vim'
+Plug 'andrewradev/splitjoin.vim', { 'on': ['SplitjoinJoin', 'SplitjoinJoin'] }
 " Configs
   nnoremap <leader>ls :SplitjoinSplit<cr>
   nnoremap <leader>lj :SplitjoinJoin<cr>
 " *******
 
 Plug 'godlygeek/tabular', { 'on': 'Tabularize' }
-Plug 'rhlobo/vim-super-retab'
+Plug 'rhlobo/vim-super-retab', { 'on': ['Space2Tab', 'Tab2Space'] }
 
 " Initialize plugin system
 call plug#end()
@@ -834,7 +776,7 @@ set cursorline
 " set relativenumber
 
 set wrap
-set textwidth=150
+set textwidth=213
 
 " Colorscheme
 colorscheme wasabi256
