@@ -463,16 +463,15 @@ Plug 'jparise/vim-graphql', { 'for': 'graphql' }
 Plug 'othree/html5.vim', { 'for': 'html' }
 
 " golang
-" Updates are too heavy: enable me when needed
-" Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries', 'for': 'go' }
+Plug 'fatih/vim-go', { 'for': 'go', 'do': ':GoUpdateBinaries', 'frozen': 'true' }
 " Configs
-  " let g:go_fmt_autosave = 0
-  " let g:go_mod_fmt_autosave = 0
-  " let g:go_def_mapping_enabled = 1
-  " let g:go_textobj_enabled = 0
-  " let g:go_textobj_include_function_doc = 0
-  " let g:go_textobj_include_variable = 0
-  " let g:go_fold_enable = []
+  let g:go_fmt_autosave = 0
+  let g:go_mod_fmt_autosave = 0
+  let g:go_def_mapping_enabled = 1
+  let g:go_textobj_enabled = 0
+  let g:go_textobj_include_function_doc = 0
+  let g:go_textobj_include_variable = 0
+  let g:go_fold_enable = []
 " *******
 
 " css3
