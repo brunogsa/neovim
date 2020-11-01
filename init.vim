@@ -28,20 +28,6 @@ function! FindGlobFile(glob, ...) abort
   return ''
 endfunction
 
-" Public
-function! SynGroup()
-  let l:s = synID(line('.'), col('.'), 1)
-  echo synIDattr(l:s, 'name') . ' -> ' . synIDattr(synIDtrans(l:s), 'name')
-endfun
-
-" Public
-function! SynStack()
-  if !exists("*synstack")
-    return
-  endif
-  echo map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")')
-endfunc
-
 " ===============================================
 " Core Settings
 " ===============================================
@@ -445,7 +431,7 @@ Plug 'pangloss/vim-javascript', { 'for': ['javascript', 'javascript.jsx'] }
 " *******
 
 " ejs
-Plug 'nikvdp/ejs-syntax', { 'for': ['ejs'] }
+Plug 'nikvdp/ejs-syntax', { 'for': 'ejs' }
 
 " jsx
 Plug 'neoclide/vim-jsx-improve', { 'for': ['javascript', 'javascript.jsx'] }
