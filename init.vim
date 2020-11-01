@@ -40,7 +40,7 @@ set ttyfast
 set regexpengine=1
 set modelines=0
 
-set synmaxcol=150
+set synmaxcol=213
 syntax sync minlines=256
 syntax sync maxlines=2048
 
