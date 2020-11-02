@@ -3,22 +3,11 @@ set -e
 
 # Install integrations..
 
-# Globally install ESLint and Tern stuff
-sudo npm install -g eslint babel-eslint eslint-config-node eslint-config-airbnb eslint-plugin-jsx-a11y eslint-plugin-react eslint-plugin-import eslint-config-standard eslint-plugin-node eslint-plugin-promise eslint-plugin-standard tern prettier eslint-plugin-cypress eslint-plugin-chai-friendly @typescript-eslint/eslint-plugin @typescript-eslint/parser eslint-config-airbnb-typescript
-
-# tslint installation
-sudo npm install -g tslint
+# Globally install Tern stuff
+sudo npm install -g tern prettier
 
 # golint installation
 sudo apt-get install -y golint
-
-# Install ag
-sudo apt-get install -y silversearcher-ag
-
-# Install FZF
-sudo rm -fr ~/.fzf && git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
-~/.fzf/install
-export FZF_CTRL_T_COMMAND='ag -g "" `git rev-parse --show-toplevel`'
 
 # Install pgFormatter
 sudo rm -fr pgFormatter && git clone https://github.com/darold/pgFormatter

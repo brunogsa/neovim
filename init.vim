@@ -519,7 +519,7 @@ Plug 'neomake/neomake', { 'for': ['javascript', 'typescript', 'go', 'lua'] }
   let g:neomake_ft_maker_remove_invalid_entries = 0
 
   " XXX: Use it for debug, if necessary
-  " let g:neomake_logfile = '/home/brunogsa/neomake.debug'
+  let g:neomake_logfile = '/home/brunogsa/neomake.debug'
 
   let g:neomake_place_signs = 1
 
@@ -534,9 +534,12 @@ Plug 'neomake/neomake', { 'for': ['javascript', 'typescript', 'go', 'lua'] }
   let g:neomake_error_sign = {'text': '✖', 'texthl': 'NeomakeErrorSign'}
   let g:neomake_warning_sign = {'text': '!', 'texthl': 'NeomakeMessageSign'}
 
+  " Helpers
+  let localEslint = FindGlobFile('node_modules') . '/.bin/eslint'
+
   " JavaScript Checkers
   let g:neomake_javascript_eslint_maker = {
-    \ 'exe': '/usr/local/bin/eslint',
+    \ 'exe': localEslint,
     \ 'append_file': 0,
     \ 'args': ['--no-ignore', '-f', 'compact', '--ext', '.js,.jsx', '%:p'],
     \ 'errorformat': '%E%f: line %l\, col %c\, Error - %m, %W%f: line %l\, col %c\, Warning - %m'
@@ -545,33 +548,8 @@ Plug 'neomake/neomake', { 'for': ['javascript', 'typescript', 'go', 'lua'] }
   let g:neomake_javascript_enabled_makers = ['eslint']
 
   " TypeScript Checkers
-  let g:neomake_typescript_tsc_maker = {
-    \ 'exe': '/usr/local/bin/tsc',
-    \ 'append_file': 0,
-    \ 'args': [
-      \ '--allowJs',
-      \ '--forceConsistentCasingInFileNames',
-      \ '--esModuleInterop',
-      \ '--jsx',
-      \ 'preserve',
-      \ '--lib',
-      \ 'es2017,dom',
-      \ '--moduleResolution',
-      \ 'node',
-      \ '--noEmit',
-      \ '--noImplicitAny',
-      \ '--noImplicitThis',
-      \ '--noUnusedLocals',
-      \ '--noUnusedParameters',
-      \ '--skipLibCheck',
-      \ '--strictNullChecks',
-      \ '%:p'
-    \],
-    \ 'errorformat': '%E%f(%l\,%c): error %m'
-  \}
-
   let g:neomake_typescript_eslint_maker = {
-    \ 'exe': '/usr/local/bin/eslint',
+    \ 'exe': localEslint,
     \ 'append_file': 0,
     \ 'args': ['--no-ignore', '-f', 'compact', '--ext', '.ts', '%:p'],
     \ 'errorformat': '%E%f: line %l\, col %c\, Error - %m, %W%f: line %l\, col %c\, Warning - %m'
