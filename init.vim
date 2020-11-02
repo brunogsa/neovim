@@ -445,7 +445,6 @@ Plug 'exu/pgsql.vim', { 'for': 'sql' }
 " Auto Completion
 " =================
 
-" Slower / Better mechanism
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 " Configs
   set runtimepath+=~/.local/share/nvim/plugged/deoplete.nvim/
@@ -465,8 +464,8 @@ Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
     \ 'ignore_case': v:false,
     \ 'smart_case': v:false,
     \ 'max_list': 32,
-    \ 'num_processes': 4,
-    \ 'min_pattern_length': 1
+    \ 'min_pattern_length': 1,
+    \ 'num_processes': 1
   \ })
 
   call deoplete#custom#source('omni', 'functions', {
