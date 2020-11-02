@@ -331,6 +331,7 @@ Plug 'dietsche/vim-lastplace'
 Plug 'iamcco/markdown-preview.nvim', { 'for': 'ghmarkdown', 'do': 'cd app && yarn install' }
 " Configs
   let g:mkdp_command_for_global = 1
+  let g:mkdp_refresh_slow = 1
   nmap <silent> <leader>vm <Plug>MarkdownPreviewToggle
 " *******
 
@@ -491,7 +492,7 @@ Plug 'othree/jspc.vim', { 'for': ['javascript', 'javascript.jsx'] }
 " WARN: Requires a tsconfig.json file, so you'll may have to create a symbolic link for it
 Plug 'mhartington/nvim-typescript', { 'for': 'typescript', 'do': './install.sh' }
 " Configs
-  set updatetime=1000
+  set updatetime=512
   let g:nvim_typescript#quiet_startup = 0
   let g:nvim_typescript#type_info_on_hold = 1
   let g:nvim_typescript#signature_complete = 1
