@@ -474,15 +474,6 @@ Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
     \ 'javascript': ['syntaxcomplete#Complete', 'tmuxcomplete#complete', 'tern#Complete', 'jspc#omni'],
     \ 'go': ['gocode#Complete', 'syntaxcomplete#Complete', 'tmuxcomplete#complete']
   \ })
-
-  " Fix an conflict with vim-multiple-cursors
-  function g:Multiple_cursors_before()
-    let g:deoplete#disable_auto_complete = 1
-  endfunction
-
-  function g:Multiple_cursors_after()
-    let g:deoplete#disable_auto_complete = 0
-  endfunction
 " *******
 
 Plug 'deoplete-plugins/deoplete-tag', { 'for': 'php' }
@@ -519,7 +510,7 @@ Plug 'neomake/neomake', { 'for': ['javascript', 'typescript', 'go', 'lua'] }
   let g:neomake_ft_maker_remove_invalid_entries = 0
 
   " XXX: Use it for debug, if necessary
-  let g:neomake_logfile = '/home/brunogsa/neomake.debug'
+  " let g:neomake_logfile = '/home/brunogsa/neomake.debug'
 
   let g:neomake_place_signs = 1
 
@@ -720,7 +711,8 @@ Plug 'justinmk/vim-sneak'
   onoremap T <Plug>Sneak_T
 " *******
 
-Plug 'terryma/vim-multiple-cursors'
+Plug 'mg979/vim-visual-multi'
+
 Plug 'yuttie/comfortable-motion.vim'
 
 Plug 'andrewradev/splitjoin.vim', { 'on': ['SplitjoinJoin', 'SplitjoinJoin'] }
