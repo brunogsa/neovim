@@ -321,6 +321,14 @@ Plug 'iamcco/markdown-preview.nvim', { 'for': 'ghmarkdown', 'do': 'cd app && yar
   nmap <silent> <leader>vm <Plug>MarkdownPreviewToggle
 " *******
 
+Plug 'wellle/context.vim', { 'for': ['json', 'yaml','javascript', 'typescript', 'go', 'lua', 'php'] }
+" Configs
+  let g:context_add_mappings = 0
+  let g:context_add_autocmds = 0
+  autocmd VimEnter *.json,*.yaml,*.yml,*.js,*.jsx,*.ts,*.tsx,*.go*.lua,*.php ContextActivate
+  autocmd CursorHold,BufWritePost *.json,*.yaml,*.yml,*.js,*.jsx,*.ts,*.tsx,*.go,*.lua,*.php ContextUpdate
+" *******
+
 
 " Highlight
 " =================
