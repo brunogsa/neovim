@@ -32,7 +32,8 @@ endfunction
 " Core Settings
 " ===============================================
 
-set updatetime=1024
+set updatetime=1000
+autocmd VimEnter *.php set updatetime=5000
 
 " Disable mouse
 set mouse=
@@ -358,6 +359,8 @@ Plug 'leafgarland/typescript-vim', { 'for': 'typescript' }
 " Configs
   let g:typescript_compiler_binary = 'tsc'
   let g:typescript_compiler_options = ''
+
+  autocmd VimEnter *.ts,*.tsx set updatetime=500
 " *******
 
 " extend typescript + DOM keywords
