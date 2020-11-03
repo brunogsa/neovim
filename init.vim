@@ -333,6 +333,13 @@ Plug 'wellle/context.vim', { 'for': ['json', 'yaml','javascript', 'typescript', 
 " Highlight
 " =================
 
+" csv
+autocmd VimEnter *.csv setlocal filetype=csv
+Plug 'mechatroner/rainbow_csv', { 'for': 'csv' }
+" Configs
+  let g:disable_rainbow_key_mappings = 0
+" *******
+
 Plug 'martinda/Jenkinsfile-vim-syntax', { 'for': 'Jenkinsfile' }
 
 Plug 'posva/vim-vue', { 'for': 'vue' }
