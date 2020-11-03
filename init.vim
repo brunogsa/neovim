@@ -242,10 +242,9 @@ Plug 'alvan/vim-closetag'
   let g:closetag_filenames = "*.html,*.xhtml,*.phtml,*.php,*.jsx,*.js"
 " *******
 
-Plug 'Raimondi/delimitMate'
+Plug 'jiangmiao/auto-pairs'
 " Configs
-  let delimitMate_matchpairs = "(:),[:],{:}"
-  let delimitMate_expand_cr = 1
+  let g:AutoPairsMultilineClose = 0
 " *******
 
 Plug 'chrisbra/vim-diff-enhanced'
