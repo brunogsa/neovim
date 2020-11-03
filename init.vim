@@ -32,6 +32,8 @@ endfunction
 " Core Settings
 " ===============================================
 
+set updatetime=1024
+
 " Disable mouse
 set mouse=
 
@@ -446,6 +448,8 @@ autocmd VimEnter *.log IndentLinesDisable
 " Auto Completion
 " =================
 
+Plug 'dkarter/bullets.vim'
+
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 " Configs
   set runtimepath+=~/.local/share/nvim/plugged/deoplete.nvim/
@@ -478,6 +482,7 @@ Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 
 Plug 'deoplete-plugins/deoplete-tag', { 'for': 'php' }
 Plug 'wellle/tmux-complete.vim'
+
 Plug 'deoplete-plugins/deoplete-docker', { 'for': 'dockerfile' }
 
 Plug 'carlitux/deoplete-ternjs', { 'for': ['javascript', 'javascript.jsx'] }
@@ -492,7 +497,6 @@ Plug 'othree/jspc.vim', { 'for': ['javascript', 'javascript.jsx'] }
 " WARN: Requires a tsconfig.json file, so you'll may have to create a symbolic link for it
 Plug 'mhartington/nvim-typescript', { 'for': 'typescript', 'do': './install.sh' }
 " Configs
-  set updatetime=1024
   let g:nvim_typescript#quiet_startup = 0
   let g:nvim_typescript#type_info_on_hold = 1
   let g:nvim_typescript#signature_complete = 1
