@@ -243,6 +243,7 @@ Plug 'alvan/vim-closetag'
 Plug 'Raimondi/delimitMate'
 " Configs
   let delimitMate_matchpairs = "(:),[:],{:}"
+  let delimitMate_expand_cr = 1
 " *******
 
 Plug 'chrisbra/vim-diff-enhanced'
