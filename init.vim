@@ -192,7 +192,6 @@ Plug 'liuchengxu/vim-which-key'
   vnoremap <silent> <leader> :<c-u>WhichKeyVisual '<Space>'<CR>
 " *******
 
-Plug 'ryanoasis/vim-devicons'
 Plug 'itchyny/lightline.vim'
 " Configs
   let g:lightline#bufferline#enable_devicons = 1
@@ -211,21 +210,9 @@ Plug 'itchyny/lightline.vim'
     \   'readonly': '(&filetype!="help"&& &readonly)',
     \   'modified': '(&filetype!="help"&&(&modified||!&modifiable))'
     \ },
-    \ 'component_function': {
-    \   'filetype': 'MyFiletype',
-    \   'fileformat': 'MyFileformat',
-    \ },
     \ 'separator': { 'left': '', 'right': '' },
     \ 'subseparator': { 'left': '|', 'right': '|' }
   \}
-
-  function! MyFiletype()
-    return winwidth(0) > 70 ? (strlen(&filetype) ? &filetype . ' ' . WebDevIconsGetFileTypeSymbol() : 'no ft') : ''
-  endfunction
-
-  function! MyFileformat()
-    return winwidth(0) > 70 ? (&fileformat . ' ' . WebDevIconsGetFileFormatSymbol()) : ''
-  endfunction
 " *******
 
 Plug 'szw/vim-maximizer', { 'on': 'MaximizerToggle' }
@@ -247,7 +234,6 @@ Plug 'Valloric/ListToggle'
 " *******
 
 Plug 'tpope/vim-surround'
-Plug 'andymass/vim-matchup'
 
 Plug 'alvan/vim-closetag'
 " Configs
@@ -366,9 +352,6 @@ Plug 'Yggdroot/indentLine'
   let g:indentLine_color_term = 32
   let g:indentLine_faster = 1
   let g:indentLine_maxLines = 512
-
-  " Disable it on markdown files
-  autocmd VimEnter *.md IndentLinesDisable
 " *******
 
 Plug 'vim-scripts/CursorLineCurrentWindow'
@@ -421,17 +404,16 @@ Plug 'cakebaker/scss-syntax.vim', { 'for': 'scss' }
 Plug 'tpope/vim-markdown', { 'for': 'ghmarkdown' }
 " Configs
   let g:markdown_syntax_conceal = 0
-  let g:markdown_fenced_languages = ['html', 'python', 'bash=sh']
 
   " Auto Disable indent lines on markdown files
-  au BufReadPre,FileReadPre *.md,*.markdown :IndentLinesDisable
+  autocmd VimEnter *.md,*.markdown IndentLinesDisable
 " *******
 
 Plug 'jtratner/vim-flavored-markdown', { 'for': 'ghmarkdown' }
 " Configs
   augroup markdown
     au!
-    au BufNewFile,BufRead *.md,*.markdown setlocal filetype=ghmarkdown
+    au VimEnter *.md,*.markdown setlocal filetype=ghmarkdown
   augroup END
 " *******
 
@@ -440,6 +422,9 @@ Plug 'exu/pgsql.vim', { 'for': 'sql' }
 " Configs
   let g:sql_type_default = 'pgsql'
 " *******
+
+" log files
+autocmd VimEnter *.log IndentLinesDisable
 
 
 " Auto Completion
@@ -491,7 +476,7 @@ Plug 'othree/jspc.vim', { 'for': ['javascript', 'javascript.jsx'] }
 " WARN: Requires a tsconfig.json file, so you'll may have to create a symbolic link for it
 Plug 'mhartington/nvim-typescript', { 'for': 'typescript', 'do': './install.sh' }
 " Configs
-  set updatetime=512
+  set updatetime=1024
   let g:nvim_typescript#quiet_startup = 0
   let g:nvim_typescript#type_info_on_hold = 1
   let g:nvim_typescript#signature_complete = 1
@@ -577,7 +562,18 @@ Plug 'tmux-plugins/vim-tmux-focus-events'
 " Luxury
 " =================
 
-Plug 'maksimr/vim-jsbeautify'
+Plug 'maksimr/vim-jsbeautify', {
+\ 'for': [
+  \ 'javascript',
+  \ 'typescript',
+  \ 'css',
+  \ 'scss',
+  \ 'sass',
+  \ 'json',
+  \ 'html'
+  \ ],
+\ 'on': ['RangeJsBeautify', 'RangeJsonBeautify', 'RangeJsxBeautify', 'RangeHtmlBeautify', 'RangeCSSBeautify']
+\ }
 " Configs
 
   vnoremap <buffer> <leader>Fjs :call RangeJsBeautify()<cr>
@@ -616,14 +612,14 @@ Plug 'prettier/vim-prettier', {
 \ 'branch': 'release/1.x',
 \ 'for': [
   \ 'javascript',
-  \ 'javascript.jsx',
   \ 'typescript',
   \ 'css',
   \ 'scss',
   \ 'sass',
   \ 'json',
   \ 'html'
-  \ ]
+  \ ],
+\ 'on': '<Plug>(Prettier)'
 \ }
 " Configs
   nnoremap <leader>Fjs <Plug>(Prettier)
