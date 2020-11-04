@@ -672,6 +672,10 @@ Plug 'justinmk/vim-sneak'
 " *******
 
 Plug 'mg979/vim-visual-multi'
+" Configs
+  let g:VM_default_mappings = 0
+  let g:VM_mouse_mappings = 0
+" *******
 
 Plug 'yuttie/comfortable-motion.vim'
 
