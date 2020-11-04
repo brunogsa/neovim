@@ -36,7 +36,7 @@ endfunction
 let mapleader = "\<space>"
 
 set updatetime=1000
-autocmd VimEnter *.php set updatetime=5000
+autocmd VimEnter *.php set updatetime=4000
 
 " Disable mouse
 set mouse=
@@ -47,8 +47,10 @@ set regexpengine=1
 set modelines=0
 
 set synmaxcol=213
-syntax sync minlines=256
-syntax sync maxlines=2048
+syntax sync minlines=250
+syntax sync maxlines=2000
+autocmd VimEnter *.php syntax sync minlines=100
+autocmd VimEnter *.php syntax sync maxlines=800
 
 set timeoutlen=512
 set ttimeoutlen=16
