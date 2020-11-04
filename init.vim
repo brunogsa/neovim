@@ -675,6 +675,8 @@ Plug 'mg979/vim-visual-multi'
 " Configs
   let g:VM_default_mappings = 0
   let g:VM_mouse_mappings = 0
+  let g:VM_silent_exit = 1
+  let g:VM_show_warnings = 0
 " *******
 
 Plug 'yuttie/comfortable-motion.vim'
