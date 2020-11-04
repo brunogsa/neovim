@@ -32,6 +32,9 @@ endfunction
 " Core Settings
 " ===============================================
 
+" Leader is SPACE
+let mapleader = "\<space>"
+
 set updatetime=1000
 autocmd VimEnter *.php set updatetime=5000
 
@@ -81,26 +84,10 @@ set title
 " Share clipboard with system
 set clipboard=unnamed,unnamedplus
 
-" Send deleted thing with 'x' and 'c' to black hole
-nnoremap x "_x
-vnoremap X "_X
-nnoremap c "_c
-vnoremap C "_C
-
-" Add ; or , in the end of the line
-nnoremap <silent> ;; mqA;<esc>`q
-nnoremap <silent> ,, mqA,<esc>`q
-
 " No annoying backup files
 set nobackup
 set nowritebackup
 set noswapfile
-
-" Efficient way to move through your code using the Arrow Keys
-nnoremap <silent> <left> h
-nnoremap <silent> <down> gj
-nnoremap <silent> <up> gk
-nnoremap <silent> <right> l
 
 " Indentation options
 set autoindent
@@ -129,50 +116,6 @@ autocmd FilterWritePre * if &diff | setlocal wrap< | endif
 
 " Virtual edit preferences: in block wise
 set virtualedit=block
-
-
-" ===============================================
-" Hotkeys
-" ===============================================
-" Leader is SPACE
-let mapleader = "\<space>"
-
-" Move to the beginning of the indentation level
-noremap <S-left> ^
-noremap <home> ^
-
-" Move to the end of a line in a smarter way
-noremap <S-right> g_
-noremap <end> g_
-
-" Easier to align
-xnoremap > >gv
-xnoremap < <gv
-
-" Resize windows
-" nnoremap <silent><leader><right> :vertical resize -5<cr>
-" nnoremap <silent><leader><left> :vertical resize +5<cr>
-" nnoremap <silent><leader><up> :resize +5<cr>
-" nnoremap <silent><leader><down> :resize -5<cr>
-
-" Toggles the number lines
-nnoremap <silent> <leader>tn :set number!<cr>
-
-" Search only in visual selection
-vnoremap / <esc>/\%V
-
-" PrettyXML: Format a line of XML
-vnoremap <silent> <leader>Fxml :!xmllint --format --recover - 2>/dev/null<cr>
-
-" PrettyPSQL: Format a line of PSQL
-vnoremap <silent> <leader>Fpsql :!pg_format -f 0 -s 2 -u 0<cr>
-
-" Selected last pasted text
-nnoremap gp V']
-
-" View a formatted JSON is a new buffer
-vnoremap <buffer> <leader>vj y:vnew<cr>pV:s/\\//g<cr>V:call RangeJsonBeautify()<cr>
-
 
 " ===============================================
 " Init plugins
@@ -744,6 +687,61 @@ Plug 'rhlobo/vim-super-retab', { 'on': ['Space2Tab', 'Tab2Space'] }
 " Initialize plugin system
 call plug#end()
 
+" ===============================================
+" Hotkeys
+" ===============================================
+
+" Send deleted thing with 'x' and 'c' to black hole
+nnoremap x "_x
+vnoremap X "_X
+nnoremap c "_c
+vnoremap C "_C
+
+" Add ; or , in the end of the line
+nnoremap <silent> ;; mqA;<esc>`q
+nnoremap <silent> ,, mqA,<esc>`q
+
+" Efficient way to move through your code using the Arrow Keys
+nnoremap <silent> <left> h
+nnoremap <silent> <down> gj
+nnoremap <silent> <up> gk
+nnoremap <silent> <right> l
+
+" Move to the beginning of the indentation level
+noremap <S-left> ^
+noremap <home> ^
+
+" Move to the end of a line in a smarter way
+noremap <S-right> g_
+noremap <end> g_
+
+" Easier to align
+xnoremap > >gv
+xnoremap < <gv
+
+" Resize windows
+" nnoremap <silent><leader><right> :vertical resize -5<cr>
+" nnoremap <silent><leader><left> :vertical resize +5<cr>
+" nnoremap <silent><leader><up> :resize +5<cr>
+" nnoremap <silent><leader><down> :resize -5<cr>
+
+" Toggles the number lines
+nnoremap <silent> <leader>tn :set number!<cr>
+
+" Search only in visual selection
+vnoremap / <esc>/\%V
+
+" PrettyXML: Format a line of XML
+vnoremap <silent> <leader>Fxml :!xmllint --format --recover - 2>/dev/null<cr>
+
+" PrettyPSQL: Format a line of PSQL
+vnoremap <silent> <leader>Fpsql :!pg_format -f 0 -s 2 -u 0<cr>
+
+" Selected last pasted text
+nnoremap gp V']
+
+" View a formatted JSON is a new buffer
+vnoremap <buffer> <leader>vj y:vnew<cr>pV:s/\\//g<cr>V:call RangeJsonBeautify()<cr>
 
 " ===============================================
 " Interface
