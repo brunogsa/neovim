@@ -35,7 +35,7 @@ endfunction
 " Leader is SPACE
 let mapleader = "\<space>"
 
-set updatetime=1000
+set updatetime=500
 autocmd VimEnter *.php set updatetime=8000
 
 " Disable mouse
@@ -266,12 +266,12 @@ Plug 'iamcco/markdown-preview.nvim', { 'for': 'ghmarkdown', 'do': 'cd app && yar
   nmap <silent> <leader>vm <Plug>MarkdownPreviewToggle
 " *******
 
-Plug 'wellle/context.vim', { 'for': ['json', 'yaml','javascript', 'typescript', 'go', 'lua', 'php'] }
+Plug 'wellle/context.vim'
 " Configs
   let g:context_add_mappings = 0
   let g:context_add_autocmds = 0
-  autocmd VimEnter *.json,*.yaml,*.yml,*.js,*.jsx,*.ts,*.tsx,*.go*.lua,*.php ContextActivate
-  autocmd CursorHold,BufWritePost *.json,*.yaml,*.yml,*.js,*.jsx,*.ts,*.tsx,*.go,*.lua,*.php ContextUpdate
+  autocmd VimEnter * ContextActivate
+  autocmd CursorHold,BufWritePost * ContextUpdate
 " *******
 
 
@@ -302,8 +302,6 @@ Plug 'leafgarland/typescript-vim', { 'for': 'typescript' }
 " Configs
   let g:typescript_compiler_binary = 'tsc'
   let g:typescript_compiler_options = ''
-
-  autocmd VimEnter *.ts,*.tsx set updatetime=500
 " *******
 
 " extend typescript + DOM keywords
