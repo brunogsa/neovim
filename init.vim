@@ -428,13 +428,14 @@ Plug 'wellle/tmux-complete.vim'
 
 Plug 'deoplete-plugins/deoplete-docker', { 'for': 'dockerfile' }
 
-Plug 'carlitux/deoplete-ternjs', { 'for': ['javascript', 'javascript.jsx'] }
+" FIXME: This plugin requires num_processes > 1, but this causes deoplete to flick due a neovim issue
+" Plug 'carlitux/deoplete-ternjs', { 'for': 'javascript' }
 " Configs
-  let g:tern_request_timeout = 2
+  " let g:tern_request_timeout = 2
 " *******
 
-Plug 'myhere/vim-nodejs-complete', { 'for': ['javascript', 'javascript.jsx'] }
-Plug 'othree/jspc.vim', { 'for': ['javascript', 'javascript.jsx'] }
+Plug 'myhere/vim-nodejs-complete', { 'for': 'javascript' }
+Plug 'othree/jspc.vim', { 'for': 'javascript' }
 
 " WARN: If you got errors, try running :UpdateRemotePlugins inside a .ts file
 " WARN: Requires a tsconfig.json file, so you'll may have to create a symbolic link for it
