@@ -387,6 +387,9 @@ Plug 'exu/pgsql.vim', { 'for': 'sql' }
 " log files
 autocmd VimEnter *.log IndentLinesDisable
 
+" text files
+autocmd VimEnter *.txt IndentLinesDisable
+
 
 " Auto Completion
 " =================
