@@ -426,7 +426,6 @@ Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
   \ })
 " *******
 
-Plug 'deoplete-plugins/deoplete-tag', { 'for': 'php' }
 Plug 'wellle/tmux-complete.vim'
 
 Plug 'deoplete-plugins/deoplete-docker', { 'for': 'dockerfile' }
