@@ -272,6 +272,8 @@ Plug 'wellle/context.vim'
   let g:context_add_autocmds = 0
   autocmd VimEnter * ContextActivate
   autocmd CursorHold,BufWritePost * ContextUpdate
+
+  let g:context_filetype_blacklist = [ 'nerdtree' ]
 " *******
 
 
