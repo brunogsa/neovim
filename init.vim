@@ -396,8 +396,6 @@ autocmd VimEnter *.txt IndentLinesDisable
 " Auto Completion
 " =================
 
-Plug 'dkarter/bullets.vim'
-
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 " Configs
   set runtimepath+=~/.local/share/nvim/plugged/deoplete.nvim/
