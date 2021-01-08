@@ -25,10 +25,9 @@ cd -
 
 # Install it
 sudo add-apt-repository ppa:neovim-ppa/unstable
-sudo apt-get update
+sudo apt-get update || echo "Done"
 sudo apt-get install -y neovim
 
-sudo pip2 install --upgrade neovim
 sudo pip3 install --upgrade neovim
 sudo gem install neovim
 sudo npm i -g neovim

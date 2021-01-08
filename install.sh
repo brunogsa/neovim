@@ -7,8 +7,7 @@ sudo apt-get install -y curl
 sudo apt-get install -y software-properties-common
 
 # Install python and pip
-sudo apt-get install -y python-dev python-pip python3-dev python3-pip
-sudo apt-get install -y python-pip python3-pip
+sudo apt-get install -y python-dev python3-dev python3-pip
 sudo pip3 install --upgrade pip
 sudo pip3 install pynvim
 sudo pip3 install --upgrade pynvim
@@ -40,13 +39,10 @@ sudo snap install go --classic
 # Ctags
 sudo apt-get install -y exuberant-ctags
 
-# Install PHP, composer, phpctags
+# Install PHP, composer
 sudo apt-get install -y php
 sudo apt-get install -y composer
-sudo chown -R $USER:$USER ~/.composer
+sudo chown -Rf $USER:$USER ~/.composer
 sudo apt-get install -y php-curl
-curl -Ss http://vim-php.com/phpctags/install/phpctags.phar > phpctags
-sudo chmod +x phpctags
-sudo mv phpctags /usr/local/bin/
 
 sudo reboot
