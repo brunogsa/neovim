@@ -726,6 +726,12 @@ noremap <end> g_
 xnoremap > >gv
 xnoremap < <gv
 
+" Disable annoying auto-increment number feature
+map <C-a> <Nop>
+map g<C-a> <Nop>
+map <C-x> <Nop>
+map g<C-x> <Nop>
+
 " Resize windows
 " nnoremap <silent><leader><right> :vertical resize -5<cr>
 " nnoremap <silent><leader><left> :vertical resize +5<cr>
