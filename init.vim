@@ -682,7 +682,7 @@ Plug 'mg979/vim-visual-multi'
 
 Plug 'yuttie/comfortable-motion.vim'
 
-Plug 'andrewradev/splitjoin.vim', { 'on': ['SplitjoinJoin', 'SplitjoinJoin'] }
+Plug 'andrewradev/splitjoin.vim', { 'on': ['SplitjoinSplit', 'SplitjoinJoin'] }
 " Configs
   nnoremap <leader>ls :SplitjoinSplit<cr>
   nnoremap <leader>lj :SplitjoinJoin<cr>
