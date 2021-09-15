@@ -263,6 +263,11 @@ Plug 'iamcco/markdown-preview.nvim', { 'for': 'ghmarkdown', 'do': 'cd app && yar
 " Configs
   let g:mkdp_command_for_global = 1
   let g:mkdp_refresh_slow = 1
+
+  let g:mkdp_preview_options = {
+    \ 'sync_scroll_type': 'middle'
+  \ }
+
   nmap <silent> <leader>vm <Plug>MarkdownPreviewToggle
 " *******
 
