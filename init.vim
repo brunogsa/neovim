@@ -401,59 +401,61 @@ autocmd VimEnter *.txt IndentLinesDisable
 " Auto Completion
 " =================
 
-Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-" Configs
-  set runtimepath+=~/.local/share/nvim/plugged/deoplete.nvim/
-  let g:deoplete#enable_at_startup = 1
-  let deoplete#tag#cache_limit_size = 5000000
-
-  inoremap <silent><expr><tab> pumvisible() ? "\<c-n>" : "\<tab>"
-  inoremap <silent><expr><s-tab> pumvisible() ? "\<c-p>" : "\<s-tab>"
-
-  " Close the documentation window when completion is done
-  autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | pclose | endif
-
-  call deoplete#custom#option({
-    \ 'auto_complete': v:true,
-    \ 'complete_suffix': v:true,
-    \ 'camel_case': v:false,
-    \ 'ignore_case': v:false,
-    \ 'smart_case': v:false,
-    \ 'max_list': 32,
-    \ 'min_pattern_length': 1,
-    \ 'num_processes': 1
-  \ })
-
-  call deoplete#custom#source('omni', 'functions', {
-    \ '_': ['syntaxcomplete#Complete', 'tmuxcomplete#complete'],
-    \ 'javascript': ['syntaxcomplete#Complete', 'tmuxcomplete#complete', 'tern#Complete', 'jspc#omni'],
-    \ 'go': ['gocode#Complete', 'syntaxcomplete#Complete', 'tmuxcomplete#complete']
-  \ })
-" *******
-
 Plug 'wellle/tmux-complete.vim'
-
-Plug 'deoplete-plugins/deoplete-docker', { 'for': 'dockerfile' }
-
-" FIXME: This plugin requires num_processes > 1, but this causes deoplete to flick due a neovim issue
-" Plug 'carlitux/deoplete-ternjs', { 'for': 'javascript' }
-" Configs
-  " let g:tern_request_timeout = 2
-" *******
 
 Plug 'myhere/vim-nodejs-complete', { 'for': 'javascript' }
 Plug 'othree/jspc.vim', { 'for': 'javascript' }
 
-" WARN: If you got errors, try running :UpdateRemotePlugins inside a .ts file
-" WARN: Requires a tsconfig.json file, so you'll may have to create a symbolic link for it
-Plug 'mhartington/nvim-typescript', { 'for': 'typescript', 'do': './install.sh' }
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
 " Configs
-  let g:nvim_typescript#quiet_startup = 0
-  let g:nvim_typescript#type_info_on_hold = 1
-  let g:nvim_typescript#signature_complete = 1
-  let g:nvim_typescript#default_mappings = 0
-  let g:nvim_typescript#completion_mark = '[TS]'
+
+  function! s:check_back_space() abort
+    let col = col('.') - 1
+    return !col || getline('.')[col - 1]  =~# '\s'
+  endfunction
+
+  function! s:show_documentation()
+    if (index(['vim','help'], &filetype) >= 0)
+      execute 'h '.expand('<cword>')
+    elseif (coc#rpc#ready())
+      call CocActionAsync('doHover')
+    else
+      execute '!' . &keywordprg . " " . expand('<cword>')
+    endif
+  endfunction
+
+  " Use tab for trigger completion with characters ahead and navigate.
+  " NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
+  " other plugin before putting this into your config.inoremap <silent><expr> <TAB>
+  inoremap <silent><expr> <TAB>
+    \ pumvisible() ? "\<C-n>" :
+    \ <SID>check_back_space() ? "\<TAB>" :
+    \ coc#refresh()
+
+  inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+
+  nnoremap <silent> <leader>vd :call <SID>show_documentation()<CR>
+
+  " GoTo code navigation.
+  nmap <silent> gd <Plug>(coc-definition)
+  nmap <silent> gy <Plug>(coc-type-definition)
+  nmap <silent> gi <Plug>(coc-implementation)
+  nmap <silent> gr <Plug>(coc-references)
+
+  " Use `[g` and `]g` to navigate diagnostics
+  " Use `:CocDiagnostics` to get all diagnostics of current buffer in location list.
+  nmap <silent> [g <Plug>(coc-diagnostic-prev)
+  nmap <silent> ]g <Plug>(coc-diagnostic-next)
+
+  " Symbol renaming.
+  nmap <leader>r <Plug>(coc-rename)
+
 " *******
+
+Plug 'voldikss/coc-browser', { 'do': 'yarn install --frozen-lockfile' }
+Plug 'neoclide/coc-tsserver', { 'for': 'typescript', 'do': 'yarn install --frozen-lockfile' }
+Plug 'neoclide/coc-json', { 'for': 'json', 'do': 'yarn install --frozen-lockfile' }
+
 
 " Lint
 " =================
@@ -767,6 +769,9 @@ vnoremap <buffer> <leader>vj y:vnew<cr>pV:s/\\//g<cr>V:call RangeJsonBeautify()<
 
 syntax on
 autocmd BufWinEnter * :syntax sync fromstart
+
+" Don't pass messages to |ins-completion-menu|.
+set shortmess+=c
 
 " Larger bottom command panel, better for seeing auxiliar messages
 set cmdheight=2
