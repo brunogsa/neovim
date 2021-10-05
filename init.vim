@@ -788,6 +788,7 @@ set cursorline
 " set relativenumber
 
 set wrap
+set whichwrap+=<,>
 set textwidth=213
 
 " Colorscheme
