@@ -450,11 +450,15 @@ Plug 'neoclide/coc.nvim', {'branch': 'release'}
   " Symbol renaming.
   nmap <leader>r <Plug>(coc-rename)
 
-" *******
+  let g:coc_global_extensions = [
+    \ 'coc-browser',
+    \ 'coc-json',
+    \ 'coc-tsserver',
+    \ 'coc-html',
+    \ 'coc-css',
+    \ ]
 
-Plug 'voldikss/coc-browser', { 'do': 'yarn install --frozen-lockfile' }
-Plug 'neoclide/coc-tsserver', { 'for': 'typescript', 'do': 'yarn install --frozen-lockfile' }
-Plug 'neoclide/coc-json', { 'for': 'json', 'do': 'yarn install --frozen-lockfile' }
+" *******
 
 
 " Lint
