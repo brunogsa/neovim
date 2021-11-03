@@ -271,6 +271,8 @@ Plug 'iamcco/markdown-preview.nvim', { 'for': 'ghmarkdown', 'do': 'cd app && yar
   nmap <silent> <leader>vm <Plug>MarkdownPreviewToggle
 " *******
 
+Plug 'mzlogin/vim-markdown-toc', { 'for': 'ghmarkdown' }
+
 Plug 'wellle/context.vim'
 " Configs
   let g:context_add_mappings = 0
@@ -455,7 +457,11 @@ Plug 'neoclide/coc.nvim', {'branch': 'release'}
     \ 'coc-tsserver',
     \ 'coc-html',
     \ 'coc-css',
+    \ 'coc-swagger',
     \ ]
+
+  " Hotkey for rendering Swagger
+  nmap <silent> <leader>vs :CocCommand swagger.render<CR>
 
 " *******
 
