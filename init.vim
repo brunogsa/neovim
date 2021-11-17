@@ -772,6 +772,9 @@ nnoremap gp V']
 " View a formatted JSON is a new buffer
 vnoremap <buffer> <leader>vj y:vnew<cr>pV:s/\\//g<cr>V:call RangeJsonBeautify()<cr>
 
+" Preview for HTML
+nmap <silent> <leader>vh :!google-chrome % &<cr>
+
 " ===============================================
 " Interface
 " ===============================================
