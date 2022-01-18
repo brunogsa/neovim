@@ -775,6 +775,10 @@ vnoremap <buffer> <leader>vj y:vnew<cr>pV:s/\\//g<cr>V:call RangeJsonBeautify()<
 " Preview for HTML
 nmap <silent> <leader>vh :!google-chrome % &<cr>
 
+" Preview for AsyncAPI
+nmap <silent> <leader>va :!rm -fr /tmp/brunogsa-vim-asyncapi-preview && ag % @asyncapi/html-template -o /tmp/brunogsa-vim-asyncapi-preview && google-chrome /tmp/brunogsa-vim-asyncapi-preview/index.html &<cr>
+
+
 " ===============================================
 " Interface
 " ===============================================

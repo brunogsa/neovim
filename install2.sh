@@ -4,7 +4,7 @@ set -e
 # Install integrations..
 
 # Globally install Tern stuff
-sudo npm install -g tern prettier
+sudo npm install -g tern prettier @asyncapi/generator @asyncapi/html-template
 
 # golint installation
 sudo apt-get install -y golint
