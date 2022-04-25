@@ -259,7 +259,7 @@ Plug 'dietsche/vim-lastplace'
   let g:lastplace_ignore = "gitcommit,gitrebase,svn,hgcommit"
 " *******
 
-Plug 'iamcco/markdown-preview.nvim', { 'for': 'ghmarkdown', 'do': 'cd app && yarn install' }
+Plug 'iamcco/markdown-preview.nvim', { 'for': 'ghmarkdown', 'do': 'cd app && npm install' }
 " Configs
   let g:mkdp_command_for_global = 1
   let g:mkdp_refresh_slow = 1
