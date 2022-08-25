@@ -117,6 +117,10 @@ autocmd FilterWritePre * if &diff | setlocal wrap< | endif
 " Virtual edit preferences: in block wise
 set virtualedit=block
 
+" Colorscheme
+set background=dark
+colorscheme jellybeans
+
 " ===============================================
 " Init plugins
 " ===============================================
@@ -411,36 +415,32 @@ Plug 'othree/jspc.vim', { 'for': 'javascript' }
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 " Configs
 
-  function! s:check_back_space() abort
+  function! CheckBackspace() abort
     let col = col('.') - 1
     return !col || getline('.')[col - 1]  =~# '\s'
   endfunction
 
-  function! s:show_documentation()
-    if (index(['vim','help'], &filetype) >= 0)
-      execute 'h '.expand('<cword>')
-    elseif (coc#rpc#ready())
+  function! ShowDocumentation()
+    if CocAction('hasProvider', 'hover')
       call CocActionAsync('doHover')
     else
-      execute '!' . &keywordprg . " " . expand('<cword>')
+      call feedkeys('K', 'in')
     endif
   endfunction
 
   " Use tab for trigger completion with characters ahead and navigate.
-  " NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
-  " other plugin before putting this into your config.inoremap <silent><expr> <TAB>
   inoremap <silent><expr> <TAB>
-    \ pumvisible() ? "\<C-n>" :
-    \ <SID>check_back_space() ? "\<TAB>" :
+    \ coc#pum#visible() ? coc#pum#next(1):
+    \ CheckBackspace() ? "\<Tab>" :
     \ coc#refresh()
 
-  inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+  inoremap <expr><S-TAB> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
 
-  nnoremap <silent> <leader>vd :call <SID>show_documentation()<CR>
+  nnoremap <silent> <leader>vd :call ShowDocumentation()<CR>
 
   " GoTo code navigation.
   nmap <silent> gd <Plug>(coc-definition)
-  nmap <silent> gy <Plug>(coc-type-definition)
+  nmap <silent> gt <Plug>(coc-type-definition)
   nmap <silent> gi <Plug>(coc-implementation)
   nmap <silent> gr <Plug>(coc-references)
 
@@ -458,10 +458,13 @@ Plug 'neoclide/coc.nvim', {'branch': 'release'}
     \ 'coc-html',
     \ 'coc-css',
     \ 'coc-swagger',
-    \ ]
+  \ ]
 
   " Hotkey for rendering Swagger
   nmap <silent> <leader>vs :CocCommand swagger.render<CR>
+
+  " Highlight the symbol and its references when holding the cursor.
+  autocmd CursorHold * silent call CocActionAsync('highlight')
 
 " *******
 
@@ -802,9 +805,6 @@ set cursorline
 set wrap
 set whichwrap+=<,>
 set textwidth=213
-
-" Colorscheme
-colorscheme wasabi256
 
 " Transparency in some terminals
 hi Normal ctermbg=none
