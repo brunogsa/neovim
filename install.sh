@@ -1,48 +1,41 @@
 #!/bin/bash
 set -e
 
-# Dependencies
-sudo apt-get update && sudo apt-get upgrade
-sudo apt-get install -y curl
-sudo apt-get install -y software-properties-common
-
 # Install python and pip
-sudo apt-get install -y python-dev python3-dev python3-pip
-sudo pip3 install --upgrade pip
-sudo pip3 install pynvim
-sudo pip3 install --upgrade pynvim
+brew install python
+pip3 install --upgrade pip
+pip3 install pynvim
+pip3 install --upgrade pynvim
+
+# Install Ruby
+brew install ruby
+brew install gcc
+brew install rbenv
+brew install gnupg
+command curl -sSL https://rvm.io/mpapis.asc | gpg --import -
+command curl -sSL https://rvm.io/pkuczynski.asc | gpg --import -
+curl -sSL https://get.rvm.io | bash
+rvm get stable --ruby
 
 # Install Lua
-sudo apt-get install -y luarocks lua-check rubygems ruby-dev
-sudo luarocks install luacheck
+brew install lua
+brew install luarocks
+luarocks install luacheck
+
+# Install perl
+brew install perl
 
 # Install node, npm and n
-cd ~
-wget https://nodejs.org/dist/v8.9.4/node-v8.9.4-linux-x64.tar.xz
-tar -xf node-v8.9.4-linux-x64.tar.xz
-rm -f node-v8.9.4-linux-x64.tar.xz
-sudo cp node-v8.9.4-linux-x64/bin/node /usr/bin/
-sudo node-v8.9.4-linux-x64/bin/npm install -g npm
+brew install node
 node -v
 npm -v
-rm -fr node-v8.9.4-linux-x64
 sudo npm i -g n
 sudo n lts
 sudo npm i -g npm
+sudo npm i -g yarn
+mkdir -p ~/.npm
+sudo npm i -g node-gyp
+sudo chown -R $USER:$GROUP ~/.npm
 
 # Install typescript
 sudo npm i -g typescript
-
-# Install go
-sudo snap install go --classic
-
-# Ctags
-sudo apt-get install -y exuberant-ctags
-
-# Install PHP, composer
-sudo apt-get install -y php
-sudo apt-get install -y composer
-sudo chown -Rf $USER:$USER ~/.composer
-sudo apt-get install -y php-curl
-
-sudo reboot

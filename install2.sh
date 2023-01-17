@@ -1,13 +1,8 @@
 #!/bin/bash
 set -e
 
-# Install integrations..
-
 # Globally install Tern stuff
 sudo npm install -g tern prettier @asyncapi/generator @asyncapi/html-template
-
-# golint installation
-sudo apt-get install -y golint
 
 # Install pgFormatter
 sudo rm -fr pgFormatter && git clone https://github.com/darold/pgFormatter
@@ -17,19 +12,14 @@ make && sudo make install
 cd -
 
 # Install nerd-fonts
-sudo rm -fr nerd-fonts && git clone https://github.com/ryanoasis/nerd-fonts
-cd nerd-fonts
-sudo chmod +x install.sh
-./install.sh
-cd -
+brew tap homebrew/cask-fonts
+brew install --cask font-hack-nerd-font
 
 # Install it
-sudo add-apt-repository ppa:neovim-ppa/unstable
-sudo apt-get update || echo "Done"
-sudo apt-get install -y neovim
+brew install neovim
 
-sudo pip3 install --upgrade neovim
-sudo gem install neovim
+pip3 install --upgrade neovim
+gem install neovim
 sudo npm i -g neovim
 
 # Install vim-plug
@@ -37,10 +27,8 @@ curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs https://raw.g
 
 # Use my configs
 mkdir -p ~/.config/nvim/
-ln -s ~/neovim/init.vim ~/.config/nvim/
-ln -s ~/neovim/colors ~/.config/nvim/
-ln -s ~/neovim/.tern-project ~
+ln -sf ~/neovim/init.vim ~/.config/nvim/
+ln -sf ~/neovim/colors ~/.config/nvim/
+ln -sf ~/neovim/.tern-project ~
 
-echo "alias sudo=sudo " >> ~/.bashrc
-echo "alias vim=nvim" >> ~/.bashrc
 echo "Done!"
