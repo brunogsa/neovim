@@ -1,3 +1,4 @@
 {
   "suggest.noselect": true
+  "coc.preferences.jumpCommand": "vsplit"
 }
