@@ -169,6 +169,7 @@ Plug 'szw/vim-maximizer', { 'on': 'MaximizerToggle' }
 "Configs
   let g:maximizer_set_default_mapping = 0
   nnoremap <silent><leader><F3> :MaximizerToggle<CR>
+  nnoremap <silent><C-w>z :MaximizerToggle<CR>
 " *******
 
 Plug 'tpope/vim-commentary'
