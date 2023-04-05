@@ -453,6 +453,7 @@ Plug 'neoclide/coc.nvim', {'branch': 'release'}
   nmap <leader>r <Plug>(coc-rename)
 
   let g:coc_global_extensions = [
+    \ 'coc-json',
     \ 'coc-browser',
     \ 'coc-tsserver',
     \ 'coc-html',
