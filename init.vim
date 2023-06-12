@@ -224,7 +224,7 @@ Plug 'lfv89/vim-interestingwords'
 
   " [Ligh] green, yellow, blue, orange, purple, teal, red, gray - [Dark] same
   let g:interestingWordsTermColors = ['115', '190', '27', '202', '165', '87', '196', '250',
-    \ '22', '11', '19', '94', '89', '147', '52', '234']
+    \ '22', '11', '19', '94', '89', '147', '52', '234', '164', '86', '7', '53', '1', '254', '32', '200', '12', '79', '47', '159', '69', '181', '90', '213']
 " *******
 
 Plug 'henrik/vim-indexed-search'
