@@ -341,6 +341,9 @@ Plug 'pangloss/vim-javascript', { 'for': 'javascript' }
 " jsx
 Plug 'neoclide/vim-jsx-improve', { 'for': 'javascript' }
 
+" tsx
+Plug 'tasn/vim-tsx'
+
 " ejs
 Plug 'nikvdp/ejs-syntax', { 'for': 'ejs' }
 
@@ -474,7 +477,7 @@ Plug 'neoclide/coc.nvim', {'branch': 'release'}
 " Lint
 " =================
 
-Plug 'neomake/neomake', { 'for': ['javascript', 'typescript', 'go', 'lua'] }
+Plug 'neomake/neomake', { 'for': ['javascript', 'typescript', 'go', 'lua', 'typescript.tsx'] }
 " Configs
   autocmd! BufWritePost,BufEnter *.js,*.jsx,*.ts,*.tsx,*.go,*.lua Neomake
   let g:quickfixsigns_protect_sign_rx = '^neomake_'
