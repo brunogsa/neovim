@@ -321,6 +321,10 @@ Plug 'leafgarland/typescript-vim', { 'for': 'typescript' }
 " extend typescript + DOM keywords
 Plug 'HerringtonDarkholme/yats.vim', { 'for': 'typescript' }
 
+Plug 'peitalin/vim-jsx-typescript', { 'for': 'typescript' }
+
+Plug 'styled-components/vim-styled-components', { 'branch': 'main' }
+
 Plug 'Yggdroot/indentLine'
 " Configs
   let g:indentLine_char = '┆'
@@ -340,9 +344,6 @@ Plug 'pangloss/vim-javascript', { 'for': 'javascript' }
 
 " jsx
 Plug 'neoclide/vim-jsx-improve', { 'for': 'javascript' }
-
-" tsx
-Plug 'tasn/vim-tsx'
 
 " ejs
 Plug 'nikvdp/ejs-syntax', { 'for': 'ejs' }
