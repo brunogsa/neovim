@@ -801,7 +801,7 @@ set cmdheight=2
 set cursorline
 
 " Line numbers - Disable for better performance
-" set number
+set number
 " set relativenumber
 
 set wrap
