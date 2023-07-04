@@ -28,6 +28,7 @@ curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs https://raw.g
 # Use my configs
 mkdir -p ~/.config/nvim/
 ln -sf ~/neovim/init.vim ~/.config/nvim/
+ln -sf ~/neovim/init.lua ~/.config/nvim/
 ln -sf ~/neovim/colors ~/.config/nvim/
 ln -sf ~/neovim/.tern-project ~
 ln -sf ~/neovim/coc-settings.json ~/.config/nvim/
