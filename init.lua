@@ -527,10 +527,10 @@ Plug('mg979/vim-visual-multi')
 
 Plug('yuttie/comfortable-motion.vim')
 
-Plug('andrewradev/splitjoin.vim', { on = { 'SplitjoinSplit', 'SplitjoinJoin' } })
--- Configs
-  vim.api.nvim_set_keymap('n', '<leader>ls', ':SplitjoinSplit<CR>', {noremap = true, silent = true})
-  vim.api.nvim_set_keymap('n', '<leader>lj', ':SplitjoinJoin<CR>', {noremap = true, silent = true})
+-- Plugin for joining / splitting
+Plug('Wansmer/treesj', { on = { 'TSJToggle' } })
+-- Additional configs down below
+  vim.api.nvim_set_keymap('n', '<leader>lt', ':TSJToggle<CR>', {noremap = true, silent = true})
 -- *******
 
 Plug('godlygeek/tabular', { on = 'Tabularize' })
@@ -837,4 +837,31 @@ require('nvim-treesitter.configs').setup({
     -- Instead of true it can also be a list of languages
     additional_vim_regex_highlighting = true,
   }
+})
+
+local langs = {--[[ configuration for languages ]]}
+require('treesj').setup({
+  -- Use default keymaps
+  -- (<space>m - toggle, <space>j - join, <space>s - split)
+  use_default_keymaps = false,
+
+  -- Node with syntax error will not be formatted
+  check_syntax_error = true,
+
+  -- If line after join will be longer than max value,
+  -- node will not be formatted
+  max_join_length = 2048,
+
+  -- hold|start|end:
+  -- hold - cursor follows the node/place on which it was called
+  -- start - cursor jumps to the first symbol of the node being formatted
+  -- end - cursor jumps to the last symbol of the node being formatted
+  cursor_behavior = 'hold',
+
+  -- Notify about possible problems or not
+  notify = true,
+  langs = langs,
+
+  -- Use `dot` for repeat action
+  dot_repeat = true,
 })
