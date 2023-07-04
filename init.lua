@@ -149,7 +149,8 @@ vim.cmd('highlight IncSearch guibg=red ctermbg=red term=underline')
 -- Hotkeys
 -- =======================================
 
-vim.g.mapleader = '\\<space>'
+-- Map to <space>
+vim.g.mapleader = ' '
 
 -- Send deleted thing with 'x' and 'c' to black hole
 vim.api.nvim_set_keymap('n', 'x', '"_x', { noremap = true, silent = true })
