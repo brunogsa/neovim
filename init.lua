@@ -773,33 +773,52 @@ Plug('neomake/neomake', { ['for'] = { 'javascript', 'typescript', 'go', 'lua', '
 
   -- Helpers
   local localEslint = vim.fn.glob('node_modules') .. '/.bin/eslint'
+  local globalEslint = vim.fn.system('which eslint')
+  globalEslint = string.sub(globalEslint, 1, -3) -- Remove last 2 chars (garbage)
+  local eslint = globalEslint
+  if vim.fn.executable(localEslint) == 1 then
+    eslint = localEslint
+  end
+
+  local localEslintConfig = vim.fn.glob('.eslintrc')
 
   -- JavaScript Checkers
   vim.g.neomake_javascript_eslint_maker = {
-    exe = localEslint,
+    exe = eslint,
     append_file = 0,
     args = {'--no-ignore', '-f', 'compact', '--ext', '.js,.jsx', '%:p'},
     errorformat = '%E%f: line %l\\, col %c\\, Error - %m, %W%f: line %l\\, col %c\\, Warning - %m'
   }
+  if vim.fn.filereadable(localEslintConfig) == 1 then
+    table.insert(vim.g.neomake_javascript_eslint_maker.args, 1, '-c')
+    table.insert(vim.g.neomake_javascript_eslint_maker.args, 2, localEslintConfig)
+  end
 
   vim.g.neomake_javascript_enabled_makers = { 'eslint' }
 
   -- TypeScript Checkers
   vim.g.neomake_typescript_eslint_maker = {
-    exe = localEslint,
+    exe = eslint,
     append_file = 0,
-    args = {'--no-ignore', '-f', 'compact', '--ext', '.ts', '%:p'},
+    args = {'--no-ignore', '-f', 'compact', '--ext', '.ts,.tsx', '%:p'},
     errorformat = '%E%f: line %l\\, col %c\\, Error - %m, %W%f: line %l\\, col %c\\, Warning - %m'
   }
+  if vim.fn.filereadable(localEslintConfig) == 1 then
+    table.insert(vim.g.neomake_javascript_eslint_maker.args, 1, '-c')
+    table.insert(vim.g.neomake_javascript_eslint_maker.args, 2, localEslintConfig)
+  end
 
   vim.g.neomake_typescript_enabled_makers = { 'eslint' }
 
   -- Lua Checkers
+  local luacBin = vim.fn.system('which luac')
+  luacBin = string.sub(luacBin, 1, -3) -- Remove last 2 chars (garbage)
+
   vim.g.neomake_lua_luac_maker = {
-    exe = '/usr/bin/luac',
+    exe = luacBin,
     append_file = 0,
     args = {'-p', '%:p'},
-    errorformat = '%E/usr/bin/luac: %f:%l: %m'
+    errorformat = '%Eluac: %f:%l: %m'
   }
   vim.g.neomake_lua_enabled_makers = { 'luac' }
 
