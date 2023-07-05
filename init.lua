@@ -95,7 +95,6 @@ vim.opt.virtualedit = 'block'
 
 -- Colorscheme
 vim.opt.background = 'dark'
-vim.cmd('colorscheme jellybeans')
 
 -- Set file type to CSV files
 vim.cmd('autocmd VimEnter *.csv setlocal filetype=csv')
@@ -541,6 +540,12 @@ Plug('rhlobo/vim-super-retab', { on = { 'Space2Tab', 'Tab2Space' } })
 -- Highlight
 -- ===================
 
+-- Colorscheme
+Plug('sainnhe/sonokai')
+vim.g.sonokai_style = 'espresso'
+vim.g.sonokai_better_performance = 1
+vim.g.sonokai_transparent_background = 1
+
 -- csv
 Plug('mechatroner/rainbow_csv', { ['for'] = 'csv' })
 -- Configs
@@ -838,6 +843,9 @@ require('nvim-treesitter.configs').setup({
     additional_vim_regex_highlighting = true,
   }
 })
+
+-- Colorscheme
+vim.cmd('colorscheme sonokai')
 
 local langs = {--[[ configuration for languages ]]}
 require('treesj').setup({
