@@ -503,26 +503,7 @@ Plug('scrooloose/nerdtree', { on = 'NERDTreeToggle' })
   vim.g.NERDTreeHijackNetrw = 1
 -- *******
 
-Plug('justinmk/vim-sneak')
--- Configs
-  vim.g['sneak#s_next'] = 1
-
-  --replace 'f' with 1-char Sneak
-  vim.api.nvim_set_keymap('n', 'f', '<Plug>Sneak_f', {noremap = true, silent = true})
-  vim.api.nvim_set_keymap('n', 'F', '<Plug>Sneak_F', {noremap = true, silent = true})
-  vim.api.nvim_set_keymap('x', 'f', '<Plug>Sneak_f', {noremap = true, silent = true})
-  vim.api.nvim_set_keymap('x', 'F', '<Plug>Sneak_F', {noremap = true, silent = true})
-  vim.api.nvim_set_keymap('o', 'f', '<Plug>Sneak_f', {noremap = true, silent = true})
-  vim.api.nvim_set_keymap('o', 'F', '<Plug>Sneak_F', {noremap = true, silent = true})
-
-  --replace 't' with 1-char Sneak
-  vim.api.nvim_set_keymap('n', 't', '<Plug>Sneak_t', {noremap = true, silent = true})
-  vim.api.nvim_set_keymap('n', 'T', '<Plug>Sneak_T', {noremap = true, silent = true})
-  vim.api.nvim_set_keymap('x', 't', '<Plug>Sneak_t', {noremap = true, silent = true})
-  vim.api.nvim_set_keymap('x', 'T', '<Plug>Sneak_T', {noremap = true, silent = true})
-  vim.api.nvim_set_keymap('o', 't', '<Plug>Sneak_t', {noremap = true, silent = true})
-  vim.api.nvim_set_keymap('o', 'T', '<Plug>Sneak_T', {noremap = true, silent = true})
--- *******
+Plug('ggandor/leap.nvim')
 
 Plug('mg979/vim-visual-multi')
 -- Configs
@@ -930,3 +911,5 @@ require("noice").setup({
     view = "cmdline_popup", -- view for rendering the cmdline. Change to `cmdline` or `cmdline_popup`
   },
 })
+
+require('leap').add_default_mappings()
