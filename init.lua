@@ -681,19 +681,26 @@ Plug('othree/jspc.vim', { ['for'] = 'javascript' })
 
 Plug('neoclide/coc.nvim', {branch = 'release'})
 -- Configs
+  vim.cmd([[
 
-  function _G.CheckBackspace()
-    local col = vim.api.nvim_win_get_cursor(0)[2]
-    return col == 0 or vim.api.nvim_get_current_line():sub(col, col):match('%s') ~= nil
-  end
+    function! CheckBackspace() abort
+      let col = col('.') - 1
+      return !col || getline('.')[col - 1]  =~# '\s'
+    endfunction
 
-  function _G.ShowDocumentation()
-    if vim.fn['coc#rpc#request']('CocAction', {'hasProvider', 'hover'}) then
-      vim.api.nvim_command('call CocActionAsync("doHover")')
-    else
-      vim.api.nvim_feedkeys('K', 'n', true)
-    end
-  end
+  ]])
+  vim.cmd([[
+
+    function! ShowDocumentation()
+      if CocAction('hasProvider', 'hover')
+        call CocActionAsync('doHover')
+      else
+        call feedkeys('K', 'in')
+      endif
+    endfunction
+
+  ]])
+
 
   -- Use tab for trigger completion with characters ahead and navigate.
   vim.cmd([[
@@ -703,7 +710,7 @@ Plug('neoclide/coc.nvim', {branch = 'release'})
     inoremap <expr><S-TAB> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
   ]])
 
-  vim.api.nvim_set_keymap('n', '<leader>vd', ':lua ShowDocumentation()<CR>', {noremap = true, silent = true})
+  vim.api.nvim_set_keymap('n', '<leader>vd', ':call ShowDocumentation()<CR>', {noremap = true, silent = true})
 
   -- GoTo code navigation.
   vim.api.nvim_set_keymap('n', 'gd', ':call CocAction("jumpDefinition", "drop")<CR>', {noremap = true, silent = true})
