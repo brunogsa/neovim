@@ -390,10 +390,13 @@ Plug('wellle/context.vim')
 
 Plug('nvim-treesitter/nvim-treesitter', { ['do'] = ':TSUpdate<CR>' })
 
-Plug('vim-scripts/LargeFile')
+Plug('f-person/git-blame.nvim', { on = 'GitBlameToggle' })
 -- Configs
-  vim.g.LargeFile = 0.5
+  vim.g.gitblame_enabled = 0
+  vim.api.nvim_set_keymap('n', '<leader>tg', ':GitBlameToggle<CR>', {noremap = true, silent = true})
 -- *******
+
+Plug('vim-scripts/LargeFile')
 
 Plug('tmux-plugins/vim-tmux-focus-events')
 
@@ -798,7 +801,7 @@ vim.call('plug#end')
 
 
 -- =======================================
--- Post configs
+-- Post plugin load configs
 -- =======================================
 require('nvim-treesitter.configs').setup({
   -- A list of parser names, or "all" (the five listed parsers should always be installed)
