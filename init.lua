@@ -390,6 +390,11 @@ Plug('wellle/context.vim')
 
 Plug('nvim-treesitter/nvim-treesitter', { ['do'] = ':TSUpdate<CR>' })
 
+-- Better UI for messages, quickfix, cmd etc
+Plug('MunifTanjim/nui.nvim')
+Plug('rcarriga/nvim-notify')
+Plug('folke/noice.nvim')
+
 Plug('f-person/git-blame.nvim', { on = 'GitBlameToggle' })
 -- Configs
   vim.g.gitblame_enabled = 0
@@ -875,4 +880,23 @@ require('treesj').setup({
 
   -- Use `dot` for repeat action
   dot_repeat = true,
+})
+
+require("noice").setup({
+  lsp = {
+    -- override markdown rendering so that **cmp** and other plugins use **Treesitter**
+    override = {
+      ["vim.lsp.util.convert_input_to_markdown_lines"] = true,
+      ["vim.lsp.util.stylize_markdown"] = true,
+      ["cmp.entry.get_documentation"] = true,
+    },
+  },
+  -- you can enable a preset for easier configuration
+  presets = {
+    bottom_search = true, -- use a classic bottom cmdline for search
+    command_palette = true, -- position the cmdline and popupmenu together
+    long_message_to_split = true, -- long messages will be sent to a split
+    inc_rename = false, -- enables an input dialog for inc-rename.nvim
+    lsp_doc_border = false, -- add a border to hover docs and signature help
+  },
 })
