@@ -168,12 +168,12 @@ vim.api.nvim_set_keymap('n', '<up>', 'gk', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<right>', 'l', { noremap = true, silent = true })
 
 -- Move to the beginning of the indentation level
-vim.api.nvim_set_keymap('n', '<S-left>', '^', { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<home>', '^', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('', '<S-left>', '^', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('', '<home>', '^', { noremap = true, silent = true })
 
 -- Move to the end of a line in a smarter way
-vim.api.nvim_set_keymap('n', '<S-right>', 'g_', { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<end>', 'g_', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('', '<S-right>', 'g_', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('', '<end>', 'g_', { noremap = true, silent = true })
 
 -- Easier to align
 vim.api.nvim_set_keymap('x', '>', '>gv', { noremap = true, silent = true })
