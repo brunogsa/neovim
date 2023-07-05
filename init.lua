@@ -401,6 +401,9 @@ Plug('f-person/git-blame.nvim', { on = 'GitBlameToggle' })
   vim.api.nvim_set_keymap('n', '<leader>tg', ':GitBlameToggle<CR>', {noremap = true, silent = true})
 -- *******
 
+Plug('akinsho/git-conflict.nvim')
+-- Post configs below
+
 Plug('vim-scripts/LargeFile')
 
 Plug('tmux-plugins/vim-tmux-focus-events')
@@ -913,3 +916,7 @@ require("noice").setup({
 })
 
 require('leap').add_default_mappings()
+
+require('git-conflict').setup({
+  default_mappings = false
+})
