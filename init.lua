@@ -804,8 +804,8 @@ Plug('neomake/neomake', { ['for'] = { 'javascript', 'typescript', 'go', 'lua', '
     errorformat = '%E%f: line %l\\, col %c\\, Error - %m, %W%f: line %l\\, col %c\\, Warning - %m'
   }
   if vim.fn.filereadable(localEslintConfig) == 1 then
-    table.insert(vim.g.neomake_javascript_eslint_maker.args, 1, '-c')
-    table.insert(vim.g.neomake_javascript_eslint_maker.args, 2, localEslintConfig)
+    table.insert(vim.g.neomake_typescript_eslint_maker.args, 1, '-c')
+    table.insert(vim.g.neomake_typescript_eslint_maker.args, 2, localEslintConfig)
   end
 
   vim.g.neomake_typescript_enabled_makers = { 'eslint' }
