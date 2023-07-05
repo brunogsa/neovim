@@ -758,7 +758,7 @@ Plug('neomake/neomake', { ['for'] = { 'javascript', 'typescript', 'go', 'lua', '
   -- Helpers
   local localEslint = vim.fn.glob('node_modules') .. '/.bin/eslint'
   local globalEslint = vim.fn.system('which eslint')
-  globalEslint = string.sub(globalEslint, 1, -3) -- Remove last 2 chars (garbage)
+  globalEslint = string.sub(globalEslint, 1, -2) -- Remove some last chars (garbage)
   local eslint = globalEslint
   if vim.fn.executable(localEslint) == 1 then
     eslint = localEslint
