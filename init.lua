@@ -918,5 +918,10 @@ require("noice").setup({
 require('leap').add_default_mappings()
 
 require('git-conflict').setup({
-  default_mappings = false
+  default_mappings = true,
+  disable_diagnostics = false, -- This will disable the diagnostics in a buffer whilst it is conflicted
+  highlights = { -- They must have background color, otherwise the default color will be used
+    incoming = 'DiffAdd',
+    current = 'DiffText',
+  }
 })
