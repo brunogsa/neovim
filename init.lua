@@ -572,7 +572,7 @@ Plug('peitalin/vim-jsx-typescript', { ['for'] = 'typescript' })
 
 Plug('styled-components/vim-styled-components', { branch = 'main' })
 
-Plug('Yggdroot/indentLine')
+Plug('lukas-reineke/indent-blankline.nvim')
 -- Configs
   vim.g.indentLine_char = '┆'
   vim.g.indentLine_color_term = 32
@@ -599,12 +599,6 @@ Plug('neoclide/vim-jsx-improve', { ['for'] = 'javascript' })
 
 -- ejs
 Plug('nikvdp/ejs-syntax', { ['for'] = 'ejs' })
-
--- json
-Plug('elzr/vim-json', { ['for'] = 'json' })
--- Configs
-  vim.g.vim_json_syntax_conceal = 0
--- *******
 
 -- GraphQL
 Plug('jparise/vim-graphql', { ['for'] = 'graphql' })
@@ -925,3 +919,10 @@ require('git-conflict').setup({
     current = 'DiffText',
   }
 })
+
+require("indent_blankline").setup {
+  -- for example, context is off by default, use this to turn it on
+  show_current_context = true,
+  show_current_context_start = true,
+  show_end_of_line = false,
+}
