@@ -578,11 +578,6 @@ Plug('lukas-reineke/indent-blankline.nvim')
   vim.g.indentLine_color_term = 32
   vim.g.indentLine_faster = 1
   vim.g.indentLine_maxLines = 512
-
-  -- Disable for some files, due performance issues
-  vim.cmd('autocmd VimEnter *.log IndentLinesDisable')
-  vim.cmd('autocmd VimEnter *.txt IndentLinesDisable')
-  vim.cmd('autocmd VimEnter *.md,*.markdown IndentLinesDisable')
 -- *******
 
 Plug('vim-scripts/CursorLineCurrentWindow')
