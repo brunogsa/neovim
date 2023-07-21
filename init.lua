@@ -403,6 +403,13 @@ Plug('f-person/git-blame.nvim', { on = 'GitBlameToggle' })
 
 Plug('akinsho/git-conflict.nvim')
 -- Post configs below
+-- Hotkeys, as a quick note:
+-- co — choose ours 
+-- ct — choose theirs
+-- cb — choose both
+-- c0 — choose none
+-- ]x — move to previous conflict
+-- [x — move to next conflict
 
 Plug('vim-scripts/LargeFile')
 
