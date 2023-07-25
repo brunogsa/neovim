@@ -4,6 +4,14 @@
 
 HOME = os.getenv('HOME')
 
+function _G.toggle_foldmethod()
+  local current_foldmethod = vim.opt.foldmethod:get()
+  if current_foldmethod == 'indent' then
+    vim.opt.foldmethod = 'syntax'
+  else
+    vim.opt.foldmethod = 'indent'
+  end
+end
 
 -- =======================================
 -- Core Settings
@@ -30,9 +38,10 @@ vim.opt.timeoutlen = 512
 vim.opt.ttimeoutlen = 16
 
 -- Fold options. I prefer fold by identation
+
 vim.opt.foldmethod = 'indent'
 vim.opt.foldlevelstart = 2
-vim.opt.foldnestmax = 16
+vim.opt.foldnestmax = 20 -- This is the max value, hard limited by neovim code
 vim.opt.listchars = {
   nbsp = '˽',
   trail = '˽',
@@ -150,6 +159,12 @@ vim.cmd('highlight IncSearch guibg=red ctermbg=red term=underline')
 
 -- Map to <space>
 vim.g.mapleader = ' '
+
+-- Toggle foldmethod between "indent" and "syntax"
+-- This is useful when dealing with files too nested, where the "indent" becomes limited
+-- since neovim has a internal limit of "20" foldnestmax.
+-- In those case, switching to "syntax" is the workaround
+vim.api.nvim_set_keymap('n', '<leader>tf', [[<Cmd>lua _G.toggle_foldmethod()<CR>]], { noremap = true, silent = false })
 
 -- Send deleted thing with 'x' and 'c' to black hole
 vim.api.nvim_set_keymap('n', 'x', '"_x', { noremap = true, silent = true })
@@ -581,6 +596,7 @@ Plug('styled-components/vim-styled-components', { branch = 'main' })
 
 Plug('lukas-reineke/indent-blankline.nvim')
 -- Configs
+  vim.g.indent_blankline_indent_level = 32
   vim.g.indentLine_char = '┆'
   vim.g.indentLine_color_term = 32
   vim.g.indentLine_faster = 1
@@ -833,6 +849,15 @@ require('nvim-treesitter.configs').setup({
 
   highlight = {
     enable = true,
+    highlight = {
+      enable = true,
+    },
+    indent = {
+      enable = true,
+    },
+    fold = {
+      enable = true,
+    },
 
     -- NOTE: these are the names of the parsers and not the filetype. (for example if you want to
     -- disable highlighting for the `tex` filetype, you need to include `latex` in this list as this is
