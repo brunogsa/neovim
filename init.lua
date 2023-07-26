@@ -871,15 +871,6 @@ require('nvim-treesitter.configs').setup({
 
   highlight = {
     enable = true,
-    highlight = {
-      enable = true,
-    },
-    indent = {
-      enable = true,
-    },
-    fold = {
-      enable = true,
-    },
 
     -- NOTE: these are the names of the parsers and not the filetype. (for example if you want to
     -- disable highlighting for the `tex` filetype, you need to include `latex` in this list as this is
@@ -902,7 +893,13 @@ require('nvim-treesitter.configs').setup({
     -- Using this option may slow down your editor, and you may see some duplicate highlights.
     -- Instead of true it can also be a list of languages
     additional_vim_regex_highlighting = true,
-  }
+  },
+  indent = {
+    enable = true,
+  },
+  fold = {
+    enable = true,
+  },
 })
 
 -- Colorscheme
@@ -976,7 +973,7 @@ require("indent_blankline").setup {
   show_end_of_line = false,
 }
 
-require'marks'.setup {
+require('marks').setup {
   -- whether to map keybinds or not. default true
   default_mappings = true,
   -- which builtin marks to show. default {}
