@@ -966,16 +966,14 @@ require('git-conflict').setup({
   }
 })
 
-require("indent_blankline").setup {
+require("indent_blankline").setup({
   -- for example, context is off by default, use this to turn it on
   show_current_context = true,
   show_current_context_start = true,
   show_end_of_line = false,
-}
+})
 
-require('marks').setup {
-  -- whether to map keybinds or not. default true
-  default_mappings = true,
+require('marks').setup({
   -- which builtin marks to show. default {}
   builtin_marks = { ".", "<", ">", "^" },
   -- whether movements cycle back to the beginning/end of buffer. default true
@@ -1005,5 +1003,22 @@ require('marks').setup {
     -- defaults to false.
     annotate = false,
   },
-  mappings = {}
-}
+  default_mappings = false,
+  -- pass false to disable only this default mapping
+  mappings = {
+    set_next = "mz",
+    set = "ma",
+    toggle = "mT",
+    next = "m]",
+    prev = "m[",
+    delete_line = "md",
+    delete_buf = "mD",
+    preview = false,
+    delete = false,
+    set_bookmark0 = false,
+    delete_bookmark = false,
+    next_bookmark = false,
+    prev_bookmark = false,
+    annotate = false,
+  },
+})
