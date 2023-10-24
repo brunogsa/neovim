@@ -592,13 +592,6 @@ Plug('peitalin/vim-jsx-typescript', { ['for'] = 'typescript' })
 Plug('styled-components/vim-styled-components', { branch = 'main' })
 
 Plug('lukas-reineke/indent-blankline.nvim')
--- Configs
-  vim.g.indent_blankline_indent_level = 32
-  vim.g.indentLine_char = '┆'
-  vim.g.indentLine_color_term = 32
-  vim.g.indentLine_faster = 1
-  vim.g.indentLine_maxLines = 512
--- *******
 
 Plug('vim-scripts/CursorLineCurrentWindow')
 
@@ -918,11 +911,17 @@ require('git-conflict').setup({
   }
 })
 
-require("indent_blankline").setup({
-  -- for example, context is off by default, use this to turn it on
-  show_current_context = true,
-  show_current_context_start = true,
-  show_end_of_line = false,
+require("ibl").setup({
+  indent = {
+    char = '┆',
+  },
+
+  scope = {
+    enabled = true,
+    show_start = true,
+    show_end = true,
+    show_start = true
+  }
 })
 
 require('marks').setup({
