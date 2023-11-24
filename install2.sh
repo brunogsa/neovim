@@ -1,8 +1,8 @@
 #!/bin/bash
 set -e
 
-# Globally install Tern stuff
-sudo npm install -g tern prettier @asyncapi/generator @asyncapi/html-template
+# Globally install Tern and Node stuff
+sudo npm install -g tern prettier @asyncapi/generator @asyncapi/html-template @mermaid-js/mermaid-cli
 
 # Install pgFormatter
 sudo rm -fr pgFormatter && git clone https://github.com/darold/pgFormatter
