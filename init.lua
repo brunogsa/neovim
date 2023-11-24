@@ -23,7 +23,8 @@ vim.opt.updatetime = 500
 vim.cmd('autocmd VimEnter *.php set updatetime=8000')
 
 -- Enable mouse scroll
-vim.opt.mouse = 'a'
+-- vim.opt.mouse = 'a'
+vim.opt.mouse = ''
 
 -- Improve Performance
 vim.opt.ttyfast = true
@@ -379,7 +380,7 @@ Plug('dietsche/vim-lastplace')
   vim.g.lastplace_ignore = 'gitcommit,gitrebase,svn,hgcommit'
 -- *******
 
-Plug('iamcco/markdown-preview.nvim', { ['for'] = 'ghmarkdown', ['do'] = 'cd app && npm install' })
+Plug('iamcco/markdown-preview.nvim', { ['for'] = 'ghmarkdown,mermaid', ['do'] = 'cd app && npm install' })
 -- Configs
   vim.g.mkdp_command_for_global = 1
   vim.g.mkdp_refresh_slow = 1
