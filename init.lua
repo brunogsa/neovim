@@ -720,6 +720,7 @@ Plug('neoclide/coc.nvim', {branch = 'release'})
     'coc-html',
     'coc-css',
     'coc-swagger',
+    'coc-pyright',
   }
 
   -- Hotkey for rendering Swagger
