@@ -1,5 +1,6 @@
 #!/bin/bash
 set -e
+set -x
 
 # Dependencies
 sudo apt-get update && sudo apt-get upgrade
@@ -7,25 +8,17 @@ sudo apt-get install -y curl
 sudo apt-get install -y software-properties-common
 
 # Install python and pip
-sudo apt-get install -y python-dev python3-dev python3-pip
-sudo pip3 install --upgrade pip
-sudo pip3 install pynvim
-sudo pip3 install --upgrade pynvim
+sudo apt install build-essential zlib1g-dev libncurses5-dev libgdbm-dev libnss3-dev libssl-dev libreadline-dev libffi-dev wget
+sudo apt-get install -y python3 python3-pip
+sudo apt install python3-pip
+sudo apt install python-pynvim
 
 # Install Lua
 sudo apt-get install -y luarocks lua-check rubygems ruby-dev
 sudo luarocks install luacheck
 
 # Install node, npm and n
-cd ~
-wget https://nodejs.org/dist/v8.9.4/node-v8.9.4-linux-x64.tar.xz
-tar -xf node-v8.9.4-linux-x64.tar.xz
-rm -f node-v8.9.4-linux-x64.tar.xz
-sudo cp node-v8.9.4-linux-x64/bin/node /usr/bin/
-sudo node-v8.9.4-linux-x64/bin/npm install -g npm
-node -v
-npm -v
-rm -fr node-v8.9.4-linux-x64
+sudo apt-get install -y nodejs npm
 sudo npm i -g n
 sudo n lts
 sudo npm i -g npm
