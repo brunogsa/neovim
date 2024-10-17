@@ -18,7 +18,7 @@ brew install --cask font-hack-nerd-font
 # Install it
 brew install neovim
 
-pip3 install --upgrade neovim
+pip3 install --upgrade neovim --break-system-packages
 sudo npm i -g neovim
 
 # Install vim-plug

@@ -545,6 +545,7 @@ Plug('Wansmer/treesj', { on = { 'TSJToggle' } })
 -- *******
 
 Plug('godlygeek/tabular', { on = 'Tabularize' })
+
 Plug('rhlobo/vim-super-retab', { on = { 'Space2Tab', 'Tab2Space' } })
 
 

@@ -3,9 +3,9 @@ set -e
 
 # Install python and pip
 brew install python
-pip3 install --upgrade pip
-pip3 install pynvim
-pip3 install --upgrade pynvim
+pip3 install --upgrade pip --break-system-packages
+pip3 install pynvim --break-system-packages
+pip3 install --upgrade pynvim --break-system-packages
 
 # Install Ruby
 brew install ruby
