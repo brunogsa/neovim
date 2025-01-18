@@ -22,9 +22,9 @@ vim.opt.encoding='utf-8'
 vim.opt.updatetime = 500
 vim.cmd('autocmd VimEnter *.php set updatetime=8000')
 
--- Enable mouse scroll
--- vim.opt.mouse = 'a'
-vim.opt.mouse = ''
+-- Toggle mouse scroll
+vim.opt.mouse = 'a'
+-- vim.opt.mouse = ''
 
 -- Improve Performance
 vim.opt.ttyfast = true
