@@ -579,6 +579,8 @@ Plug('hashivim/vim-terraform', { ['for'] = 'terraform' })
   vim.g.terraform_fmt_on_save = 0
 -- *******
 
+Plug('cuducos/yaml.nvim', { ['for'] = 'yaml' })
+
 -- typescript highlight for .ts and .d.ts files
 Plug('leafgarland/typescript-vim', { ['for'] = 'typescript' })
 -- Configs
@@ -593,7 +595,7 @@ Plug('peitalin/vim-jsx-typescript', { ['for'] = 'typescript' })
 
 Plug('styled-components/vim-styled-components', { branch = 'main' })
 
-Plug('lukas-reineke/indent-blankline.nvim')
+Plug('lukas-reineke/indent-blankline.nvim', { tag = 'v3.8.6' })
 
 Plug('vim-scripts/CursorLineCurrentWindow')
 
