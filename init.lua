@@ -226,10 +226,13 @@ vim.api.nvim_set_keymap('n', 'gp', "V']", { noremap = true, silent = true })
 vim.api.nvim_set_keymap('v', '<leader>vj', 'y:vnew<cr>pV:s/\\//g<cr>V:call RangeJsonBeautify()<cr>', { noremap = true, silent = true })
 
 -- Preview for HTML
-vim.api.nvim_set_keymap('n', '<leader>vh', ':!google-chrome % &<cr>', { noremap = false, silent = true })
+vim.api.nvim_set_keymap('n', '<leader>vh', ':!open % &<cr>', { noremap = false, silent = true })
+
+-- Preview for OpenAPI
+vim.api.nvim_set_keymap('n', '<leader>vo', ':!rm -fr /tmp/brunogsa-vim-openapi-preview.html && npx redocly build-docs % --output /tmp/brunogsa-vim-openapi-preview.html && open /tmp/brunogsa-vim-openapi-preview.html &<cr>', { noremap = false, silent = true })
 
 -- Preview for AsyncAPI
-vim.api.nvim_set_keymap('n', '<leader>va', ':!rm -fr /tmp/brunogsa-vim-asyncapi-preview && ag % @asyncapi/html-template -o /tmp/brunogsa-vim-asyncapi-preview && google-chrome /tmp/brunogsa-vim-asyncapi-preview/index.html &<cr>', { noremap = false, silent = true })
+vim.api.nvim_set_keymap('n', '<leader>va', ':!rm -fr /tmp/brunogsa-vim-asyncapi-preview && ag % @asyncapi/html-template -o /tmp/brunogsa-vim-asyncapi-preview && open /tmp/brunogsa-vim-asyncapi-preview/index.html &<cr>', { noremap = false, silent = true })
 
 -- =======================================
 -- Plugins
@@ -415,7 +418,7 @@ Plug('f-person/git-blame.nvim', { on = 'GitBlameToggle' })
 Plug('akinsho/git-conflict.nvim')
 -- Post configs below
 -- Hotkeys, as a quick note:
--- co — choose ours 
+-- co — choose ours
 -- ct — choose theirs
 -- cb — choose both
 -- c0 — choose none
