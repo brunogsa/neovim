@@ -551,6 +551,16 @@ Plug('godlygeek/tabular', { on = 'Tabularize' })
 
 Plug('rhlobo/vim-super-retab', { on = { 'Space2Tab', 'Tab2Space' } })
 
+-- All below are dependencies for ChatGPT plugin
+Plug('MunifTanjim/nui.nvim')
+Plug('nvim-lua/plenary.nvim')
+Plug('folke/trouble.nvim')
+Plug('nvim-telescope/telescope.nvim')
+Plug('jackMort/ChatGPT.nvim')
+-- Additional configs down below
+  vim.keymap.set({'n', 'v'}, '<leader>e', ':ChatGPTRun explain_code<CR>', { noremap = true, silent = false })
+-- *******
+
 
 -- ===================
 -- Highlight
@@ -725,8 +735,19 @@ Plug('neoclide/coc.nvim', {branch = 'release'})
     'coc-tsserver',
     'coc-html',
     'coc-css',
+    'coc-html-css-support',
     'coc-swagger',
     'coc-pyright',
+    'coc-docker',
+    'coc-eslint',
+    'coc-git',
+    'coc-go',
+    'coc-golines',
+    'coc-prisma',
+    'coc-sql',
+    'coc-xml',
+    'coc-yaml',
+    'coc-copilot',
   }
 
   -- Hotkey for rendering Swagger
@@ -871,7 +892,7 @@ require('nvim-treesitter.configs').setup({
     additional_vim_regex_highlighting = true,
   },
   indent = {
-    enable = true,
+    enable = false,
   },
   fold = {
     enable = true,
@@ -982,3 +1003,5 @@ require('marks').setup({
     annotate = false,
   },
 })
+
+require("chatgpt").setup()
