@@ -365,7 +365,6 @@ Plug('tpope/vim-endwise')
 
 Plug('tpope/vim-repeat')
 Plug('nelstrom/vim-visual-star-search')
-Plug('rhysd/clever-f.vim')
 
 Plug('sickill/vim-pasta')
 Plug('conradirwin/vim-bracketed-paste')
