@@ -532,8 +532,6 @@ Plug('scrooloose/nerdtree', { on = 'NERDTreeToggle' })
 
 Plug('chentoast/marks.nvim')
 
-Plug('ggandor/leap.nvim')
-
 Plug('mg979/vim-visual-multi')
 -- Configs
   vim.g.VM_default_mappings = 0
@@ -767,7 +765,7 @@ Plug('neoclide/coc.nvim', {branch = 'release'})
 
 Plug('neomake/neomake', { ['for'] = { 'javascript', 'typescript', 'go', 'lua', 'typescript.tsx' } })
 -- Configs
-  vim.cmd('autocmd! BufWritePost,BufEnter *.js,*.jsx,*.ts,*.tsx,*.go,*.lua Neomake')
+  -- vim.cmd('autocmd! BufWritePost,BufEnter *.js,*.jsx,*.ts,*.tsx,*.go,*.lua Neomake')
 
   vim.g.quickfixsigns_protect_sign_rx = '^neomake_'
   vim.g.neomake_ft_maker_remove_invalid_entries = 0
@@ -930,8 +928,6 @@ require('treesj').setup({
   -- Use `dot` for repeat action
   dot_repeat = true,
 })
-
-require('leap').add_default_mappings()
 
 require('git-conflict').setup({
   default_mappings = true,
