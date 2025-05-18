@@ -747,7 +747,6 @@ Plug('neoclide/coc.nvim', {branch = 'release'})
     'coc-sql',
     'coc-xml',
     'coc-yaml',
-    'coc-copilot',
   }
 
   -- Hotkey for rendering Swagger
