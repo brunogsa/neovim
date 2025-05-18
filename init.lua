@@ -335,17 +335,6 @@ Plug('AndrewRadev/linediff.vim', { on = { 'Linediff', 'LinediffReset' } })
   vim.api.nvim_set_keymap('n', '<leader>D', ':LinediffReset<cr>', { silent = true, noremap = true })
 -- *******
 
-Plug('junegunn/limelight.vim', { on = { 'Limelight', 'Limelight!!' } })
--- Configs
-  vim.api.nvim_set_keymap('v', '<leader>V', ':Limelight<cr>', { silent = true, noremap = true })
-  vim.api.nvim_set_keymap('n', '<leader>V', ':Limelight!!<cr>', { silent = true, noremap = true })
-
-  vim.g.limelight_conceal_ctermfg = 'gray'
-  vim.g.limelight_conceal_ctermfg = 240
-
-  vim.g.limelight_priority = -1
--- *******
-
 Plug('lfv89/vim-interestingwords')
 -- Configs
   vim.api.nvim_set_keymap('n', '<leader>h', ':call InterestingWords("n")<cr>', { silent = true, noremap = true })
