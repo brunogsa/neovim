@@ -349,6 +349,8 @@ Plug('lfv89/vim-interestingwords')
   }
 -- *******
 
+Plug('RRethy/vim-illuminate')
+
 Plug('henrik/vim-indexed-search')
 -- Configs
   vim.g.indexed_search_mappings = 0
@@ -1002,3 +1004,11 @@ require('marks').setup({
 })
 
 require("chatgpt").setup()
+
+-- Configs illuminate (it needs to be here at the end)
+  vim.cmd([[
+    highlight illuminatedWord gui=underline cterm=underline
+    highlight illuminatedCurWord gui=underline cterm=underline
+    highlight illuminatedWordText gui=underline cterm=underline
+  ]])
+-- *******
