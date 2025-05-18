@@ -351,16 +351,14 @@ Plug('lfv89/vim-interestingwords')
 
 Plug('RRethy/vim-illuminate')
 
-Plug('henrik/vim-indexed-search')
+Plug('kevinhwang91/nvim-hlslens')
 -- Configs
-  vim.g.indexed_search_mappings = 0
-
-  -- Requires a lot of integrations...
-  vim.cmd('autocmd VimEnter * nnoremap <silent> n nzz:ShowSearchIndex<cr>')
-  vim.cmd('autocmd VimEnter * nnoremap <silent> N Nzz:ShowSearchIndex<cr>')
-
-  vim.cmd('autocmd VimEnter * nnoremap <silent> * *zz:ShowSearchIndex<cr>')
-  vim.cmd('autocmd VimEnter * nnoremap <silent> # #zz:ShowSearchIndex<cr>')
+  vim.keymap.set('n', 'n', [[<Cmd>execute('normal! ' . v:count1 . 'n')<CR><Cmd>lua require('hlslens').start()<CR>]], { noremap = true, silent = true })
+  vim.keymap.set('n', 'N', [[<Cmd>execute('normal! ' . v:count1 . 'N')<CR><Cmd>lua require('hlslens').start()<CR>]], { noremap = true, silent = true })
+  vim.keymap.set('n', '*', [[*<Cmd>lua require('hlslens').start()<CR>]], { noremap = true, silent = true })
+  vim.keymap.set('n', '#', [[#<Cmd>lua require('hlslens').start()<CR>]], { noremap = true, silent = true })
+  vim.keymap.set('n', 'g*', [[g*<Cmd>lua require('hlslens').start()<CR>]], { noremap = true, silent = true })
+  vim.keymap.set('n', 'g#', [[g#<Cmd>lua require('hlslens').start()<CR>]], { noremap = true, silent = true })
 -- *******
 
 Plug('tpope/vim-endwise')
