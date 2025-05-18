@@ -179,41 +179,41 @@ vim.g.mapleader = ' '
 -- This is useful when dealing with files too nested, where the "indent" becomes limited
 -- since neovim has a internal limit of "20" foldnestmax.
 -- In those case, switching to "syntax" is the workaround
-vim.api.nvim_set_keymap('n', '<leader>tf', [[<Cmd>lua _G.toggle_foldmethod()<CR>]], { noremap = true, silent = false })
+vim.keymap.set('n', '<leader>tf', '<Cmd>lua _G.toggle_foldmethod()<CR>', { silent = false })
 
 -- Send deleted thing with 'x' and 'c' to black hole
-vim.api.nvim_set_keymap('n', 'x', '"_x', { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', 'X', '"_X', { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', 'c', '"_c', { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', 'C', '"_C', { noremap = true, silent = true })
+vim.keymap.set('n', 'x', '"_x', { silent = true })
+vim.keymap.set('n', 'X', '"_X', { silent = true })
+vim.keymap.set('n', 'c', '"_c', { silent = true })
+vim.keymap.set('n', 'C', '"_C', { silent = true })
 
 -- Add ; or , in the end of the line
-vim.api.nvim_set_keymap('n', ';;', 'mqA;<esc>`q', { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', ',,', 'mqA,<esc>`q', { noremap = true, silent = true })
+vim.keymap.set('n', ';;', 'mqA;<esc>`q', { silent = true })
+vim.keymap.set('n', ',,', 'mqA,<esc>`q', { silent = true })
 
 -- Efficient way to move through your code using the Arrow Keys
-vim.api.nvim_set_keymap('n', '<left>', 'h', { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<down>', 'gj', { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<up>', 'gk', { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<right>', 'l', { noremap = true, silent = true })
+vim.keymap.set('n', '<left>', 'h', { silent = true })
+vim.keymap.set('n', '<down>', 'gj', { silent = true })
+vim.keymap.set('n', '<up>', 'gk', { silent = true })
+vim.keymap.set('n', '<right>', 'l', { silent = true })
 
 -- Move to the beginning of the indentation level
-vim.api.nvim_set_keymap('', '<S-left>', '^', { noremap = true, silent = true })
-vim.api.nvim_set_keymap('', '<home>', '^', { noremap = true, silent = true })
+vim.keymap.set('', '<S-left>', '^', { silent = true })
+vim.keymap.set('', '<home>', '^', { silent = true })
 
 -- Move to the end of a line in a smarter way
-vim.api.nvim_set_keymap('', '<S-right>', 'g_', { noremap = true, silent = true })
-vim.api.nvim_set_keymap('', '<end>', 'g_', { noremap = true, silent = true })
+vim.keymap.set('', '<S-right>', 'g_', { silent = true })
+vim.keymap.set('', '<end>', 'g_', { silent = true })
 
 -- Easier to align
-vim.api.nvim_set_keymap('x', '>', '>gv', { noremap = true, silent = true })
-vim.api.nvim_set_keymap('x', '<', '<gv', { noremap = true, silent = true })
+vim.keymap.set('x', '>', '>gv', { silent = true })
+vim.keymap.set('x', '<', '<gv', { silent = true })
 
 -- Disable annoying auto-increment number feature
-vim.api.nvim_set_keymap('', '<C-a>', '<Nop>', { noremap = false, silent = true })
-vim.api.nvim_set_keymap('', 'g<C-a>', '<Nop>', { noremap = false, silent = true })
-vim.api.nvim_set_keymap('', '<C-x>', '<Nop>', { noremap = false, silent = true })
-vim.api.nvim_set_keymap('', 'g<C-x>', '<Nop>', { noremap = false, silent = true })
+vim.keymap.set('', '<C-a>', '<Nop>', { noremap = false, silent = true })
+vim.keymap.set('', 'g<C-a>', '<Nop>', { noremap = false, silent = true })
+vim.keymap.set('', '<C-x>', '<Nop>', { noremap = false, silent = true })
+vim.keymap.set('', 'g<C-x>', '<Nop>', { noremap = false, silent = true })
 
 -- Resize windows
 -- nnoremap <silent><leader><right> :vertical resize -5<cr>
@@ -222,31 +222,31 @@ vim.api.nvim_set_keymap('', 'g<C-x>', '<Nop>', { noremap = false, silent = true 
 -- nnoremap <silent><leader><down> :resize -5<cr>
 
 -- Toggles the number lines
-vim.api.nvim_set_keymap('n', '<leader>tn', ':set number!<cr>', { noremap = true, silent = true })
+vim.keymap.set('n', '<leader>tn', ':set number!<cr>', { silent = true })
 
 -- Search only in visual selection
-vim.api.nvim_set_keymap('v', '/', '<esc>/\\%V', { noremap = true, silent = true })
+vim.keymap.set('v', '/', '<esc>/\\%V', { silent = true })
 
 -- PrettyXML: Format a line of XML
-vim.api.nvim_set_keymap('v', '<leader>Fxml', ':!xmllint --format --recover - 2>/dev/null<cr>', { noremap = true, silent = true })
+vim.keymap.set('v', '<leader>Fxml', ':!xmllint --format --recover - 2>/dev/null<cr>', { silent = true })
 
 -- PrettyPSQL: Format a line of PSQL
-vim.api.nvim_set_keymap('v', '<leader>Fpsql', ':!pg_format -f 0 -s 2 -u 0<cr>', { noremap = true, silent = true })
+vim.keymap.set('v', '<leader>Fpsql', ':!pg_format -f 0 -s 2 -u 0<cr>', { silent = true })
 
 -- Selected last pasted text
-vim.api.nvim_set_keymap('n', 'gp', "V']", { noremap = true, silent = true })
+vim.keymap.set('n', 'gp', "V']", { silent = true })
 
 -- View a formatted JSON is a new buffer
-vim.api.nvim_set_keymap('v', '<leader>vj', 'y:vnew<cr>pV:s/\\//g<cr>V:call RangeJsonBeautify()<cr>', { noremap = true, silent = true })
+vim.keymap.set('v', '<leader>vj', 'y:vnew<cr>pV:s/\\//g<cr>V:call RangeJsonBeautify()<cr>', { silent = true })
 
 -- Preview for HTML
-vim.api.nvim_set_keymap('n', '<leader>vh', ':!open % &<cr>', { noremap = false, silent = true })
+vim.keymap.set('n', '<leader>vh', ':!open % &<cr>', { noremap = false, silent = true })
 
 -- Preview for OpenAPI
-vim.api.nvim_set_keymap('n', '<leader>vo', ':!rm -fr /tmp/brunogsa-vim-openapi-preview.html && npx redocly build-docs % --output /tmp/brunogsa-vim-openapi-preview.html && open /tmp/brunogsa-vim-openapi-preview.html &<cr>', { noremap = false, silent = true })
+vim.keymap.set('n', '<leader>vo', ':!rm -fr /tmp/brunogsa-vim-openapi-preview.html && npx redocly build-docs % --output /tmp/brunogsa-vim-openapi-preview.html && open /tmp/brunogsa-vim-openapi-preview.html &<cr>', { noremap = false, silent = true })
 
 -- Preview for AsyncAPI
-vim.api.nvim_set_keymap('n', '<leader>va', ':!rm -fr /tmp/brunogsa-vim-asyncapi-preview && ag % @asyncapi/html-template -o /tmp/brunogsa-vim-asyncapi-preview && open /tmp/brunogsa-vim-asyncapi-preview/index.html &<cr>', { noremap = false, silent = true })
+vim.keymap.set('n', '<leader>va', ':!rm -fr /tmp/brunogsa-vim-asyncapi-preview && ag % @asyncapi/html-template -o /tmp/brunogsa-vim-asyncapi-preview && open /tmp/brunogsa-vim-asyncapi-preview/index.html &<cr>', { noremap = false, silent = true })
 
 -- =======================================
 -- Plugins
@@ -265,8 +265,8 @@ Plug('neovim/python-client')
 
 Plug('liuchengxu/vim-which-key')
 -- Configs
-  vim.api.nvim_set_keymap('n', '<leader>', ":<c-u>WhichKey '<Space>'<CR>", {silent = true, noremap = true})
-  vim.api.nvim_set_keymap('v', '<leader>', ":<c-u>WhichKeyVisual '<Space>'<CR>", {silent = true, noremap = true})
+  vim.keymap.set('n', '<leader>', ":<c-u>WhichKey '<Space>'<CR>", {silent = true})
+  vim.keymap.set('v', '<leader>', ":<c-u>WhichKeyVisual '<Space>'<CR>", {silent = true})
 -- *******
 
 Plug('itchyny/lightline.vim')
@@ -298,14 +298,14 @@ Plug('szw/vim-maximizer', { on = 'MaximizerToggle' })
 --Configs
   vim.g.maximizer_set_default_mapping = 0
 
-  vim.api.nvim_set_keymap('n', '<leader><F3>', ':MaximizerToggle<CR>', { silent = true, noremap = true })
-  vim.api.nvim_set_keymap('n', '<C-w>z', ':MaximizerToggle<CR>', { silent = true, noremap = true })
+  vim.keymap.set('n', '<leader><F3>', ':MaximizerToggle<CR>', { silent = true })
+  vim.keymap.set('n', '<C-w>z', ':MaximizerToggle<CR>', { silent = true })
 -- *******
 
 Plug('tpope/vim-commentary')
 -- Configs
-  vim.api.nvim_set_keymap('n', '<leader><leader>', 'gcc', { silent = true })
-  vim.api.nvim_set_keymap('v', '<leader><leader>', 'gcc', { silent = true })
+  vim.keymap.set('n', '<leader><leader>', 'gcc', { silent = true })
+  vim.keymap.set('v', '<leader><leader>', 'gcc', { silent = true })
 -- *******
 
 Plug('Valloric/ListToggle')
@@ -331,15 +331,15 @@ Plug('rickhowe/diffchar.vim')
 
 Plug('AndrewRadev/linediff.vim', { on = { 'Linediff', 'LinediffReset' } })
 -- Configs
-  vim.api.nvim_set_keymap('v', '<leader>d', ':Linediff<cr>', { silent = true, noremap = true })
-  vim.api.nvim_set_keymap('n', '<leader>D', ':LinediffReset<cr>', { silent = true, noremap = true })
+  vim.keymap.set('v', '<leader>d', ':Linediff<cr>', { silent = true })
+  vim.keymap.set('n', '<leader>D', ':LinediffReset<cr>', { silent = true })
 -- *******
 
 Plug('lfv89/vim-interestingwords')
 -- Configs
-  vim.api.nvim_set_keymap('n', '<leader>h', ':call InterestingWords("n")<cr>', { silent = true, noremap = true })
-  vim.api.nvim_set_keymap('v', '<leader>h', ':call InterestingWords("v")<cr>', { silent = true, noremap = true })
-  vim.api.nvim_set_keymap('n', '<leader>H', ':call UncolorAllWords()<cr>', { silent = true, noremap = true })
+  vim.keymap.set('n', '<leader>h', ':call InterestingWords("n")<cr>', { silent = true })
+  vim.keymap.set('v', '<leader>h', ':call InterestingWords("v")<cr>', { silent = true })
+  vim.keymap.set('n', '<leader>H', ':call UncolorAllWords()<cr>', { silent = true })
 
   vim.g.interestingWordsTermColors = {
     '1', '8', '15', '22', '29', '36', '43', '50', '57', '64',
@@ -353,12 +353,12 @@ Plug('RRethy/vim-illuminate')
 
 Plug('kevinhwang91/nvim-hlslens')
 -- Configs
-  vim.keymap.set('n', 'n', [[<Cmd>execute('normal! ' . v:count1 . 'n')<CR><Cmd>lua require('hlslens').start()<CR>]], { noremap = true, silent = true })
-  vim.keymap.set('n', 'N', [[<Cmd>execute('normal! ' . v:count1 . 'N')<CR><Cmd>lua require('hlslens').start()<CR>]], { noremap = true, silent = true })
-  vim.keymap.set('n', '*', [[*<Cmd>lua require('hlslens').start()<CR>]], { noremap = true, silent = true })
-  vim.keymap.set('n', '#', [[#<Cmd>lua require('hlslens').start()<CR>]], { noremap = true, silent = true })
-  vim.keymap.set('n', 'g*', [[g*<Cmd>lua require('hlslens').start()<CR>]], { noremap = true, silent = true })
-  vim.keymap.set('n', 'g#', [[g#<Cmd>lua require('hlslens').start()<CR>]], { noremap = true, silent = true })
+  vim.keymap.set('n', 'n', [[<Cmd>execute('normal! ' . v:count1 . 'n')<CR><Cmd>lua require('hlslens').start()<CR>]], { silent = true })
+  vim.keymap.set('n', 'N', [[<Cmd>execute('normal! ' . v:count1 . 'N')<CR><Cmd>lua require('hlslens').start()<CR>]], { silent = true })
+  vim.keymap.set('n', '*', [[*<Cmd>lua require('hlslens').start()<CR>]], { silent = true })
+  vim.keymap.set('n', '#', [[#<Cmd>lua require('hlslens').start()<CR>]], { silent = true })
+  vim.keymap.set('n', 'g*', [[g*<Cmd>lua require('hlslens').start()<CR>]], { silent = true })
+  vim.keymap.set('n', 'g#', [[g#<Cmd>lua require('hlslens').start()<CR>]], { silent = true })
 -- *******
 
 Plug('tpope/vim-endwise')
@@ -394,7 +394,7 @@ Plug('iamcco/markdown-preview.nvim', { ['for'] = 'ghmarkdown,mermaid', ['do'] = 
     sync_scroll_type = 'middle'
   }
 
-  vim.api.nvim_set_keymap('n', '<leader>vm', '<Plug>MarkdownPreviewToggle', {noremap = true, silent = true})
+  vim.keymap.set('n', '<leader>vm', '<Plug>MarkdownPreviewToggle', {silent = true})
 -- *******
 
 Plug('mzlogin/vim-markdown-toc', { ['for'] = 'ghmarkdown' })
@@ -414,7 +414,7 @@ Plug('nvim-treesitter/nvim-treesitter', { ['do'] = ':TSUpdate<CR>' })
 Plug('f-person/git-blame.nvim', { on = 'GitBlameToggle' })
 -- Configs
   vim.g.gitblame_enabled = 0
-  vim.api.nvim_set_keymap('n', '<leader>tg', ':GitBlameToggle<CR>', {noremap = true, silent = true})
+  vim.keymap.set('n', '<leader>tg', ':GitBlameToggle<CR>', {silent = true})
 -- *******
 
 Plug('akinsho/git-conflict.nvim')
@@ -433,11 +433,11 @@ Plug('tmux-plugins/vim-tmux-focus-events')
 
 Plug('maksimr/vim-jsbeautify', { ['for'] = { 'javascript', 'typescript', 'css', 'scss', 'sass', 'json', 'html' }, on = { 'RangeJsBeautify', 'RangeJsonBeautify', 'RangeJsxBeautify', 'RangeHtmlBeautify', 'RangeCSSBeautify' } })
 -- Configs
-  vim.api.nvim_set_keymap('v', '<leader>Fjs', ':call RangeJsBeautify()<cr>', {noremap = true, silent = true})
-  vim.api.nvim_set_keymap('v', '<leader>Fjson', 'di<cr><esc>VpV:s/\\//g<cr>V:call RangeJsonBeautify()<cr>', {noremap = true, silent = true})
-  vim.api.nvim_set_keymap('v', '<leader>Fjsx', ':call RangeJsxBeautify()<cr>', {noremap = true, silent = true})
-  vim.api.nvim_set_keymap('v', '<leader>Fhtml', ':call RangeHtmlBeautify()<cr>', {noremap = true, silent = true})
-  vim.api.nvim_set_keymap('v', '<leader>Fcss', ':call RangeCSSBeautify()<cr>', {noremap = true, silent = true})
+  vim.keymap.set('v', '<leader>Fjs', ':call RangeJsBeautify()<cr>', {silent = true})
+  vim.keymap.set('v', '<leader>Fjson', 'di<cr><esc>VpV:s/\\//g<cr>V:call RangeJsonBeautify()<cr>', {silent = true})
+  vim.keymap.set('v', '<leader>Fjsx', ':call RangeJsxBeautify()<cr>', {silent = true})
+  vim.keymap.set('v', '<leader>Fhtml', ':call RangeHtmlBeautify()<cr>', {silent = true})
+  vim.keymap.set('v', '<leader>Fcss', ':call RangeCSSBeautify()<cr>', {silent = true})
 
   -- For additional configs, see: https://github.com/beautify-web/js-beautify
   vim.g.config_Beautifier = {
@@ -466,13 +466,13 @@ Plug('maksimr/vim-jsbeautify', { ['for'] = { 'javascript', 'typescript', 'css', 
 
 Plug('prettier/vim-prettier', { ['do'] = 'yarn install', branch = 'release/1.x', ['for'] = { 'javascript', 'typescript', 'css', 'scss', 'sass', 'json', 'html' }, on = '<Plug>(Prettier)' })
 -- Configs
-  vim.api.nvim_set_keymap('n', '<leader>Fjs', '<Plug>(Prettier)', {noremap = true, silent = true})
-  vim.api.nvim_set_keymap('n', '<leader>Fjson', '<Plug>(Prettier)', {noremap = true, silent = true})
-  vim.api.nvim_set_keymap('n', '<leader>Fjsx', '<Plug>(Prettier)', {noremap = true, silent = true})
-  vim.api.nvim_set_keymap('n', '<leader>Fhtml', '<Plug>(Prettier)', {noremap = true, silent = true})
-  vim.api.nvim_set_keymap('n', '<leader>Fcss', '<Plug>(Prettier)', {noremap = true, silent = true})
-  vim.api.nvim_set_keymap('n', '<leader>Fscss', '<Plug>(Prettier)', {noremap = true, silent = true})
-  vim.api.nvim_set_keymap('n', '<leader>Fsass', '<Plug>(Prettier)', {noremap = true, silent = true})
+  vim.keymap.set('n', '<leader>Fjs', '<Plug>(Prettier)', {silent = true})
+  vim.keymap.set('n', '<leader>Fjson', '<Plug>(Prettier)', {silent = true})
+  vim.keymap.set('n', '<leader>Fjsx', '<Plug>(Prettier)', {silent = true})
+  vim.keymap.set('n', '<leader>Fhtml', '<Plug>(Prettier)', {silent = true})
+  vim.keymap.set('n', '<leader>Fcss', '<Plug>(Prettier)', {silent = true})
+  vim.keymap.set('n', '<leader>Fscss', '<Plug>(Prettier)', {silent = true})
+  vim.keymap.set('n', '<leader>Fsass', '<Plug>(Prettier)', {silent = true})
 
   vim.g['prettier#autoformat'] = 0
 
@@ -525,7 +525,7 @@ Plug('prettier/vim-prettier', { ['do'] = 'yarn install', branch = 'release/1.x',
 
 Plug('scrooloose/nerdtree', { on = 'NERDTreeToggle' })
 -- Configs
-  vim.api.nvim_set_keymap('n', '<leader>tp', ':NERDTreeToggle<CR>', { noremap = true })
+  vim.keymap.set('n', '<leader>tp', ':NERDTreeToggle<CR>')
   vim.g.NERDTreeHijackNetrw = 1
 -- *******
 
@@ -544,7 +544,7 @@ Plug('yuttie/comfortable-motion.vim')
 -- Plugin for joining / splitting
 Plug('Wansmer/treesj', { on = { 'TSJToggle' } })
 -- Additional configs down below
-  vim.api.nvim_set_keymap('n', '<leader>lt', ':TSJToggle<CR>', {noremap = true, silent = true})
+  vim.keymap.set('n', '<leader>lt', ':TSJToggle<CR>', {silent = true})
 -- *******
 
 Plug('godlygeek/tabular', { on = 'Tabularize' })
@@ -558,7 +558,7 @@ Plug('folke/trouble.nvim')
 Plug('nvim-telescope/telescope.nvim')
 Plug('jackMort/ChatGPT.nvim')
 -- Additional configs down below
-  vim.keymap.set({'n', 'v'}, '<leader>e', ':ChatGPTRun explain_code<CR>', { noremap = true, silent = false })
+  vim.keymap.set({'n', 'v'}, '<leader>e', ':ChatGPTRun explain_code<CR>', { silent = false })
 -- *******
 
 
@@ -713,21 +713,21 @@ Plug('neoclide/coc.nvim', {branch = 'release'})
     inoremap <expr><S-TAB> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
   ]])
 
-  vim.api.nvim_set_keymap('n', '<leader>vd', ':call ShowDocumentation()<CR>', {noremap = true, silent = true})
+  vim.keymap.set('n', '<leader>vd', ':call ShowDocumentation()<CR>', {silent = true})
 
   -- GoTo code navigation.
-  vim.api.nvim_set_keymap('n', 'gd', ':call CocAction("jumpDefinition", "drop")<CR>', {noremap = true, silent = true})
-  vim.api.nvim_set_keymap('n', 'gt', '<Plug>(coc-type-definition)', {noremap = true, silent = true})
-  vim.api.nvim_set_keymap('n', 'gi', '<Plug>(coc-implementation)', {noremap = true, silent = true})
-  vim.api.nvim_set_keymap('n', 'gr', '<Plug>(coc-references)', {noremap = true, silent = true})
+  vim.keymap.set('n', 'gd', ':call CocAction("jumpDefinition", "drop")<CR>', {silent = true})
+  vim.keymap.set('n', 'gt', '<Plug>(coc-type-definition)', {silent = true})
+  vim.keymap.set('n', 'gi', '<Plug>(coc-implementation)', {silent = true})
+  vim.keymap.set('n', 'gr', '<Plug>(coc-references)', {silent = true})
 
   -- Use `[g` and `]g` to navigate diagnostics
   -- Use `:CocDiagnostics` to get all diagnostics of current buffer in location list.
-  vim.api.nvim_set_keymap('n', '[g', '<Plug>(coc-diagnostic-prev)', {noremap = true, silent = true})
-  vim.api.nvim_set_keymap('n', ']g', '<Plug>(coc-diagnostic-next)', {noremap = true, silent = true})
+  vim.keymap.set('n', '[g', '<Plug>(coc-diagnostic-prev)', {silent = true})
+  vim.keymap.set('n', ']g', '<Plug>(coc-diagnostic-next)', {silent = true})
 
   -- Symbol renaming.
-  vim.api.nvim_set_keymap('n', '<leader>r', '<Plug>(coc-rename)', {noremap = true, silent = true})
+  vim.keymap.set('n', '<leader>r', '<Plug>(coc-rename)', {silent = true})
 
   vim.g.coc_global_extensions = {
     'coc-json',
@@ -750,7 +750,7 @@ Plug('neoclide/coc.nvim', {branch = 'release'})
   }
 
   -- Hotkey for rendering Swagger
-  vim.api.nvim_set_keymap('n', '<leader>vs', ':CocCommand swagger.render<CR>', {noremap = true, silent = true})
+  vim.keymap.set('n', '<leader>vs', ':CocCommand swagger.render<CR>', {silent = true})
 
   -- Highlight the symbol and its references when holding the cursor.
   vim.cmd("autocmd CursorHold * silent call CocActionAsync('highlight')")
