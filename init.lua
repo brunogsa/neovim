@@ -13,6 +13,20 @@ function _G.toggle_foldmethod()
   end
 end
 
+vim.api.nvim_create_user_command('Msglog', function()
+  -- Get message history
+  local output = vim.api.nvim_exec('messages', true)
+  local lines = vim.split(output, '\n')
+
+  -- Open a new split buffer
+  vim.cmd('new')
+  vim.api.nvim_buf_set_lines(0, 0, -1, false, lines)
+  vim.bo.buftype = 'nofile'
+  vim.bo.bufhidden = 'wipe'
+  vim.bo.swapfile = false
+  vim.bo.filetype = 'messages'
+end, {})
+
 -- =======================================
 -- Core Settings
 -- =======================================
