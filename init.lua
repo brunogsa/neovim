@@ -34,7 +34,14 @@ end, {})
 vim.opt.encoding='utf-8'
 
 vim.opt.updatetime = 500
-vim.cmd('autocmd VimEnter *.php set updatetime=8000')
+
+-- PHP: slower updatetime for better LSP performance
+vim.api.nvim_create_autocmd('VimEnter', {
+  pattern = '*.php',
+  callback = function()
+    vim.opt.updatetime = 8000
+  end,
+})
 
 -- Toggle mouse scroll
 vim.opt.mouse = 'a'
@@ -112,7 +119,14 @@ vim.g.html_indent_style1 = 'inc'
 vim.g.html_indent_inctags = 'html,body,head'
 
 -- Automatically set wrap when starting a vim diff
-vim.cmd('autocmd FilterWritePre * if &diff | setlocal wrap< | endif')
+vim.api.nvim_create_autocmd('FilterWritePre', {
+  pattern = '*',
+  callback = function()
+    if vim.wo.diff then
+      vim.opt_local.wrap = true
+    end
+  end,
+})
 
 -- Virtual edit preferences: in block wise
 vim.opt.virtualedit = 'block'
@@ -121,7 +135,12 @@ vim.opt.virtualedit = 'block'
 vim.opt.background = 'dark'
 
 -- Set file type to CSV files
-vim.cmd('autocmd VimEnter *.csv setlocal filetype=csv')
+vim.api.nvim_create_autocmd('VimEnter', {
+  pattern = '*.csv',
+  callback = function()
+    vim.bo.filetype = 'csv'
+  end,
+})
 
 -- =======================================
 -- Interface
@@ -405,8 +424,16 @@ Plug('wellle/context.vim')
   vim.g.context_add_autocmds = 0
   vim.g.context_filetype_blacklist = { 'nerdtree' }
 
-  vim.cmd('autocmd VimEnter * ContextActivate')
-  vim.cmd('autocmd CursorHold,BufWritePost * ContextUpdate')
+  vim.api.nvim_create_autocmd('VimEnter', {
+    callback = function()
+      vim.cmd('ContextActivate')
+    end,
+  })
+  vim.api.nvim_create_autocmd({ 'CursorHold', 'BufWritePost' }, {
+    callback = function()
+      vim.cmd('ContextUpdate')
+    end,
+  })
 -- *******
 
 Plug('nvim-treesitter/nvim-treesitter', { ['do'] = ':TSUpdate<CR>' })
