@@ -155,14 +155,6 @@ vim.opt.virtualedit = 'block'
 -- Colorscheme
 vim.opt.background = 'dark'
 
--- Set file type to CSV files
-vim.api.nvim_create_autocmd('VimEnter', {
-  pattern = '*.csv',
-  callback = function()
-    vim.bo.filetype = 'csv'
-  end,
-})
-
 -- =======================================
 -- Interface
 -- =======================================
@@ -612,12 +604,6 @@ vim.g.sonokai_style = 'espresso'
 vim.g.sonokai_better_performance = 1
 vim.g.sonokai_transparent_background = 1
 
--- csv
-Plug('mechatroner/rainbow_csv', { ['for'] = 'csv' })
--- Configs
-  vim.g.disable_rainbow_key_mappings = 0
--- *******
-
 Plug('martinda/Jenkinsfile-vim-syntax', { ['for'] = 'Jenkinsfile' })
 
 Plug('posva/vim-vue', { ['for'] = 'vue' })
@@ -699,6 +685,11 @@ Plug('exu/pgsql.vim', { ['for'] = 'sql' })
   vim.g.sql_type_default = 'pgsql'
 -- *******
 
+--- csv
+Plug('mechatroner/rainbow_csv', { ['for'] = 'csv' })
+-- Configs
+  vim.g.disable_rainbow_key_mappings = 0
+--- *******
 
 -- ===================
 -- Auto Completion
