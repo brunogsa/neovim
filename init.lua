@@ -585,22 +585,6 @@ require("lazy").setup({
       end,
     },
 
-    -- Git conflict resolution
-    {
-      "akinsho/git-conflict.nvim",
-      config = function()
-        require("git-conflict").setup({
-          default_mappings = true,
-          disable_diagnostics = false,
-          highlights = {
-            incoming = "DiffAdd",
-            current = "DiffText",
-          },
-        })
-      end,
-      event = "BufReadPost",
-    },
-
     -- Handle large files efficiently
     {
       "vim-scripts/LargeFile",
@@ -611,67 +595,6 @@ require("lazy").setup({
     {
       "tmux-plugins/vim-tmux-focus-events",
       event = "VeryLazy",
-    },
-
-    -- JSBeautify-based formatter
-    {
-      "maksimr/vim-jsbeautify",
-      ft = { "javascript", "typescript", "css", "scss", "sass", "json", "html" },
-      cmd = {
-        "RangeJsBeautify",
-        "RangeJsonBeautify",
-        "RangeJsxBeautify",
-        "RangeHtmlBeautify",
-        "RangeCSSBeautify",
-      },
-      init = function()
-        vim.keymap.set("v", "<leader>Fjs", ":call RangeJsBeautify()<cr>", { silent = true })
-        vim.keymap.set("v", "<leader>Fjson", "di<cr><esc>VpV:s/\\//g<cr>V:call RangeJsonBeautify()<cr>", { silent = true })
-        vim.keymap.set("v", "<leader>Fjsx", ":call RangeJsxBeautify()<cr>", { silent = true })
-        vim.keymap.set("v", "<leader>Fhtml", ":call RangeHtmlBeautify()<cr>", { silent = true })
-        vim.keymap.set("v", "<leader>Fcss", ":call RangeCSSBeautify()<cr>", { silent = true })
-
-        vim.g.config_Beautifier = {
-          js = { indent_style = "space", indent_size = "2" },
-          json = { indent_style = "space", indent_size = "2" },
-          jsx = { indent_style = "space", indent_size = "2" },
-          html = { indent_style = "space", indent_size = "2" },
-          css = { indent_style = "space", indent_size = "2" },
-        }
-      end,
-    },
-
-    {
-      "prettier/vim-prettier",
-      build = "yarn install",
-      branch = "release/1.x",
-      ft = { "javascript", "typescript", "css", "scss", "sass", "json", "html" },
-      init = function()
-        -- Keymaps
-        vim.keymap.set("n", "<leader>Fjs", "<Plug>(Prettier)", { silent = true })
-        vim.keymap.set("n", "<leader>Fjson", "<Plug>(Prettier)", { silent = true })
-        vim.keymap.set("n", "<leader>Fjsx", "<Plug>(Prettier)", { silent = true })
-        vim.keymap.set("n", "<leader>Fhtml", "<Plug>(Prettier)", { silent = true })
-        vim.keymap.set("n", "<leader>Fcss", "<Plug>(Prettier)", { silent = true })
-        vim.keymap.set("n", "<leader>Fscss", "<Plug>(Prettier)", { silent = true })
-        vim.keymap.set("n", "<leader>Fsass", "<Plug>(Prettier)", { silent = true })
-
-        -- Prettier global settings
-        vim.g["prettier#autoformat"] = 0
-        vim.g["prettier#config#print_width"] = 80
-        vim.g["prettier#config#tab_width"] = 2
-        vim.g["prettier#config#use_tabs"] = "false"
-        vim.g["prettier#config#semi"] = "true"
-        vim.g["prettier#config#single_quote"] = "true"
-        vim.g["prettier#config#bracket_spacing"] = "true"
-        vim.g["prettier#config#jsx_bracket_same_line"] = "false"
-        vim.g["prettier#config#arrow_parens"] = "avoid"
-        vim.g["prettier#config#trailing_comma"] = "all"
-        vim.g["prettier#config#parser"] = "babylon"
-        vim.g["prettier#config#config_precedence"] = "prefer-file"
-        vim.g["prettier#config#prose_wrap"] = "preserve"
-      end,
-      cmd = { "Prettier", "PrettierAsync" }, -- optional: lazy-load on demand
     },
 
     -- NERDTree
