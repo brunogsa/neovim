@@ -433,8 +433,6 @@ Plug('iamcco/markdown-preview.nvim', { ['for'] = 'ghmarkdown,mermaid', ['do'] = 
   vim.keymap.set('n', '<leader>vm', '<Plug>MarkdownPreviewToggle', {silent = true})
 -- *******
 
-Plug('mzlogin/vim-markdown-toc', { ['for'] = 'ghmarkdown' })
-
 Plug('wellle/context.vim')
 -- Configs
   vim.g.context_add_mappings = 0
@@ -693,20 +691,7 @@ Plug('hail2u/vim-css3-syntax', { ['for'] = 'css' })
 Plug('cakebaker/scss-syntax.vim', { ['for'] = 'scss' })
 
 -- markdown
-Plug('tpope/vim-markdown', { ['for'] = 'ghmarkdown' })
--- Configs
-  vim.g.markdown_syntax_conceal = 0
--- *******
-
-Plug('jtratner/vim-flavored-markdown', { ['for'] = 'ghmarkdown' })
--- Configs
-  vim.cmd([[
-    augroup markdown
-      au!
-      au VimEnter *.md,*.markdown setlocal filetype=ghmarkdown
-    augroup END
-  ]])
--- *******
+Plug('ixru/nvim-markdown')
 
 -- sql
 Plug('exu/pgsql.vim', { ['for'] = 'sql' })
@@ -806,7 +791,7 @@ Plug('neoclide/coc.nvim', {branch = 'release'})
 
 Plug('neomake/neomake', { ['for'] = { 'javascript', 'typescript', 'go', 'lua', 'typescript.tsx' } })
 -- Configs
-  vim.cmd('autocmd! BufWritePost,BufEnter *.js,*.jsx,*.ts,*.tsx,*.go,*.lua Neomake')
+  -- vim.cmd('autocmd! BufWritePost,BufEnter *.js,*.jsx,*.ts,*.tsx,*.go,*.lua Neomake')
 
   vim.g.quickfixsigns_protect_sign_rx = '^neomake_'
   vim.g.neomake_ft_maker_remove_invalid_entries = 0
