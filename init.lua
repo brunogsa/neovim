@@ -4,6 +4,27 @@
 
 HOME = os.getenv('HOME')
 
+-- Restore cursor position
+vim.api.nvim_create_autocmd("VimEnter", {
+  callback = function()
+    vim.defer_fn(function()
+      local ft = vim.bo.filetype
+      local ignore = {
+        gitcommit = true,
+        gitrebase = true,
+      }
+
+      if ignore[ft] then return end
+
+      local mark = vim.api.nvim_buf_get_mark(0, '"')
+      local lcount = vim.api.nvim_buf_line_count(0)
+      if mark[1] > 0 and mark[1] <= lcount then
+        vim.cmd('normal! g`"')
+      end
+    end, 1)
+  end,
+})
+
 function _G.toggle_foldmethod()
   local current_foldmethod = vim.opt.foldmethod:get()
   if current_foldmethod == 'indent' then
@@ -393,12 +414,6 @@ Plug('rhysd/vim-textobj-anyblock')
 Plug('vim-utils/vim-troll-stopper')
 
 Plug('tpope/vim-sleuth')
-
-Plug('dietsche/vim-lastplace')
--- Configs
-  vim.g.lastplace_open_folds = 0
-  vim.g.lastplace_ignore = 'gitcommit,gitrebase,svn,hgcommit'
--- *******
 
 Plug('iamcco/markdown-preview.nvim', { ['for'] = 'ghmarkdown,mermaid', ['do'] = 'cd app && npm install' })
 -- Configs
