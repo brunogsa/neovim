@@ -4,6 +4,9 @@
 
 HOME = os.getenv('HOME')
 
+local colorscheme = "jellybeans"
+vim.cmd.colorscheme(colorscheme)
+
 -- Restore cursor position
 vim.api.nvim_create_autocmd("VimEnter", {
   callback = function()
@@ -290,7 +293,7 @@ vim.keymap.set('n', '<leader>va', ':!rm -fr /tmp/brunogsa-vim-asyncapi-preview &
 -- Plugins
 -- =======================================
 
--- Bootstrap lazy.nvim
+-- Botstrap lazy.nvim
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not (vim.uv or vim.loop).fs_stat(lazypath) then
   local lazyrepo = "https://github.com/folke/lazy.nvim.git"
@@ -317,44 +320,6 @@ require("lazy").setup({
     -- Colorscheme
     -- TODO
 
-    -- Jenkinsfile syntax
-    { "martinda/Jenkinsfile-vim-syntax", ft = "Jenkinsfile" },
-
-    -- Vue
-    { "posva/vim-vue", ft = "vue" },
-
-    -- Git commit messages
-    { "tpope/vim-git", ft = "gitcommit" },
-
-    -- Terraform
-    {
-      "hashivim/vim-terraform",
-      ft = "terraform",
-      init = function()
-        vim.g.terraform_align = 0
-        vim.g.terraform_fold_sections = 0
-        vim.g.terraform_fmt_on_save = 0
-      end,
-    },
-
-    -- YAML
-    { "cuducos/yaml.nvim", ft = "yaml" },
-
-    -- TypeScript + JSX
-    {
-      "leafgarland/typescript-vim",
-      ft = "typescript",
-      init = function()
-        vim.g.typescript_compiler_binary = "tsc"
-        vim.g.typescript_compiler_options = ""
-      end,
-    },
-    { "HerringtonDarkholme/yats.vim", ft = "typescript" },
-    { "peitalin/vim-jsx-typescript", ft = "typescript" },
-
-    -- Styled components
-    { "styled-components/vim-styled-components", branch = "main", ft = "javascript" },
-
     -- Indentation guides
     {
       "lukas-reineke/indent-blankline.nvim",
@@ -368,60 +333,7 @@ require("lazy").setup({
     },
 
     -- Only highlight current window's cursorline
-    { "vim-scripts/CursorLineCurrentWindow", event = "VimEnter" },
-
-    -- JavaScript
-    {
-      "pangloss/vim-javascript",
-      ft = "javascript",
-      init = function()
-        vim.g.javascript_plugin_jsdoc = 1
-        vim.g.javascript_plugin_flow = 0
-      end,
-    },
-
-    -- JSX
-    { "neoclide/vim-jsx-improve", ft = "javascript" },
-
-    -- EJS
-    { "nikvdp/ejs-syntax", ft = "ejs" },
-
-    -- GraphQL
-    { "jparise/vim-graphql", ft = "graphql" },
-
-    -- HTML5
-    { "othree/html5.vim", ft = "html" },
-
-    -- Go
-    {
-      "fatih/vim-go",
-      ft = "go",
-      init = function()
-        vim.g.go_fmt_autosave = 0
-        vim.g.go_mod_fmt_autosave = 0
-        vim.g.go_def_mapping_enabled = 1
-        vim.g.go_textobj_enabled = 0
-        vim.g.go_textobj_include_function_doc = 0
-        vim.g.go_textobj_include_variable = 0
-        vim.g.go_fold_enable = {}
-      end,
-    },
-
-    -- CSS and SCSS
-    { "hail2u/vim-css3-syntax", ft = "css" },
-    { "cakebaker/scss-syntax.vim", ft = "scss" },
-
-    -- Markdown
-    { "ixru/nvim-markdown", ft = "markdown" },
-
-    -- PostgreSQL SQL
-    {
-      "exu/pgsql.vim",
-      ft = "sql",
-      init = function()
-        vim.g.sql_type_default = "pgsql"
-      end,
-    },
+    { "vim-scripts/CursorLineCurrentWindow" },
 
     -- CSV
     {
@@ -449,7 +361,7 @@ require("lazy").setup({
         vim.g["lightline#bufferline#enable_devicons"] = 1
 
         vim.g.lightline = {
-          colorscheme = "catppuccin",
+          colorscheme = colorscheme,
           active = {
             left = {
               { "mode", "paste" },
@@ -468,7 +380,6 @@ require("lazy").setup({
           subseparator = { left = "|", right = "|" }
         }
       end,
-      event = "VimEnter", -- optional: defer setup until startup
     },
     {
       "szw/vim-maximizer",
@@ -494,7 +405,6 @@ require("lazy").setup({
           require("Comment.api").toggle.linewise(vim.fn.visualmode())
         end, { desc = "Toggle comment block" })
       end,
-      event = "VimEnter",
     },
     {
       "Valloric/ListToggle",
@@ -550,7 +460,6 @@ require("lazy").setup({
           '211', '218'
         }
       end,
-      event = "VimEnter",
     },
 
     {
@@ -579,33 +488,30 @@ require("lazy").setup({
     { "tpope/vim-endwise", event = "InsertEnter" },
     { "tpope/vim-repeat", event = "VeryLazy" },
     { "nelstrom/vim-visual-star-search", event = "VeryLazy" },
-    { "sickill/vim-pasta", event = "VimEnter" },
-    { "conradirwin/vim-bracketed-paste", event = "VimEnter" },
+    { "sickill/vim-pasta" },
+    { "conradirwin/vim-bracketed-paste" },
 
     -- Text objects
-    { "michaeljsmith/vim-indent-object", event = "VimEnter" },
-    { "kana/vim-textobj-user", event = "VimEnter" },
+    { "michaeljsmith/vim-indent-object" },
+    { "kana/vim-textobj-user" },
     {
       "paradigm/TextObjectify",
       dependencies = { "kana/vim-textobj-user" },
-      event = "VimEnter",
     },
     {
       "Julian/vim-textobj-variable-segment",
       dependencies = { "kana/vim-textobj-user" },
-      event = "VimEnter",
     },
     {
       "rhysd/vim-textobj-anyblock",
       dependencies = { "kana/vim-textobj-user" },
-      event = "VimEnter",
     },
 
     -- Troll stopper
     { "vim-utils/vim-troll-stopper", event = "VeryLazy" },
 
     -- Auto detect indentation
-    { "tpope/vim-sleuth", event = "VimEnter" },
+    { "tpope/vim-sleuth" },
 
     -- Markdown preview
     {
@@ -932,7 +838,7 @@ require("lazy").setup({
   },
   -- Configure any other settings here. See the documentation for more details.
   -- colorscheme that will be used when installing plugins.
-  install = { colorscheme = { "catppuccin" } },
+  install = { colorscheme = { colorscheme } },
   -- automatically check for plugin updates
   checker = { enabled = true },
 })
