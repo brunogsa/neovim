@@ -321,11 +321,7 @@ Plug('szw/vim-maximizer', { on = 'MaximizerToggle' })
   vim.keymap.set('n', '<C-w>z', ':MaximizerToggle<CR>', { silent = true })
 -- *******
 
-Plug('tpope/vim-commentary')
--- Configs
-  vim.keymap.set('n', '<leader><leader>', 'gcc', { silent = true })
-  vim.keymap.set('v', '<leader><leader>', 'gcc', { silent = true })
--- *******
+Plug('numToStr/Comment.nvim')
 
 Plug('Valloric/ListToggle')
 -- Configs
@@ -1036,4 +1032,16 @@ require("chatgpt").setup()
     highlight illuminatedCurWord gui=underline cterm=underline
     highlight illuminatedWordText gui=underline cterm=underline
   ]])
+-- *******
+
+require('Comment').setup()
+-- Configs illuminate (it needs to be here at the end)
+  -- Optional: Remap <leader><leader> to toggle comment
+  vim.keymap.set('n', '<leader><leader>', function()
+    require('Comment.api').toggle.linewise.current()
+  end, { desc = 'Toggle comment line' })
+
+  vim.keymap.set('v', '<leader><leader>', function()
+    require('Comment.api').toggle.linewise(vim.fn.visualmode())
+  end, { desc = 'Toggle comment block' })
 -- *******
