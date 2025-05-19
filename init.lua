@@ -19,7 +19,7 @@ vim.api.nvim_create_autocmd("VimEnter", {
       local mark = vim.api.nvim_buf_get_mark(0, '"')
       local lcount = vim.api.nvim_buf_line_count(0)
       if mark[1] > 0 and mark[1] <= lcount then
-        vim.cmd('normal! g`"')
+        vim.cmd.normal('g`"')
       end
     end, 1)
   end,
@@ -40,7 +40,7 @@ vim.api.nvim_create_user_command('Msglog', function()
   local lines = vim.split(output, '\n')
 
   -- Open a new split buffer
-  vim.cmd('new')
+  vim.cmd.new()
   vim.api.nvim_buf_set_lines(0, 0, -1, false, lines)
   vim.bo.buftype = 'nofile'
   vim.bo.bufhidden = 'wipe'
@@ -168,10 +168,13 @@ vim.api.nvim_create_autocmd('VimEnter', {
 -- =======================================
 
 vim.cmd('syntax on')
-vim.cmd('autocmd BufWinEnter * :syntax sync fromstart')
+vim.api.nvim_create_autocmd("BufWinEnter", {
+  pattern = "*",
+  command = "syntax sync fromstart",
+})
 
 -- Don't pass messages to |ins-completion-menu|.
-vim.cmd('set shortmess+=c');
+vim.opt.shortmess:append("c")
 
 -- Larger bottom command panel, better for seeing auxiliar messages
 vim.opt.cmdheight = 2
@@ -184,16 +187,16 @@ vim.opt.number = true
 -- set relativenumber
 
 vim.opt.wrap = true
-vim.cmd('set whichwrap+=<,>')
+vim.opt.whichwrap:append("<,>")
 vim.opt.textwidth = 213
 
 -- Transparency in some terminals
-vim.cmd('hi Normal ctermbg=none')
-vim.cmd('highlight NonText ctermbg=none')
+vim.api.nvim_set_hl(0, "Normal", { ctermbg = "none" })
+vim.api.nvim_set_hl(0, "NonText", { ctermbg = "none" })
 
 -- Colorscheme for vimdiff
 if vim.opt.diff then
-  vim.cmd('colorscheme jellybeans')
+  vim.cmd.colorscheme("jellybeans")
 end
 
 -- General vision
@@ -205,7 +208,10 @@ vim.opt.ruler = false
 vim.opt.laststatus = 2
 
 -- More visible search
-vim.cmd('highlight IncSearch guibg=red ctermbg=red term=underline')
+vim.api.nvim_set_hl(0, "IncSearch", {
+  bg = "red",
+  underline = true,
+})
 
 
 -- =======================================
@@ -800,7 +806,7 @@ Plug('neoclide/coc.nvim', {branch = 'release'})
 
 Plug('neomake/neomake', { ['for'] = { 'javascript', 'typescript', 'go', 'lua', 'typescript.tsx' } })
 -- Configs
-  -- vim.cmd('autocmd! BufWritePost,BufEnter *.js,*.jsx,*.ts,*.tsx,*.go,*.lua Neomake')
+  vim.cmd('autocmd! BufWritePost,BufEnter *.js,*.jsx,*.ts,*.tsx,*.go,*.lua Neomake')
 
   vim.g.quickfixsigns_protect_sign_rx = '^neomake_'
   vim.g.neomake_ft_maker_remove_invalid_entries = 0
@@ -935,7 +941,7 @@ require('nvim-treesitter.configs').setup({
 })
 
 -- Colorscheme
-vim.cmd('colorscheme sonokai')
+vim.cmd.colorscheme("sonokai")
 
 local langs = {--[[ configuration for languages ]]}
 require('treesj').setup({
@@ -989,11 +995,9 @@ require("ibl").setup({
 require("chatgpt").setup()
 
 -- Configs illuminate (it needs to be here at the end)
-  vim.cmd([[
-    highlight illuminatedWord gui=underline cterm=underline
-    highlight illuminatedCurWord gui=underline cterm=underline
-    highlight illuminatedWordText gui=underline cterm=underline
-  ]])
+  vim.api.nvim_set_hl(0, "illuminatedWord",     { underline = true })
+  vim.api.nvim_set_hl(0, "illuminatedCurWord",  { underline = true })
+  vim.api.nvim_set_hl(0, "illuminatedWordText", { underline = true })
 -- *******
 
 require('Comment').setup()
