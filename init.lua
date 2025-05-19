@@ -3,9 +3,7 @@
 -- =======================================
 
 HOME = os.getenv('HOME')
-
-local colorscheme = "jellybeans"
-vim.cmd.colorscheme(colorscheme)
+local colorscheme = "kanagawa-wave"
 
 -- Restore cursor position
 vim.api.nvim_create_autocmd("VimEnter", {
@@ -317,8 +315,49 @@ require("lazy").setup({
     -- Highlight
     -- ===================
 
-    -- Colorscheme
-    -- TODO
+    -- Colorschemes
+    {
+      "sainnhe/sonokai",
+      priority = 1000, -- load early so it's applied before other plugins
+      lazy = false,
+      init = function()
+        vim.g.sonokai_style = "espresso"                   -- Options: default, atlantis, andromeda, shusia, maia, espresso
+        vim.g.sonokai_better_performance = 1
+        vim.g.sonokai_transparent_background = 1
+      end,
+    },
+    {
+      "rebelot/kanagawa.nvim",
+      priority = 1000, -- load early so it's applied before other plugins
+      lazy = false,
+      config = function()
+        -- Default options:
+        require('kanagawa').setup({
+          compile = false,             -- enable compiling the colorscheme
+          undercurl = true,            -- enable undercurls
+          commentStyle = { italic = true },
+          functionStyle = {},
+          keywordStyle = { italic = true},
+          statementStyle = { bold = true },
+          typeStyle = {},
+          transparent = true,         -- do not set background color
+          dimInactive = false,         -- dim inactive window `:h hl-NormalNC`
+          terminalColors = false,       -- define vim.g.terminal_color_{0,17}
+          colors = {                   -- add/modify theme and palette colors
+            palette = {},
+            theme = { wave = {}, lotus = {}, dragon = {}, all = {} },
+          },
+          overrides = function(colors) -- add/modify highlights
+            return {}
+          end,
+          theme = "wave",              -- Load "wave" theme
+          background = {               -- map the value of 'background' option to a theme
+            dark = "wave",           -- try "dragon" !
+            light = "lotus"
+          },
+        })
+      end,
+    },
 
     -- Indentation guides
     {
@@ -548,7 +587,6 @@ require("lazy").setup({
           end,
         })
       end,
-      event = "VeryLazy",
     },
 
     -- Treesitter
@@ -628,7 +666,6 @@ require("lazy").setup({
     -- TreeSJ for join/split blocks
     {
       "Wansmer/treesj",
-      cmd = { "TSJToggle" },
       config = function()
         require("treesj").setup({
           use_default_keymaps = false,
@@ -765,3 +802,5 @@ require("lazy").setup({
   -- automatically check for plugin updates
   checker = { enabled = true },
 })
+
+vim.cmd.colorscheme(colorscheme)
