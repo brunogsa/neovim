@@ -19,10 +19,12 @@ vim.api.nvim_create_autocmd("VimEnter", {
 
       local mark = vim.api.nvim_buf_get_mark(0, '"')
       local lcount = vim.api.nvim_buf_line_count(0)
+
       if mark[1] > 0 and mark[1] <= lcount then
-        vim.cmd.normal('g`"')
+        vim.cmd('normal! g`"')         -- move to last position
+        vim.cmd('normal! zv')          -- open folds to make cursor visible
       end
-    end, 1)
+    end, 10)
   end,
 })
 
@@ -86,6 +88,8 @@ vim.opt.ttimeoutlen = 16
 vim.opt.foldmethod = 'indent'
 vim.opt.foldlevelstart = 2
 vim.opt.foldnestmax = 20 -- This is the max value, hard limited by neovim code
+vim.opt.foldenable = true
+
 vim.opt.listchars = {
   nbsp = '˽',
   trail = '˽',
