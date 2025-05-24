@@ -24,7 +24,7 @@ vim.api.nvim_create_autocmd("VimEnter", {
         vim.cmd('normal! g`"')         -- move to last position
         vim.cmd('normal! zv')          -- open folds to make cursor visible
       end
-    end, 10)
+    end, 1)
   end,
 })
 
@@ -272,6 +272,10 @@ vim.keymap.set('v', '<leader>Fpsql', ':!pg_format -f 0 -s 2 -u 0<cr>', { silent 
 
 -- Selected last pasted text
 vim.keymap.set('n', 'gp', "V']", { silent = true })
+
+-- Autoformat pasted text
+vim.keymap.set('n', 'p', 'p=`]', { silent = true })
+vim.keymap.set('n', 'P', 'P=`]', { silent = true })
 
 -- View a formatted JSON is a new buffer
 vim.keymap.set('v', '<leader>vj', 'y:vnew<cr>pV:s/\\//g<cr>V:call RangeJsonBeautify()<cr>', { silent = true })
