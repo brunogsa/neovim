@@ -455,8 +455,10 @@ require("lazy").setup({
       cmd = { "LTLocationListToggle", "LTQuickfixListToggle" }, -- optional for lazy loading
     },
     {
-      "tpope/vim-surround",
-      event = "InsertEnter",
+      "kylechui/nvim-surround",
+      config = function()
+        require("nvim-surround").setup()
+      end,
     },
     {
       "alvan/vim-closetag",
@@ -467,11 +469,21 @@ require("lazy").setup({
       end,
     },
     {
-      "jiangmiao/auto-pairs",
-      init = function()
-        vim.g.AutoPairsMultilineClose = 0
-      end,
+      "windwp/nvim-autopairs",
       event = "InsertEnter",
+      config = function()
+        require("nvim-autopairs").setup({
+          check_ts = true, -- Treesitter integration
+        })
+
+        -- Integrate with nvim-cmp
+        local cmp_autopairs = require("nvim-autopairs.completion.cmp")
+        local cmp = require("cmp")
+        cmp.event:on(
+        "confirm_done",
+        cmp_autopairs.on_confirm_done()
+        )
+      end,
     },
 
     { "chrisbra/vim-diff-enhanced" },
