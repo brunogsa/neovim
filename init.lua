@@ -438,15 +438,13 @@ require("lazy").setup({
       "numToStr/Comment.nvim",
       config = function()
         require("Comment").setup()
+        local api = require('Comment.api')
 
-        -- Optional: add your toggle mappings if you want
-        vim.keymap.set("n", "<leader><leader>", function()
-          require("Comment.api").toggle.linewise.current()
-        end, { desc = "Toggle comment line" })
+        vim.keymap.set('n', '<leader><leader>', function()
+          api.toggle.linewise.current()
+        end, { desc = "Toggle line comment" })
 
-        vim.keymap.set("v", "<leader><leader>", function()
-          require("Comment.api").toggle.linewise(vim.fn.visualmode())
-        end, { desc = "Toggle comment block" })
+        vim.keymap.set('x', '<leader><leader>', "<esc><cmd>lua require('Comment.api').toggle.linewise(vim.fn.visualmode())<CR>", { desc = "Toggle visual comment" })
       end,
     },
     {
