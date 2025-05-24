@@ -732,12 +732,10 @@ require("lazy").setup({
         "hrsh7th/cmp-nvim-lsp",
         "hrsh7th/cmp-buffer",
         "hrsh7th/cmp-path",
-        "hrsh7th/cmp-cmdline",
         "L3MON4D3/LuaSnip",
         "saadparwaiz1/cmp_luasnip",
         "hrsh7th/cmp-nvim-lua",
         "hrsh7th/cmp-nvim-lsp-signature-help",
-        "David-Kunz/cmp-nvim-lsp-document-symbol",
         "ray-x/cmp-treesitter",
         "petertriho/cmp-git", -- git completions
         "f3fora/cmp-spell", -- spelling suggestions
@@ -745,8 +743,9 @@ require("lazy").setup({
         "uga-rosa/cmp-dictionary", -- dictionary completions
         "tamago324/cmp-zsh", -- Zsh completions
         "delphinus/cmp-ctags", -- tags completions
-        "luckasRanarison/cmp-bash", -- Bash completions
-        "julienvincent/cmp-terraform", -- Terraform completions
+        "hrsh7th/cmp-omni", -- Omni completions
+        "andersevenrud/cmp-tmux", -- Tmux completions
+        -- TODO: completion from browser
       },
       config = function()
         local cmp = require("cmp")
@@ -773,10 +772,9 @@ require("lazy").setup({
             { name = "buffer" },
             { name = "path" },
             { name = "cmp_zsh" },
-            { name = "cmp_bash" },
             { name = "treesitter" },
-            { name = "terraform" },
-            { name = "nvim_lsp_document_symbol" },
+            { name = "omni" },
+            { name = "tmux" },
           }),
           formatting = {
             format = function(entry, vim_item)
@@ -788,10 +786,9 @@ require("lazy").setup({
                 path = "[Path]",
                 nvim_lua = "[Lua]",
                 cmp_zsh = "[Zsh]",
-                cmp_bash = "[Bash]",
                 treesitter = "[TS]",
-                terraform = "[Terraform]",
-                nvim_lsp_document_symbol = "[DocSymb]",
+                omni = "[Omni]",
+                tmux = "[Tmux]",
               })[entry.source.name] or ""
               return vim_item
             end,
@@ -807,7 +804,19 @@ require("lazy").setup({
         local capabilities = require("cmp_nvim_lsp").default_capabilities()
 
         -- Example LSP servers (add more if needed!)
-        local servers = { "tsserver", "pyright", "gopls", "dockerls", "html", "cssls", "jsonls", "yamlls", "prismals", "sqlls" }
+        local servers = {
+          "ts_ls",
+          "pyright",
+          "gopls",
+          "dockerls",
+          "html",
+          "cssls",
+          "jsonls",
+          "yamlls",
+          "prismals",
+          "sqlls",
+          "terraformls",
+        }
         for _, server in ipairs(servers) do
           lspconfig[server].setup({
             capabilities = capabilities,
@@ -824,12 +833,6 @@ require("lazy").setup({
         vim.keymap.set("n", "[g", vim.diagnostic.goto_prev, { desc = "Previous diagnostic" })
         vim.keymap.set("n", "]g", vim.diagnostic.goto_next, { desc = "Next diagnostic" })
       end,
-    },
-
-    -- Completion from tmux panes
-    {
-      "wellle/tmux-complete.vim",
-      event = "InsertEnter",
     },
 
     -- ===================
