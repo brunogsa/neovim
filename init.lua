@@ -167,8 +167,8 @@ vim.opt.background = 'dark'
 -- Don't pass messages to |ins-completion-menu|.
 vim.opt.shortmess:append("c")
 
--- Larger bottom command panel, better for seeing auxiliar messages
-vim.opt.cmdheight = 2
+-- Height of bottom command panel
+vim.opt.cmdheight = 1
 
 -- Add a line above the cursor - Disable for better performance
 vim.opt.cursorline = true
