@@ -477,9 +477,9 @@ require("lazy").setup({
         })
       end,
     },
+
     {
       "nvim-lualine/lualine.nvim",
-      dependencies = { "nvim-tree/nvim-web-devicons" },
       config = function()
         require("lualine").setup({
           options = {
@@ -896,11 +896,119 @@ require("lazy").setup({
       cmd = { "Space2Tab", "Tab2Space" },
     },
 
+    -- Fuzzy search
+    {
+      "nvim-telescope/telescope-fzf-native.nvim",
+      build = "make",
+      config = function()
+        require("telescope").load_extension("fzf")
+      end,
+    },
+
+    {
+      "nvim-telescope/telescope.nvim",
+      dependencies = { "nvim-lua/plenary.nvim" },
+      config = function()
+        local telescope = require("telescope")
+        local actions = require("telescope.actions")
+
+        telescope.setup({
+          defaults = {
+            color_devicons = false,
+
+            -- Use relative paths
+            path_display = { "relative" },
+
+            -- Layout: use 95% of window width and height
+            layout_config = {
+              width = 0.95,
+              height = 0.95,
+              preview_cutoff = 1,
+            },
+
+            -- Remove icons
+            prompt_prefix = " ",
+            selection_caret = " ",
+            entry_prefix = " ",
+            multi_icon = " ",
+
+            -- Disable folds in preview for performance
+            preview = {
+              win_config = {
+                winhl = "Normal:Normal",
+              },
+            },
+          },
+        })
+
+        -- Save and restore fold settings around Telescope invocation
+        local function telescope_no_folds_search(search_fn, opts)
+          -- Save current fold settings
+          local foldenable = vim.wo.foldenable
+          local foldmethod = vim.wo.foldmethod
+          local foldlevel = vim.wo.foldlevel
+
+          -- Disable folds for maximum performance
+          vim.wo.foldenable = false
+
+          -- Run Telescope
+          search_fn(opts)
+
+          -- Restore fold settings after closing Telescope
+          vim.api.nvim_create_autocmd("WinLeave", {
+            once = true,
+            callback = function()
+              vim.wo.foldenable = foldenable
+              vim.wo.foldmethod = foldmethod
+              vim.wo.foldlevel = foldlevel
+            end,
+          })
+        end
+
+        -- Fuzzy search (fuzzy matching)
+        vim.keymap.set("n", "gf", function()
+          local word = vim.fn.expand("<cword>")
+          telescope_no_folds_search(require("telescope.builtin").live_grep, {
+            default_text = word,
+          })
+        end, { desc = "Fuzzy search for word under cursor (folds disabled)" })
+
+        vim.keymap.set("v", "gf", function()
+          local text = vim.fn.getreg("v")
+          telescope_no_folds_search(require("telescope.builtin").live_grep, {
+            default_text = text,
+          })
+        end, { desc = "Fuzzy search for selected text (folds disabled)" })
+
+        -- Exact search (literal)
+        vim.keymap.set("n", "gs", function()
+          local word = vim.fn.expand("<cword>")
+          telescope_no_folds_search(require("telescope.builtin").live_grep, {
+            default_text = word,
+            additional_args = function(args)
+              table.insert(args, "--fixed-strings")
+              return args
+            end,
+          })
+        end, { desc = "Exact search for word under cursor (folds disabled)" })
+
+        vim.keymap.set("v", "gs", function()
+          local text = vim.fn.getreg("v")
+          telescope_no_folds_search(require("telescope.builtin").live_grep, {
+            default_text = text,
+            additional_args = function(args)
+              table.insert(args, "--fixed-strings")
+              return args
+            end,
+          })
+        end, { desc = "Exact search for selected text (folds disabled)" })
+      end,
+    },
+
     -- ChatGPT + dependencies
     { "MunifTanjim/nui.nvim" },
     { "nvim-lua/plenary.nvim" },
     { "folke/trouble.nvim" },
-    { "nvim-telescope/telescope.nvim" },
 
     {
       "jackMort/ChatGPT.nvim",
