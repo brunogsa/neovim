@@ -718,79 +718,120 @@ require("lazy").setup({
     },
 
     -- ===================
+    -- Snippets
+    -- ===================
+
+    -- TODO: Using LuaSnipets
+
+    -- ===================
     -- Auto Completion
     -- ===================
 
-    -- tmux-aware completion
-    { "wellle/tmux-complete.vim", event = "InsertEnter" },
-
-    -- NodeJS completions
-    { "myhere/vim-nodejs-complete", ft = "javascript" },
-    { "othree/jspc.vim", ft = "javascript" },
-
-    -- CoC (Conquer of Completion)
+    -- Main completion plugin
     {
-      "neoclide/coc.nvim",
-      branch = "release",
-      build = "yarn install --frozen-lockfile",
+      "hrsh7th/nvim-cmp",
+      event = "InsertEnter",
+      dependencies = {
+        "hrsh7th/cmp-nvim-lsp",
+        "hrsh7th/cmp-buffer",
+        "hrsh7th/cmp-path",
+        "hrsh7th/cmp-cmdline",
+        "L3MON4D3/LuaSnip",
+        "saadparwaiz1/cmp_luasnip",
+        "hrsh7th/cmp-nvim-lua",
+        "hrsh7th/cmp-nvim-lsp-signature-help",
+        "David-Kunz/cmp-nvim-lsp-document-symbol",
+        "ray-x/cmp-treesitter",
+        "petertriho/cmp-git", -- git completions
+        "f3fora/cmp-spell", -- spelling suggestions
+        "kristijanhusak/vim-dadbod-completion", -- SQL DB completions
+        "uga-rosa/cmp-dictionary", -- dictionary completions
+        "tamago324/cmp-zsh", -- Zsh completions
+        "delphinus/cmp-ctags", -- tags completions
+        "luckasRanarison/cmp-bash", -- Bash completions
+        "julienvincent/cmp-terraform", -- Terraform completions
+      },
       config = function()
-        -- Set global extensions
-        vim.g.coc_global_extensions = {
-          "coc-json",
-          "coc-browser",
-          "coc-tsserver",
-          "coc-html",
-          "coc-css",
-          "coc-html-css-support",
-          "coc-swagger",
-          "coc-pyright",
-          "coc-docker",
-          "coc-eslint",
-          "coc-git",
-          "coc-go",
-          "coc-golines",
-          "coc-prisma",
-          "coc-sql",
-          "coc-xml",
-          "coc-yaml",
-        }
+        local cmp = require("cmp")
+        local luasnip = require("luasnip")
 
-        -- Vimscript helper functions
-        vim.cmd([[
-          function! CheckBackspace() abort
-            let col = col('.') - 1
-            return !col || getline('.')[col - 1]  =~# '\s'
-          endfunction
-
-          function! ShowDocumentation()
-            if CocAction('hasProvider', 'hover')
-              call CocActionAsync('doHover')
-            else
-              call feedkeys('K', 'in')
-            endif
-          endfunction
-        ]])
-
-        -- Keybindings
-        vim.keymap.set("n", "<leader>vd", ":call ShowDocumentation()<CR>", { silent = true })
-        vim.keymap.set("n", "gd", ':call CocAction("jumpDefinition", "drop")<CR>', { silent = true })
-        vim.keymap.set("n", "gt", "<Plug>(coc-type-definition)", { silent = true })
-        vim.keymap.set("n", "gi", "<Plug>(coc-implementation)", { silent = true })
-        vim.keymap.set("n", "gr", "<Plug>(coc-references)", { silent = true })
-        vim.keymap.set("n", "[g", "<Plug>(coc-diagnostic-prev)", { silent = true })
-        vim.keymap.set("n", "]g", "<Plug>(coc-diagnostic-next)", { silent = true })
-        vim.keymap.set("n", "<leader>r", "<Plug>(coc-rename)", { silent = true })
-        vim.keymap.set("n", "<leader>vs", ":CocCommand swagger.render<CR>", { silent = true })
-
-        -- Highlight symbol under cursor
-        vim.cmd([[autocmd CursorHold * silent call CocActionAsync('highlight')]])
-
-        -- Insert mode tab navigation
-        vim.cmd([[
-          inoremap <silent><expr> <TAB> coc#pum#visible() ? coc#pum#next(1) : CheckBackspace() ? "\<Tab>" : coc#refresh()
-          inoremap <expr><S-TAB> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
-        ]])
+        cmp.setup({
+          snippet = {
+            expand = function(args)
+              luasnip.lsp_expand(args.body)
+            end,
+          },
+          mapping = cmp.mapping.preset.insert({
+            ["<Tab>"] = cmp.mapping.select_next_item(),
+            ["<S-Tab>"] = cmp.mapping.select_prev_item(),
+            ["<CR>"] = cmp.mapping.confirm({ select = true }),
+            ["<C-Space>"] = cmp.mapping.complete(),
+            ["<C-e>"] = cmp.mapping.abort(),        -- close the completion menu
+          }),
+          sources = cmp.config.sources({
+            { name = "nvim_lsp" },
+            { name = "nvim_lsp_signature_help" },
+            { name = "luasnip" },
+            { name = "nvim_lua" },
+            { name = "buffer" },
+            { name = "path" },
+            { name = "cmp_zsh" },
+            { name = "cmp_bash" },
+            { name = "treesitter" },
+            { name = "terraform" },
+            { name = "nvim_lsp_document_symbol" },
+          }),
+          formatting = {
+            format = function(entry, vim_item)
+              vim_item.menu = ({
+                nvim_lsp = "[LSP]",
+                nvim_lsp_signature_help = "[Sign]",
+                luasnip = "[Snip]",
+                buffer = "[Buf]",
+                path = "[Path]",
+                nvim_lua = "[Lua]",
+                cmp_zsh = "[Zsh]",
+                cmp_bash = "[Bash]",
+                treesitter = "[TS]",
+                terraform = "[Terraform]",
+                nvim_lsp_document_symbol = "[DocSymb]",
+              })[entry.source.name] or ""
+              return vim_item
+            end,
+          },
+        })
       end,
+    },
+
+    {
+      "neovim/nvim-lspconfig",
+      config = function()
+        local lspconfig = require("lspconfig")
+        local capabilities = require("cmp_nvim_lsp").default_capabilities()
+
+        -- Example LSP servers (add more if needed!)
+        local servers = { "tsserver", "pyright", "gopls", "dockerls", "html", "cssls", "jsonls", "yamlls", "prismals", "sqlls" }
+        for _, server in ipairs(servers) do
+          lspconfig[server].setup({
+            capabilities = capabilities,
+          })
+        end
+
+        -- Keymaps
+        vim.keymap.set("n", "gd", vim.lsp.buf.definition, { desc = "Go to definition" })
+        vim.keymap.set("n", "gi", vim.lsp.buf.implementation, { desc = "Go to implementation" })
+        vim.keymap.set("n", "gr", vim.lsp.buf.references, { desc = "Show references" })
+        vim.keymap.set("n", "K", vim.lsp.buf.hover, { desc = "Show hover documentation" })
+        vim.keymap.set("n", "<leader>r", vim.lsp.buf.rename, { desc = "Rename symbol" })
+        vim.keymap.set("n", "<leader>vd", vim.diagnostic.open_float, { desc = "Show diagnostics" })
+        vim.keymap.set("n", "[g", vim.diagnostic.goto_prev, { desc = "Previous diagnostic" })
+        vim.keymap.set("n", "]g", vim.diagnostic.goto_next, { desc = "Next diagnostic" })
+      end,
+    },
+
+    -- Completion from tmux panes
+    {
+      "wellle/tmux-complete.vim",
       event = "InsertEnter",
     },
 
