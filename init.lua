@@ -164,12 +164,6 @@ vim.opt.background = 'dark'
 -- Interface
 -- =======================================
 
-vim.cmd('syntax on')
-vim.api.nvim_create_autocmd("BufWinEnter", {
-  pattern = "*",
-  command = "syntax sync fromstart",
-})
-
 -- Don't pass messages to |ins-completion-menu|.
 vim.opt.shortmess:append("c")
 
@@ -607,7 +601,7 @@ require("lazy").setup({
               local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(buf))
               return ok and stats and stats.size > max_filesize
             end,
-            additional_vim_regex_highlighting = true,
+            additional_vim_regex_highlighting = false, -- Keep disable to avoid redraw exceeded time issues
           },
           indent = { enable = false },
           fold = { enable = true },
