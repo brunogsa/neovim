@@ -653,6 +653,33 @@ require("lazy").setup({
       end,
     },
 
+    {
+      "lewis6991/gitsigns.nvim",
+      event = { "BufReadPre", "BufNewFile" },
+      config = function()
+        require("gitsigns").setup({
+          signs = {
+            add          = { text = "+" },
+            change       = { text = "~" },
+            delete       = { text = "-" },
+            topdelete    = { text = "-" },
+            changedelete = { text = "~" },
+          },
+          on_attach = function(bufnr)
+            local gs = package.loaded.gitsigns
+            local opts = { buffer = bufnr, noremap = true, silent = true }
+
+            -- Define a highlight group for the border
+            vim.api.nvim_set_hl(0, "GitsignsBlameBorder", { fg = "LightGreen" })
+
+            -- Navigation
+            vim.keymap.set("n", "]c", gs.next_hunk, opts)
+            vim.keymap.set("n", "[c", gs.prev_hunk, opts)
+          end,
+        })
+      end,
+    },
+
     -- Handle large files efficiently
     {
       "vim-scripts/LargeFile",
