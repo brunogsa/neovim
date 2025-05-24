@@ -389,12 +389,25 @@ require("lazy").setup({
     -- Core
     -- ===================
     {
-      "liuchengxu/vim-which-key",
-      init = function()
-        vim.keymap.set('n', '<leader>', ":<c-u>WhichKey '<Space>'<CR>", { silent = true })
-        vim.keymap.set('v', '<leader>', ":<c-u>WhichKeyVisual '<Space>'<CR>", { silent = true })
-      end,
+      "folke/which-key.nvim",
       event = "VeryLazy",
+      init = function()
+        -- Ensure which-key triggers work as expected
+        vim.o.timeout = true
+        vim.o.timeoutlen = 300
+      end,
+      config = function()
+        local wk = require("which-key")
+        wk.setup({
+          plugins = {
+            spelling = { enabled = true },
+          },
+          -- Fix deprecation: use `win` instead of `window`
+          win = {
+            border = "rounded",
+          },
+        })
+      end,
     },
     {
       "nvim-lualine/lualine.nvim",
@@ -819,20 +832,23 @@ require("lazy").setup({
         local lspconfig = require("lspconfig")
         local capabilities = require("cmp_nvim_lsp").default_capabilities()
 
-        -- Example LSP servers (add more if needed!)
+        -- List of LSP servers to enable
         local servers = {
-          "ts_ls",
-          "pyright",
-          "gopls",
-          "dockerls",
-          "html",
-          "cssls",
-          "jsonls",
-          "yamlls",
-          "prismals",
-          "sqlls",
-          "terraformls",
+          "ts_ls",     -- JavaScript / TypeScript
+          "pyright",      -- Python
+          "gopls",        -- Go
+          "dockerls",     -- Docker
+          "html",         -- HTML
+          "cssls",        -- CSS
+          "jsonls",       -- JSON
+          "yamlls",       -- YAML
+          "prismals",     -- Prisma
+          "sqlls",        -- SQL
+          "terraformls",  -- Terraform
+          "lua_ls",       -- Lua
+          "bashls",       -- Shell scripts
         }
+
         for _, server in ipairs(servers) do
           lspconfig[server].setup({
             capabilities = capabilities,
@@ -845,7 +861,17 @@ require("lazy").setup({
         vim.keymap.set("n", "gr", vim.lsp.buf.references, { desc = "Show references" })
         vim.keymap.set("n", "K", vim.lsp.buf.hover, { desc = "Show hover documentation" })
         vim.keymap.set("n", "<leader>r", vim.lsp.buf.rename, { desc = "Rename symbol" })
-        vim.keymap.set("n", "<leader>vd", vim.diagnostic.open_float, { desc = "Show diagnostics" })
+        vim.keymap.set("n", "<leader>vd", function()
+          local opts = {
+            focusable = true,
+            close_events = { "BufLeave", "CursorMoved", "InsertEnter", "FocusLost" },
+            border = "rounded",
+            source = "always",
+            prefix = "",
+            scope = "line", -- show all diagnostics on the current line
+          }
+          vim.diagnostic.open_float(nil, opts)
+        end, { noremap = true, silent = true , desc = "Show full diagnostic for current line" })
         vim.keymap.set("n", "[g", vim.diagnostic.goto_prev, { desc = "Previous diagnostic" })
         vim.keymap.set("n", "]g", vim.diagnostic.goto_next, { desc = "Next diagnostic" })
       end,
@@ -855,7 +881,53 @@ require("lazy").setup({
     -- Lint
     -- ===================
 
-    -- TODO: Add linter for node, typescript, shell, terraform, python, golang, markdown, json, csv, lua
+    {
+      "nvimtools/none-ls-extras.nvim",
+    },
+
+    {
+      "nvimtools/none-ls.nvim",
+      dependencies = { "nvimtools/none-ls-extras.nvim" },
+      config = function()
+        local null_ls = require("null-ls")
+        local diagnostics = null_ls.builtins.diagnostics
+
+        -- Use eslint_d from none-ls-extras
+        local eslint_d = require("none-ls.diagnostics.eslint_d")
+
+        null_ls.setup({
+          debug = false,
+          sources = {
+            -- ESLint (from none-ls-extras)
+            eslint_d.with({
+              condition = function(utils)
+                return utils.root_has_file({
+                  ".eslintrc",
+                  ".eslintrc.js",
+                  ".eslintrc.json",
+                  "package.json",
+                })
+              end,
+            }),
+
+            -- Lua
+            -- Done via LSP
+
+            -- Python
+            -- Done via LSP
+
+            -- Shell
+            -- Done via LSP
+
+            -- Markdown
+            diagnostics.markdownlint,
+
+            -- YAML
+            diagnostics.yamllint,
+          },
+        })
+      end,
+    },
   },
   -- Configure any other settings here. See the documentation for more details.
   -- colorscheme that will be used when installing plugins.
