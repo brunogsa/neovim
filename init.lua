@@ -393,29 +393,34 @@ require("lazy").setup({
       event = "VeryLazy",
     },
     {
-      "itchyny/lightline.vim",
-      init = function()
-        vim.g["lightline#bufferline#enable_devicons"] = 1
-
-        vim.g.lightline = {
-          colorscheme = colorscheme,
-          active = {
-            left = {
-              { "mode", "paste" },
-              { "readonly", "absolutepath", "modified" }
-            }
+      "nvim-lualine/lualine.nvim",
+      dependencies = { "nvim-tree/nvim-web-devicons" },
+      config = function()
+        require("lualine").setup({
+          options = {
+            theme = "auto",
+            icons_enabled = false,
+            section_separators = "",
+            component_separators = "|",
+            disabled_filetypes = {},
           },
-          component = {
-            readonly = '%{&readonly?"READ-ONLY":""}',
-            modified = '%{&filetype=="help"?"":&modified?"+":&modifiable?"":"-"}'
+          sections = {
+            lualine_a = { "mode" },
+            lualine_b = {},
+            lualine_c = { { "filename", path = 2 } }, -- full path
+            lualine_x = { "filetype" },
+            lualine_y = { "progress" },
+            lualine_z = { "location" },
           },
-          component_visible_condition = {
-            readonly = '(&filetype!="help"&& &readonly)',
-            modified = '(&filetype!="help"&&(&modified||!&modifiable))'
+          inactive_sections = {
+            lualine_a = {},
+            lualine_b = {},
+            lualine_c = { { "filename", path = 2 } },
+            lualine_x = { "location" },
+            lualine_y = {},
+            lualine_z = {},
           },
-          separator = { left = "", right = "" },
-          subseparator = { left = "|", right = "|" }
-        }
+        })
       end,
     },
     {
