@@ -51,6 +51,32 @@ vim.api.nvim_create_user_command('Msglog', function()
   vim.bo.filetype = 'messages'
 end, {})
 
+-- Create an autocommand for CursorHold to show diagnostics
+vim.api.nvim_create_autocmd("CursorHold", {
+  callback = function()
+    local opts = {
+      focusable = true,
+      close_events = { "BufLeave", "CursorMoved", "InsertEnter", "FocusLost" },
+      border = "rounded",
+      source = "always",
+      prefix = "",
+    }
+    local cursor_pos = vim.api.nvim_win_get_cursor(0)
+    local bufnr = vim.api.nvim_get_current_buf()
+    local line = cursor_pos[1] - 1
+    local col = cursor_pos[2]
+    local diagnostics = vim.diagnostic.get(bufnr, { lnum = line })
+
+    -- Check if there’s a diagnostic under the cursor (by comparing ranges)
+    for _, diagnostic in ipairs(diagnostics) do
+      if diagnostic.col <= col and col < (diagnostic.end_col or diagnostic.col + 1) then
+        vim.diagnostic.open_float(nil, opts)
+        return
+      end
+    end
+  end,
+})
+
 -- =======================================
 -- Core Settings
 -- =======================================
