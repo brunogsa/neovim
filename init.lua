@@ -83,7 +83,7 @@ vim.api.nvim_create_autocmd("CursorHold", {
 
 vim.opt.encoding='utf-8'
 
-vim.opt.updatetime = 500
+vim.opt.updatetime = 2000
 
 -- PHP: slower updatetime for better LSP performance
 vim.api.nvim_create_autocmd('VimEnter', {
@@ -242,7 +242,12 @@ vim.g.mapleader = ' '
 -- This is useful when dealing with files too nested, where the "indent" becomes limited
 -- since neovim has a internal limit of "20" foldnestmax.
 -- In those case, switching to "syntax" is the workaround
-vim.keymap.set('n', '<leader>tf', '<Cmd>lua _G.toggle_foldmethod()<CR>', { silent = false })
+vim.keymap.set(
+  'n',
+  '<leader>tf',
+  '<Cmd>lua _G.toggle_foldmethod()<CR>',
+  { silent = false, desc = "Toggle fold method" }
+)
 
 -- Send deleted thing with 'x' and 'c' to black hole
 vim.keymap.set('n', 'x', '"_x', { silent = true })
@@ -285,16 +290,31 @@ vim.keymap.set('', 'g<C-x>', '<Nop>', { noremap = false, silent = true })
 -- nnoremap <silent><leader><down> :resize -5<cr>
 
 -- Toggles the number lines
-vim.keymap.set('n', '<leader>tn', ':set number!<cr>', { silent = true })
+vim.keymap.set(
+  'n',
+  '<leader>tn',
+  ':set number!<cr>',
+  { silent = true, desc = "Toggle line numbers" }
+)
 
 -- Search only in visual selection
-vim.keymap.set('v', '/', '<esc>/\\%V', { silent = true })
+vim.keymap.set('v', '/', '<esc>/\\%V', { silent = true, desc = "Search on selected block" })
 
 -- PrettyXML: Format a line of XML
-vim.keymap.set('v', '<leader>Fxml', ':!xmllint --format --recover - 2>/dev/null<cr>', { silent = true })
+vim.keymap.set(
+  'v',
+  '<leader>Fxml',
+  ':!xmllint --format --recover - 2>/dev/null<cr>',
+  { silent = true, desc = "Pretty format XML" }
+)
 
 -- PrettyPSQL: Format a line of PSQL
-vim.keymap.set('v', '<leader>Fpsql', ':!pg_format -f 0 -s 2 -u 0<cr>', { silent = true })
+vim.keymap.set(
+  'v',
+  '<leader>Fpsql',
+  ':!pg_format -f 0 -s 2 -u 0<cr>',
+  { silent = true, desc = "Pretty format SQL" }
+)
 
 -- Selected last pasted text
 vim.keymap.set('n', 'gp', "V']", { silent = true })
@@ -303,17 +323,29 @@ vim.keymap.set('n', 'gp', "V']", { silent = true })
 vim.keymap.set('n', 'p', 'p=`]', { silent = true })
 vim.keymap.set('n', 'P', 'P=`]', { silent = true })
 
--- View a formatted JSON is a new buffer
-vim.keymap.set('v', '<leader>vj', 'y:vnew<cr>pV:s/\\//g<cr>V:call RangeJsonBeautify()<cr>', { silent = true })
-
 -- Preview for HTML
-vim.keymap.set('n', '<leader>vh', ':!open % &<cr>', { noremap = false, silent = true })
+vim.keymap.set(
+  'n',
+  '<leader>vh',
+  ':!open % &<cr>',
+  { noremap = false, silent = true, desc = "Preview HTML file" }
+)
 
 -- Preview for OpenAPI
-vim.keymap.set('n', '<leader>vo', ':!rm -fr /tmp/brunogsa-vim-openapi-preview.html && npx redocly build-docs % --output /tmp/brunogsa-vim-openapi-preview.html && open /tmp/brunogsa-vim-openapi-preview.html &<cr>', { noremap = false, silent = true })
+vim.keymap.set(
+  'n',
+  '<leader>vo',
+  ':!rm -fr /tmp/brunogsa-vim-openapi-preview.html && npx redocly build-docs % --output /tmp/brunogsa-vim-openapi-preview.html && open /tmp/brunogsa-vim-openapi-preview.html &<cr>',
+  { noremap = false, silent = true, desc = "Preview OpenAPI spec" }
+)
 
 -- Preview for AsyncAPI
-vim.keymap.set('n', '<leader>va', ':!rm -fr /tmp/brunogsa-vim-asyncapi-preview && ag % @asyncapi/html-template -o /tmp/brunogsa-vim-asyncapi-preview && open /tmp/brunogsa-vim-asyncapi-preview/index.html &<cr>', { noremap = false, silent = true })
+vim.keymap.set(
+  'n',
+  '<leader>va',
+  ':!rm -fr /tmp/brunogsa-vim-asyncapi-preview && ag % @asyncapi/html-template -o /tmp/brunogsa-vim-asyncapi-preview && open /tmp/brunogsa-vim-asyncapi-preview/index.html &<cr>',
+  { noremap = false, silent = true, desc = "Preview AsyncAPI spec" }
+)
 
 -- =======================================
 -- Plugins
@@ -472,8 +504,8 @@ require("lazy").setup({
       init = function()
         vim.g.maximizer_set_default_mapping = 0
 
-        vim.keymap.set('n', '<leader><F3>', ':MaximizerToggle<CR>', { silent = true })
-        vim.keymap.set('n', '<C-w>z', ':MaximizerToggle<CR>', { silent = true })
+        vim.keymap.set('n', '<leader><F3>', ':MaximizerToggle<CR>', { silent = true, desc = ":MaximizerToggle" })
+        vim.keymap.set('n', '<C-w>z', ':MaximizerToggle<CR>', { silent = true, desc = ":MaximizerToggle" })
       end,
     },
     {
@@ -486,7 +518,12 @@ require("lazy").setup({
           api.toggle.linewise.current()
         end, { desc = "Toggle line comment" })
 
-        vim.keymap.set('x', '<leader><leader>', "<esc><cmd>lua require('Comment.api').toggle.linewise(vim.fn.visualmode())<CR>", { desc = "Toggle visual comment" })
+        vim.keymap.set(
+          'x',
+          '<leader><leader>',
+          "<esc><cmd>lua require('Comment.api').toggle.linewise(vim.fn.visualmode())<CR>",
+          { desc = "Toggle visual comment" }
+        )
       end,
     },
     {
@@ -536,17 +573,34 @@ require("lazy").setup({
       "AndrewRadev/linediff.vim",
       cmd = { "Linediff", "LinediffReset" },
       init = function()
-        vim.keymap.set("v", "<leader>d", ":Linediff<cr>", { silent = true })
-        vim.keymap.set("n", "<leader>D", ":LinediffReset<cr>", { silent = true })
+        vim.keymap.set("v", "<leader>d", ":Linediff<cr>", { silent = true, desc = ":Linediff" })
+        vim.keymap.set("n", "<leader>D", ":LinediffReset<cr>", { silent = true, desc = ":LinediffReset" })
       end,
     },
 
     {
       "lfv89/vim-interestingwords",
       init = function()
-        vim.keymap.set("n", "<leader>h", ':call InterestingWords("n")<cr>', { silent = true })
-        vim.keymap.set("v", "<leader>h", ':call InterestingWords("v")<cr>', { silent = true })
-        vim.keymap.set("n", "<leader>H", ":call UncolorAllWords()<cr>", { silent = true })
+        vim.keymap.set(
+          "n",
+          "<leader>h",
+          ':call InterestingWords("n")<cr>',
+          { silent = true, desc = "Highlight word" }
+        )
+
+        vim.keymap.set(
+          "v",
+          "<leader>h",
+          ':call InterestingWords("v")<cr>',
+          { silent = true, desc = "Highlight selected text" }
+        )
+
+        vim.keymap.set(
+          "n",
+          "<leader>H",
+          ":call UncolorAllWords()<cr>",
+          { silent = true, desc = ":call UncolorAllWords" }
+        )
 
         vim.g.interestingWordsTermColors = {
           '1', '8', '15', '22', '29', '36', '43', '50', '57', '64',
@@ -570,12 +624,47 @@ require("lazy").setup({
     {
       "kevinhwang91/nvim-hlslens",
       config = function()
-        vim.keymap.set("n", "n", [[<Cmd>execute('normal! ' . v:count1 . 'n')<CR><Cmd>lua require('hlslens').start()<CR>]], { silent = true })
-        vim.keymap.set("n", "N", [[<Cmd>execute('normal! ' . v:count1 . 'N')<CR><Cmd>lua require('hlslens').start()<CR>]], { silent = true })
-        vim.keymap.set("n", "*", [[*<Cmd>lua require('hlslens').start()<CR>]], { silent = true })
-        vim.keymap.set("n", "#", [[#<Cmd>lua require('hlslens').start()<CR>]], { silent = true })
-        vim.keymap.set("n", "g*", [[g*<Cmd>lua require('hlslens').start()<CR>]], { silent = true })
-        vim.keymap.set("n", "g#", [[g#<Cmd>lua require('hlslens').start()<CR>]], { silent = true })
+        vim.keymap.set(
+          "n",
+          "n",
+          [[<Cmd>execute('normal! ' . v:count1 . 'n')<CR><Cmd>lua require('hlslens').start()<CR>]],
+          { silent = true }
+        )
+
+        vim.keymap.set(
+          "n",
+          "N",
+          [[<Cmd>execute('normal! ' . v:count1 . 'N')<CR><Cmd>lua require('hlslens').start()<CR>]],
+          { silent = true }
+        )
+
+        vim.keymap.set(
+          "n",
+          "*",
+          [[*<Cmd>lua require('hlslens').start()<CR>]],
+          { silent = true }
+        )
+
+        vim.keymap.set(
+          "n",
+          "#",
+          [[#<Cmd>lua require('hlslens').start()<CR>]],
+          { silent = true }
+        )
+
+        vim.keymap.set(
+          "n",
+          "g*",
+          [[g*<Cmd>lua require('hlslens').start()<CR>]],
+          { silent = true }
+        )
+
+        vim.keymap.set(
+          "n",
+          "g#",
+          [[g#<Cmd>lua require('hlslens').start()<CR>]],
+          { silent = true }
+        )
       end,
       event = "VeryLazy",
     },
@@ -619,7 +708,13 @@ require("lazy").setup({
         vim.g.mkdp_preview_options = {
           sync_scroll_type = "middle",
         }
-        vim.keymap.set("n", "<leader>vm", "<Plug>MarkdownPreviewToggle", { silent = true })
+
+        vim.keymap.set(
+          "n",
+          "<leader>vm",
+          "<Plug>MarkdownPreviewToggle",
+          { silent = true, desc = ":MarkdownPreviewToggle" }
+        )
       end,
     },
 
@@ -675,7 +770,13 @@ require("lazy").setup({
       cmd = "GitBlameToggle",
       init = function()
         vim.g.gitblame_enabled = 0
-        vim.keymap.set("n", "<leader>tg", ":GitBlameToggle<CR>", { silent = true })
+
+        vim.keymap.set(
+          "n",
+          "<leader>tg",
+          ":GitBlameToggle<CR>",
+          { silent = true, desc = ":GitBlameToggle" }
+        )
       end,
     },
 
@@ -693,14 +794,24 @@ require("lazy").setup({
           },
           on_attach = function(bufnr)
             local gs = package.loaded.gitsigns
-            local opts = { buffer = bufnr, noremap = true, silent = true }
 
             -- Define a highlight group for the border
             vim.api.nvim_set_hl(0, "GitsignsBlameBorder", { fg = "LightGreen" })
 
             -- Navigation
-            vim.keymap.set("n", "]c", gs.next_hunk, opts)
-            vim.keymap.set("n", "[c", gs.prev_hunk, opts)
+            vim.keymap.set(
+              "n",
+              "]c",
+              gs.next_hunk,
+              { buffer = bufnr, noremap = true, silent = true, desc = "Next git chunk" }
+            )
+
+            vim.keymap.set(
+              "n",
+              "[c",
+              gs.prev_hunk,
+              { buffer = bufnr, noremap = true, silent = true, desc = "Previous git chunk" }
+            )
           end,
         })
       end,
@@ -723,7 +834,7 @@ require("lazy").setup({
       "scrooloose/nerdtree",
       cmd = "NERDTreeToggle",
       init = function()
-        vim.keymap.set("n", "<leader>tp", ":NERDTreeToggle<CR>")
+        vim.keymap.set("n", "<leader>tp", ":NERDTreeToggle<CR>", { desc = ":NERDTreeToggle" })
         vim.g.NERDTreeHijackNetrw = 1
       end,
     },
@@ -759,7 +870,7 @@ require("lazy").setup({
           dot_repeat = true,
         })
 
-        vim.keymap.set("n", "<leader>lt", ":TSJToggle<CR>", { silent = true })
+        vim.keymap.set("n", "<leader>lt", ":TSJToggle<CR>", { silent = true, desc = "Toggle Split/Join format" })
       end,
     },
 
@@ -785,7 +896,12 @@ require("lazy").setup({
       "jackMort/ChatGPT.nvim",
       config = function()
         require("chatgpt").setup()
-        vim.keymap.set({ "n", "v" }, "<leader>e", ":ChatGPTRun explain_code<CR>", { silent = false })
+        vim.keymap.set(
+          { "n", "v" },
+          "<leader>e",
+          ":ChatGPTRun explain_code<CR>",
+          { silent = false, desc = ":ChatGPTRun explain_code" }
+        )
       end,
       cmd = { "ChatGPT", "ChatGPTRun" },
       dependencies = {
@@ -912,7 +1028,7 @@ require("lazy").setup({
         vim.keymap.set("n", "gd", vim.lsp.buf.definition, { desc = "Go to definition" })
         vim.keymap.set("n", "gi", vim.lsp.buf.implementation, { desc = "Go to implementation" })
         vim.keymap.set("n", "gr", vim.lsp.buf.references, { desc = "Show references" })
-        vim.keymap.set("n", "K", vim.lsp.buf.hover, { desc = "Show hover documentation" })
+        vim.keymap.set("n", "<leader>vs", vim.lsp.buf.hover, { desc = "Show signature/doc" })
         vim.keymap.set("n", "<leader>r", vim.lsp.buf.rename, { desc = "Rename symbol" })
         vim.keymap.set("n", "<leader>vd", function()
           local opts = {
@@ -924,7 +1040,7 @@ require("lazy").setup({
             scope = "line", -- show all diagnostics on the current line
           }
           vim.diagnostic.open_float(nil, opts)
-        end, { noremap = true, silent = true , desc = "Show full diagnostic for current line" })
+        end, { noremap = true, silent = true , desc = "Show diagnostic for current line" })
         vim.keymap.set("n", "[g", vim.diagnostic.goto_prev, { desc = "Previous diagnostic" })
         vim.keymap.set("n", "]g", vim.diagnostic.goto_next, { desc = "Next diagnostic" })
       end,
