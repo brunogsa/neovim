@@ -77,6 +77,16 @@ vim.api.nvim_create_autocmd("CursorHold", {
   end,
 })
 
+-- Save the current neovim file I'm at
+-- Used in a tmux hotkey
+vim.api.nvim_create_autocmd({"BufEnter", "FocusGained"}, {
+  callback = function()
+    local file = vim.fn.expand("%:p")
+    local last_file_path = vim.fn.expand("$HOME/.nvim_last_file")
+    vim.fn.writefile({file}, last_file_path)
+  end
+})
+
 -- =======================================
 -- Core Settings
 -- =======================================
