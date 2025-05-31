@@ -380,6 +380,11 @@ vim.opt.rtp:prepend(lazypath)
 
 -- Setup lazy.nvim
 require("lazy").setup({
+  checker = {
+    enabled = true,       -- automatically check for plugin updates
+    frequency = 7 * 24 * 60 * 60, -- check every week
+    notify = true,        -- notify when new updates are found
+  },
   spec = {
     -- ===================
     -- Highlight
