@@ -329,9 +329,25 @@ vim.keymap.set(
 -- Selected last pasted text
 vim.keymap.set('n', 'gp', "V']", { silent = true })
 
--- Autoformat pasted text
-vim.keymap.set('n', 'p', 'p=`]', { silent = true })
-vim.keymap.set('n', 'P', 'P=`]', { silent = true })
+-- Autoformat pasted text, and jump to the end of the content
+vim.keymap.set('n', 'p', "p=']']$", { silent = true })
+vim.keymap.set('n', 'P', "P=']']j", { silent = true })
+
+-- Keep cursor position after yanking on visual selections
+-- Has an optimization to avoid 2 vim redraws, which cause a flicker
+vim.keymap.set('v', 'y', function()
+  -- save cursor position (row, col) before the yank
+  local win   = 0                              -- 0 = current window
+  local pos   = vim.api.nvim_win_get_cursor(win)
+  local originalConfig  = vim.o.lazyredraw               -- remember current setting
+  vim.o.lazyredraw = true                      -- suppress interim screen updates
+
+  vim.cmd('normal! y')                         -- real yank (no remaps)
+
+  -- restore cursor to saved position
+  vim.api.nvim_win_set_cursor(win, pos)
+  vim.o.lazyredraw = originalConfig                      -- restore original option
+end, { silent = true })
 
 -- Preview for HTML
 vim.keymap.set(
@@ -687,7 +703,6 @@ require("lazy").setup({
     { "tpope/vim-endwise", event = "InsertEnter" },
     { "tpope/vim-repeat", event = "VeryLazy" },
     { "nelstrom/vim-visual-star-search", event = "VeryLazy" },
-    { "sickill/vim-pasta" },
     { "conradirwin/vim-bracketed-paste" },
 
     -- Text objects
