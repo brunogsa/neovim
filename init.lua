@@ -893,13 +893,31 @@ require("lazy").setup({
       event = "VeryLazy",
     },
 
-    -- NERDTree
+    -- Project / Folder tree
     {
-      "scrooloose/nerdtree",
-      cmd = "NERDTreeToggle",
-      init = function()
-        vim.keymap.set("n", "<leader>tp", ":NERDTreeToggle<CR>", { desc = ":NERDTreeToggle" })
-        vim.g.NERDTreeHijackNetrw = 1
+      "nvim-tree/nvim-tree.lua",
+      config = function()
+        require("nvim-tree").setup({
+          -- example setup, tweak to your preference
+          view = {
+            width = 30,
+            side = "left",
+          },
+          renderer = {
+            icons = {
+              show = {
+                file = false,
+                folder = false,
+                folder_arrow = false,
+                git = false,
+              },
+            },
+          },
+          filters = {
+            dotfiles = false,
+          },
+        })
+        vim.keymap.set("n", "<leader>tp", ":NvimTreeToggle<CR>", { desc = ":NvimTreeToggle" })
       end,
     },
 
