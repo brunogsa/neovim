@@ -29,7 +29,7 @@ vim.api.nvim_create_autocmd("VimEnter", {
 })
 
 function _G.toggle_foldmethod()
-  local current_foldmethod = vim.opt.foldmethod:get()
+  local current_foldmethod = vim.wo.foldmethod
   if current_foldmethod == 'indent' then
     vim.opt.foldmethod = 'syntax'
   else
@@ -433,6 +433,8 @@ require("lazy").setup({
     frequency = 7 * 24 * 60 * 60, -- check every week
     notify = true,        -- notify when new updates are found
   },
+  -- colorscheme that will be used when installing plugins.
+  install = { colorscheme = { colorscheme } },
   spec = {
     -- ===================
     -- Highlight
@@ -470,7 +472,7 @@ require("lazy").setup({
             palette = {},
             theme = { wave = {}, lotus = {}, dragon = {}, all = {} },
           },
-          overrides = function(colors) -- add/modify highlights
+          overrides = function(_) -- add/modify highlights
             return {}
           end,
           theme = "wave",              -- Load "wave" theme
@@ -813,7 +815,7 @@ require("lazy").setup({
           auto_install = true,
           highlight = {
             enable = true,
-            disable = function(lang, buf)
+            disable = function(_, buf)
               local max_filesize = 100 * 1024 -- 100 KB
               local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(buf))
               return ok and stats and stats.size > max_filesize
@@ -962,7 +964,6 @@ require("lazy").setup({
       dependencies = { "nvim-lua/plenary.nvim" },
       config = function()
         local telescope = require("telescope")
-        local actions = require("telescope.actions")
 
         telescope.setup({
           defaults = {
@@ -1122,7 +1123,6 @@ require("lazy").setup({
 
         -- Snippet helpers
         local s = luasnip.snippet
-        local t = luasnip.text_node
         local i = luasnip.insert_node
 
         luasnip.add_snippets("javascript", {
@@ -1348,9 +1348,22 @@ require("lazy").setup({
         }
 
         for _, server in ipairs(servers) do
-          lspconfig[server].setup({
+          local opts = {
             capabilities = capabilities,
-          })
+          }
+
+          -- If configuring lua_ls, set the "vim" global
+          if server == "lua_ls" then
+            opts.settings = {
+              Lua = {
+                diagnostics = {
+                  globals = { "vim" },
+                },
+              },
+            }
+          end
+
+          lspconfig[server].setup(opts)
         end
 
         -- Keymaps
@@ -1427,11 +1440,6 @@ require("lazy").setup({
       end,
     },
   },
-  -- Configure any other settings here. See the documentation for more details.
-  -- colorscheme that will be used when installing plugins.
-  install = { colorscheme = { colorscheme } },
-  -- automatically check for plugin updates
-  checker = { enabled = true },
 })
 
 vim.cmd.colorscheme(colorscheme)
