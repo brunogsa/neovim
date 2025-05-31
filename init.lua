@@ -1039,7 +1039,7 @@ require("lazy").setup({
     -- Snippets
     -- ===================
 
-    -- TODO: Using LuaSnipets
+    -- Inside nvm-cmp completion engine, since I trigger snippet in completion, after : is typed
 
     -- ===================
     -- Auto Completion
@@ -1071,6 +1071,47 @@ require("lazy").setup({
       config = function()
         local cmp = require("cmp")
         local luasnip = require("luasnip")
+
+        -- Snippets config
+        local s = luasnip.snippet
+        local t = luasnip.text_node
+        local i = luasnip.insert_node
+
+        luasnip.add_snippets("javascript", {
+          s(":if_solo", { t("if ("), i(1), t({") {", "  "}), i(0), t({"", "}"}) }),
+          s(":if_else", { t("if ("), i(1), t({") {", "  "}), i(0), t({"", "} else {", "  ", "}"}) }),
+          s(":if_else_if", { t("if ("), i(1), t({") {", "  "}), i(0), t({"", "} else if () {", "  ", "} else {", "  ", "}"}) }),
+          s(":switch", { t("switch ("), i(1), t({") {", "  case 'TODO': {", "  ", "  }", "  default: {", "  ", "  }", "}"}) }),
+          s(":for_i", { t("for (let i = 0; i < "), i(1), t({"; i++) {", "  "}), i(0), t({"", "}"}) }),
+          s(":for_let", { t("for (let "), i(1), t(" of LIST) {"), t({"", "  "}), i(0), t({"", "}"}) }),
+          s(":while", { t("while ("), i(1), t({") {", "  "}), i(0), t({"", "}"}) }),
+          s(":func_decl", { t("function ("), i(1), t({") {", "  "}), i(0), t({"", "}"}) }),
+          s(":func_named", { t("const "), i(1), t(" = function () {"), t({"", "  "}), i(0), t({"", "};"}) }),
+          s(":func_arr_decl", { t("("), i(1), t({") => {", "  "}), i(0), t({"", "}"}) }),
+          s(":func_arr_named", { t("const "), i(1), t(" = () => {"), t({"", "  "}), i(0), t({"", "};"}) }),
+          s(":class_decl", { t("class "), i(1), t({" {", "  constructor() {", "  }", "}"}) }),
+          s(":class_meth", { i(1), t({"() {", "  "}), i(0), t({"", "}"}) }),
+          s(":export", { t("export default {"), t({"", "  "}), i(0), t({"", "};"}) }),
+          s(":import", { t("import "), i(1), t(" from 'TODO';") }),
+          s(":required", { t("const "), i(1), t(" = require('TODO');") }),
+        })
+
+        luasnip.add_snippets("typescript", luasnip.get_snippets("javascript"))
+        luasnip.add_snippets("python", {
+          s(":if_solo", { t("if "), i(1), t({":", "  "}), i(0) }),
+          s(":if_else", { t("if "), i(1), t({":", "  "}), i(0), t({"", "else:", "  "}) }),
+          s(":while", { t("while "), i(1), t({":", "  "}), i(0) }),
+          s(":func_decl", { t("def "), i(1), t("():"), t({"", "  "}), i(0) }),
+        })
+        luasnip.add_snippets("sh", {
+          s(":if_solo", { t("if "), i(1), t({"; then", "  "}), i(0), t({"", "fi"}) }),
+          s(":while", { t("while "), i(1), t({"; do", "  "}), i(0), t({"", "done"}) }),
+        })
+        luasnip.add_snippets("go", {
+          s(":if_solo", { t("if "), i(1), t({"{", "  "}), i(0), t({"", "}"}) }),
+          s(":for_i", { t("for i := 0; i < "), i(1), t("; i++ {"), t({"", "  "}), i(0), t({"", "}"}) }),
+          s(":func_decl", { t("func "), i(1), t("() {"), t({"", "  "}), i(0), t({"", "}"}) }),
+        })
 
         cmp.setup({
           snippet = {
