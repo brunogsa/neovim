@@ -329,9 +329,28 @@ vim.keymap.set(
 -- Selected last pasted text
 vim.keymap.set('n', 'gp', "V']", { silent = true })
 
--- Autoformat pasted text, and jump to the end of the content
-vim.keymap.set('n', 'p', "p=']']$", { silent = true })
-vim.keymap.set('n', 'P', "P=']']j", { silent = true })
+-- Autoformat pasted text, and keep cursor in the best place
+vim.keymap.set({ 'n', 'v' }, 'p', function()
+  local win = 0
+  local pos = vim.api.nvim_win_get_cursor(win)
+  local originalConfig = vim.o.lazyredraw
+  vim.o.lazyredraw = true
+
+  if vim.fn.mode() == 'v' or vim.fn.mode() == 'V' then
+    -- Visual paste and reindent
+    vim.cmd('normal! p')        -- paste
+    vim.cmd('normal! gv=gv')    -- reselect and reindent
+  else
+    -- Normal paste and reindent
+    vim.cmd("normal! p=']")   -- paste and reindent
+  end
+
+  -- Restore original cursor position
+  vim.api.nvim_win_set_cursor(win, pos)
+  vim.o.lazyredraw = originalConfig
+end, { silent = true })
+
+vim.keymap.set('n', 'P', "P=']", { silent = true })
 
 -- Keep cursor position after yanking on visual selections
 -- Has an optimization to avoid 2 vim redraws, which cause a flicker
@@ -347,6 +366,19 @@ vim.keymap.set('v', 'y', function()
   -- restore cursor to saved position
   vim.api.nvim_win_set_cursor(win, pos)
   vim.o.lazyredraw = originalConfig                      -- restore original option
+end, { silent = true })
+
+-- Keep cursor position after reindenting visually selected text
+vim.keymap.set('v', '=', function()
+  local win = 0
+  local pos = vim.api.nvim_win_get_cursor(win)
+  local originalConfig = vim.o.lazyredraw
+  vim.o.lazyredraw = true
+
+  vim.cmd('normal! =')   -- reindent selected region
+
+  vim.api.nvim_win_set_cursor(win, pos)
+  vim.o.lazyredraw = originalConfig
 end, { silent = true })
 
 -- Preview for HTML
