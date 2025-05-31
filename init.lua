@@ -788,8 +788,8 @@ require("lazy").setup({
             end,
             additional_vim_regex_highlighting = false, -- Keep disable to avoid redraw exceeded time issues
           },
-          indent = { enable = false },
-          fold = { enable = true },
+          indent = { enable = true },
+          fold = { enable = false },
         })
       end,
     },
@@ -1086,60 +1086,178 @@ require("lazy").setup({
       config = function()
         local cmp = require("cmp")
         local luasnip = require("luasnip")
+        local fmt     = require("luasnip.extras.fmt").fmt
 
-        -- Snippets config
+        -- Snippet helpers
         local s = luasnip.snippet
         local t = luasnip.text_node
         local i = luasnip.insert_node
 
         luasnip.add_snippets("javascript", {
-          s(":if_solo", { t("if ("), i(1), t({") {", "  "}), i(0), t({"", "}"}) }),
-          s(":if_else", { t("if ("), i(1), t({") {", "  "}), i(0), t({"", "} else {", "  ", "}"}) }),
-          s(":if_else_if", { t("if ("), i(1), t({") {", "  "}), i(0), t({"", "} else if () {", "  ", "} else {", "  ", "}"}) }),
-          s(":switch", { t("switch ("), i(1), t({") {", "  case 'TODO': {", "  ", "  }", "  default: {", "  ", "  }", "}"}) }),
-          s(":for_i", { t("for (let i = 0; i < "), i(1), t({"; i++) {", "  "}), i(0), t({"", "}"}) }),
-          s(":for_let", { t("for (let "), i(1), t(" of LIST) {"), t({"", "  "}), i(0), t({"", "}"}) }),
-          s(":while", { t("while ("), i(1), t({") {", "  "}), i(0), t({"", "}"}) }),
-          s(":func_decl", { t("function ("), i(1), t({") {", "  "}), i(0), t({"", "}"}) }),
-          s(":func_named", { t("const "), i(1), t(" = function () {"), t({"", "  "}), i(0), t({"", "};"}) }),
-          s(":func_arr_decl", { t("("), i(1), t({") => {", "  "}), i(0), t({"", "}"}) }),
-          s(":func_arr_named", { t("const "), i(1), t(" = () => {"), t({"", "  "}), i(0), t({"", "};"}) }),
-          s(":class_decl", { t("class "), i(1), t({" {", "  constructor() {", "  }", "}"}) }),
-          s(":class_meth", { i(1), t({"() {", "  "}), i(0), t({"", "}"}) }),
-          s(":export", { t("export default {"), t({"", "  "}), i(0), t({"", "};"}) }),
-          s(":import", { t("import "), i(1), t(" from 'TODO';") }),
-          s(":required", { t("const "), i(1), t(" = require('TODO');") }),
+          s(
+            ":if_solo",
+            fmt([[
+              if ({}) {{
+              }}
+            ]], { i(1, " ") })
+          ),
+
+          s(
+            ":if_else", fmt([[
+              if ({}) {{
+              }} else {{
+              }}
+            ]], { i(1, " ") })
+          ),
+
+          s(
+            ":if_else_if",
+            fmt([[
+              if ({}) {{
+              }} else if () {{
+              }} else {{
+              }}
+            ]], { i(1, " ") })
+          ),
+
+          s(
+            ":switch",
+            fmt([[
+              switch ({}) {{
+                case '': {{
+                }}
+                default: {{
+                }}
+              }}
+            ]], { i(1, " ") })
+          ),
+
+          s(
+            ":for_i", fmt([[
+              for (let i = 0; i < {}; i++) {{
+              }}
+            ]], { i(1, " ") })
+          ),
+
+          s(
+            ":for_let", fmt([[
+              for (let {} of []) {{
+              }}
+            ]], { i(1, " ") })
+          ),
+
+          s(
+            ":while",
+            fmt([[
+              while ({}) {{
+              }}
+            ]], { i(1, " ") })
+          ),
+
+          s(
+            ":func_decl",
+            fmt([[
+              function ({}) {{
+              }}
+            ]], { i(1, " ") })
+          ),
+
+          s(
+            ":func_named", fmt([[
+              const {} = function () {{
+              }};
+            ]], { i(1, " ") })
+          ),
+
+          s(
+            ":func_arr_decl",
+            fmt([[
+              ({}) => {{
+              }}
+            ]], { i(1, " ") })
+          ),
+
+          s(
+            ":func_arr_named",
+            fmt([[
+              const {} = () => {{
+              }};
+            ]], { i(1, " ") })
+          ),
+
+          s(
+            ":class_decl",
+            fmt([[
+              class {} {{
+                constructor() {{
+                }}
+              }}
+            ]], { i(1, " ") })
+          ),
+
+          s(
+            ":class_meth",
+            fmt([[
+              {}() {{
+              }}
+            ]], { i(1, " ") })
+          ),
+
+          s(
+            ":export",
+            fmt([[
+              export default {{
+                {}
+              }};
+            ]], { i(1, " ") })
+          ),
+
+          s(
+            ":import",
+            fmt([[
+              import {} from '';
+            ]], { i(1, " ") })
+          ),
+
+          s(
+            ":required",
+            fmt([[
+              const {} = require('');
+            ]], { i(1, " ") })
+          ),
         })
 
+        -- Also apply the same set for TypeScript
         luasnip.add_snippets("typescript", luasnip.get_snippets("javascript"))
-        luasnip.add_snippets("python", {
-          s(":if_solo", { t("if "), i(1), t({":", "  "}), i(0) }),
-          s(":if_else", { t("if "), i(1), t({":", "  "}), i(0), t({"", "else:", "  "}) }),
-          s(":while", { t("while "), i(1), t({":", "  "}), i(0) }),
-          s(":func_decl", { t("def "), i(1), t("():"), t({"", "  "}), i(0) }),
-        })
-        luasnip.add_snippets("sh", {
-          s(":if_solo", { t("if "), i(1), t({"; then", "  "}), i(0), t({"", "fi"}) }),
-          s(":while", { t("while "), i(1), t({"; do", "  "}), i(0), t({"", "done"}) }),
-        })
-        luasnip.add_snippets("go", {
-          s(":if_solo", { t("if "), i(1), t({"{", "  "}), i(0), t({"", "}"}) }),
-          s(":for_i", { t("for i := 0; i < "), i(1), t("; i++ {"), t({"", "  "}), i(0), t({"", "}"}) }),
-          s(":func_decl", { t("func "), i(1), t("() {"), t({"", "  "}), i(0), t({"", "}"}) }),
+
+        -- Python
+        -- TODO: same of javascript, but ported to Python
+
+        -- Shell
+        -- TODO: same of javascript, but ported to Shell
+
+        -- Go
+        -- TODO: same of javascript, but ported to Go
+
+        vim.api.nvim_create_autocmd("User", {
+          pattern = "LuasnipInsertNodeEnter",
+          callback = function()
+            vim.cmd("normal! `[=']")  -- re-indent just the snippet range
+          end,
         })
 
         cmp.setup({
           snippet = {
             expand = function(args)
               luasnip.lsp_expand(args.body)
-            end,
+            end
           },
           mapping = cmp.mapping.preset.insert({
             ["<Tab>"] = cmp.mapping.select_next_item(),
             ["<S-Tab>"] = cmp.mapping.select_prev_item(),
             ["<CR>"] = cmp.mapping.confirm({ select = true }),
             ["<C-Space>"] = cmp.mapping.complete(),
-            ["<C-e>"] = cmp.mapping.abort(),        -- close the completion menu
+            ["<C-e>"] = cmp.mapping.abort()
           }),
           sources = cmp.config.sources({
             { name = "nvim_lsp" },
@@ -1151,7 +1269,7 @@ require("lazy").setup({
             { name = "cmp_zsh" },
             { name = "treesitter" },
             { name = "omni" },
-            { name = "tmux" },
+            { name = "tmux" }
           }),
           formatting = {
             format = function(entry, vim_item)
@@ -1165,13 +1283,13 @@ require("lazy").setup({
                 cmp_zsh = "[Zsh]",
                 treesitter = "[TS]",
                 omni = "[Omni]",
-                tmux = "[Tmux]",
+                tmux = "[Tmux]"
               })[entry.source.name] or ""
               return vim_item
-            end,
-          },
+            end
+          }
         })
-      end,
+      end
     },
 
     {
