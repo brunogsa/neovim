@@ -28,6 +28,29 @@ vim.api.nvim_create_autocmd("VimEnter", {
   end,
 })
 
+-- Only highlight current window's cursorline
+vim.api.nvim_create_autocmd({ "InsertLeave", "WinEnter", "BufEnter" }, {
+  callback = function()
+    vim.wo.cursorline = true
+  end,
+})
+vim.api.nvim_create_autocmd({ "InsertEnter", "WinLeave", "BufLeave" }, {
+  callback = function()
+    vim.wo.cursorline = false
+  end,
+})
+
+-- Save the current neovim file I'm at
+-- Used in a tmux hotkey
+vim.api.nvim_create_autocmd({"BufEnter", "FocusGained"}, {
+  callback = function()
+    local file = vim.fn.expand("%:p")
+    local last_file_path = vim.fn.expand("$HOME/.nvim_last_file")
+    vim.fn.writefile({file}, last_file_path)
+  end
+})
+
+-- Toggle foldmethod between "indent" and "syntax"
 function _G.toggle_foldmethod()
   local current_foldmethod = vim.wo.foldmethod
   if current_foldmethod == 'indent' then
@@ -36,20 +59,6 @@ function _G.toggle_foldmethod()
     vim.opt.foldmethod = 'indent'
   end
 end
-
-vim.api.nvim_create_user_command('Msglog', function()
-  -- Get message history
-  local output = vim.api.nvim_exec('messages', true)
-  local lines = vim.split(output, '\n')
-
-  -- Open a new split buffer
-  vim.cmd.new()
-  vim.api.nvim_buf_set_lines(0, 0, -1, false, lines)
-  vim.bo.buftype = 'nofile'
-  vim.bo.bufhidden = 'wipe'
-  vim.bo.swapfile = false
-  vim.bo.filetype = 'messages'
-end, {})
 
 -- Create an autocommand for CursorHold to show diagnostics
 vim.api.nvim_create_autocmd("CursorHold", {
@@ -75,16 +84,6 @@ vim.api.nvim_create_autocmd("CursorHold", {
       end
     end
   end,
-})
-
--- Save the current neovim file I'm at
--- Used in a tmux hotkey
-vim.api.nvim_create_autocmd({"BufEnter", "FocusGained"}, {
-  callback = function()
-    local file = vim.fn.expand("%:p")
-    local last_file_path = vim.fn.expand("$HOME/.nvim_last_file")
-    vim.fn.writefile({file}, last_file_path)
-  end
 })
 
 -- =======================================
@@ -435,10 +434,110 @@ require("lazy").setup({
   },
   -- colorscheme that will be used when installing plugins.
   install = { colorscheme = { colorscheme } },
+
   spec = {
+
     -- ===================
-    -- Highlight
+    -- Core / Essentials
     -- ===================
+
+    -- Tmux focus event support
+    {
+      "tmux-plugins/vim-tmux-focus-events",
+      event = "VeryLazy",
+    },
+
+    -- Handle large files efficiently
+    {
+      "vim-scripts/LargeFile",
+      event = "BufReadPre",
+    },
+
+    -- Auto detect indentation (2, 4 spaces, or tabs)
+    { "tpope/vim-sleuth" },
+
+    -- Space/tab converter
+    {
+      "rhlobo/vim-super-retab",
+      cmd = { "Space2Tab", "Tab2Space" },
+    },
+
+    -- Helper to remember hotkeys
+    {
+      "folke/which-key.nvim",
+      event = "VeryLazy",
+      init = function()
+        -- Ensure which-key triggers work as expected
+        vim.o.timeout = true
+        vim.o.timeoutlen = 300
+      end,
+      config = function()
+        local wk = require("which-key")
+        wk.setup({
+          plugins = {
+            spelling = { enabled = true },
+          },
+          -- Fix deprecation: use `win` instead of `window`
+          win = {
+            border = "rounded",
+          },
+        })
+      end,
+    },
+
+    -- Allow easily toggling quickfix and location lists
+    {
+      "Valloric/ListToggle",
+      init = function()
+        vim.g.lt_location_list_toggle_map = "<leader>tl"
+        vim.g.lt_quickfix_list_toggle_map = "<leader>tq"
+      end,
+      cmd = { "LTLocationListToggle", "LTQuickfixListToggle" }, -- optional for lazy loading
+    },
+
+    {
+      "szw/vim-maximizer",
+      cmd = "MaximizerToggle",
+      init = function()
+        vim.g.maximizer_set_default_mapping = 0
+
+        vim.keymap.set('n', '<leader><F3>', ':MaximizerToggle<CR>', { silent = true, desc = ":MaximizerToggle" })
+        vim.keymap.set('n', '<C-w>z', ':MaximizerToggle<CR>', { silent = true, desc = ":MaximizerToggle" })
+      end,
+    },
+
+    -- Better paste behavior
+    { "conradirwin/vim-bracketed-paste" },
+
+    -- Smooth scrolling, for avoiding loosing where you are
+    {
+      "yuttie/comfortable-motion.vim",
+      event = "VeryLazy",
+    },
+
+    -- Treesitter
+    {
+      "nvim-treesitter/nvim-treesitter",
+      build = ":TSUpdate",
+      config = function()
+        require("nvim-treesitter.configs").setup({
+          ensure_installed = "all",
+          sync_install = true,
+          auto_install = true,
+          highlight = {
+            enable = true,
+            disable = function(_, buf)
+              local max_filesize = 100 * 1024 -- 100 KB
+              local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(buf))
+              return ok and stats and stats.size > max_filesize
+            end,
+            additional_vim_regex_highlighting = false, -- Keep disable to avoid redraw exceeded time issues
+          },
+          indent = { enable = true },
+          fold = { enable = false },
+        })
+      end,
+    },
 
     -- Colorschemes
     {
@@ -487,48 +586,10 @@ require("lazy").setup({
     -- Indentation guides
     {
       "lukas-reineke/indent-blankline.nvim",
-      tag = "v3.8.6",
       config = function()
         require("ibl").setup({
           indent = { char = "┆" },
           scope = { enabled = true, show_start = true, show_end = true },
-        })
-      end,
-    },
-
-    -- Only highlight current window's cursorline
-    { "vim-scripts/CursorLineCurrentWindow" },
-
-    -- CSV
-    {
-      "mechatroner/rainbow_csv",
-      ft = "csv",
-      init = function()
-        vim.g.disable_rainbow_key_mappings = 0
-      end,
-    },
-
-    -- ===================
-    -- Core
-    -- ===================
-    {
-      "folke/which-key.nvim",
-      event = "VeryLazy",
-      init = function()
-        -- Ensure which-key triggers work as expected
-        vim.o.timeout = true
-        vim.o.timeoutlen = 300
-      end,
-      config = function()
-        local wk = require("which-key")
-        wk.setup({
-          plugins = {
-            spelling = { enabled = true },
-          },
-          -- Fix deprecation: use `win` instead of `window`
-          win = {
-            border = "rounded",
-          },
         })
       end,
     },
@@ -563,86 +624,28 @@ require("lazy").setup({
         })
       end,
     },
-    {
-      "szw/vim-maximizer",
-      cmd = "MaximizerToggle",
-      init = function()
-        vim.g.maximizer_set_default_mapping = 0
 
-        vim.keymap.set('n', '<leader><F3>', ':MaximizerToggle<CR>', { silent = true, desc = ":MaximizerToggle" })
-        vim.keymap.set('n', '<C-w>z', ':MaximizerToggle<CR>', { silent = true, desc = ":MaximizerToggle" })
-      end,
-    },
+    -- Highlight current word under cursor
     {
-      "numToStr/Comment.nvim",
+      "RRethy/vim-illuminate",
+      event = "VeryLazy",
       config = function()
-        require("Comment").setup()
-        local api = require('Comment.api')
-
-        vim.keymap.set('n', '<leader><leader>', function()
-          api.toggle.linewise.current()
-        end, { desc = "Toggle line comment" })
-
-        vim.keymap.set(
-          'x',
-          '<leader><leader>',
-          "<esc><cmd>lua require('Comment.api').toggle.linewise(vim.fn.visualmode())<CR>",
-          { desc = "Toggle visual comment" }
-        )
+        vim.api.nvim_set_hl(0, "illuminatedWord",     { underline = true })
+        vim.api.nvim_set_hl(0, "illuminatedCurWord",  { underline = true })
+        vim.api.nvim_set_hl(0, "illuminatedWordText", { underline = true })
       end,
     },
+
+    -- Better CSV visualization
     {
-      "Valloric/ListToggle",
+      "mechatroner/rainbow_csv",
+      ft = "csv",
       init = function()
-        vim.g.lt_location_list_toggle_map = "<leader>tl"
-        vim.g.lt_quickfix_list_toggle_map = "<leader>tq"
-      end,
-      cmd = { "LTLocationListToggle", "LTQuickfixListToggle" }, -- optional for lazy loading
-    },
-    {
-      "kylechui/nvim-surround",
-      config = function()
-        require("nvim-surround").setup()
-      end,
-    },
-    {
-      "alvan/vim-closetag",
-      ft = { "html", "xhtml", "phtml", "php", "jsx", "javascript" },
-      event = "InsertEnter",
-      init = function()
-        vim.g.closetag_filenames = "*.html,*.xhtml,*.phtml,*.php,*.jsx,*.js"
-      end,
-    },
-    {
-      "windwp/nvim-autopairs",
-      event = "InsertEnter",
-      config = function()
-        require("nvim-autopairs").setup({
-          check_ts = true, -- Treesitter integration
-        })
-
-        -- Integrate with nvim-cmp
-        local cmp_autopairs = require("nvim-autopairs.completion.cmp")
-        local cmp = require("cmp")
-        cmp.event:on(
-        "confirm_done",
-        cmp_autopairs.on_confirm_done()
-        )
+        vim.g.disable_rainbow_key_mappings = 0
       end,
     },
 
-    { "chrisbra/vim-diff-enhanced" },
-    { "rickhowe/diffchar.vim" },
-
-    {
-      "AndrewRadev/linediff.vim",
-      cmd = { "Linediff", "LinediffReset" },
-      init = function()
-        vim.keymap.set("v", "<leader>d", ":Linediff<cr>", { silent = true, desc = ":Linediff" })
-        vim.keymap.set("n", "<leader>D", ":LinediffReset<cr>", { silent = true, desc = ":LinediffReset" })
-      end,
-    },
-
+    -- Highlight interesting words for debug/focus
     {
       "lfv89/vim-interestingwords",
       init = function()
@@ -676,18 +679,237 @@ require("lazy").setup({
       end,
     },
 
+    -- Better repeaters via .
+    { "tpope/vim-repeat", event = "VeryLazy" },
+
+    -- Toggle support for comments on different languages
     {
-      "RRethy/vim-illuminate",
-      event = "VeryLazy",
+      "numToStr/Comment.nvim",
       config = function()
-        vim.api.nvim_set_hl(0, "illuminatedWord",     { underline = true })
-        vim.api.nvim_set_hl(0, "illuminatedCurWord",  { underline = true })
-        vim.api.nvim_set_hl(0, "illuminatedWordText", { underline = true })
+        require("Comment").setup()
+        local api = require('Comment.api')
+
+        vim.keymap.set('n', '<leader><leader>', function()
+          api.toggle.linewise.current()
+        end, { desc = "Toggle line comment" })
+
+        vim.keymap.set(
+          'x',
+          '<leader><leader>',
+          "<esc><cmd>lua require('Comment.api').toggle.linewise(vim.fn.visualmode())<CR>",
+          { desc = "Toggle visual comment" }
+        )
       end,
     },
 
+    -- Text objects
+    { "kana/vim-textobj-user" }, -- dependency for others
+
+    -- selects a section of word
+    -- pressing: div
+    -- produces: produ|ctOwner -> |Owner
+    {
+      "Julian/vim-textobj-variable-segment",
+      dependencies = { "kana/vim-textobj-user" },
+    },
+
+    -- selects the next block available
+    -- pressing: dib
+    -- produces: "use|r" -> ""
+    -- produces: 'use|r' -> ''
+    -- produces: ( use|r ) -> ()
+    -- etc
+    {
+      "rhysd/vim-textobj-anyblock",
+      dependencies = { "kana/vim-textobj-user" },
+    },
+
+    -- Auto Closes
+
+    -- Auto-pairs brackets, quotes, etc
+    -- Integrates with Treesitter for smarter pairing
+    {
+      "windwp/nvim-autopairs",
+      event = "InsertEnter",
+      config = function()
+        require("nvim-autopairs").setup({
+          check_ts = true, -- Treesitter integration
+        })
+
+        -- Integrate with nvim-cmp
+        local cmp_autopairs = require("nvim-autopairs.completion.cmp")
+        local cmp = require("cmp")
+        cmp.event:on(
+          "confirm_done",
+          cmp_autopairs.on_confirm_done()
+        )
+      end,
+    },
+
+    -- Quickly add/change/delete surrounding characters:
+    -- quotes, parentheses, tags, etc
+    {
+      "kylechui/nvim-surround",
+      config = function()
+        require("nvim-surround").setup()
+      end,
+    },
+
+    -- Auto-closes HTML/XML tags, using Treesitter
+    {
+      "windwp/nvim-ts-autotag",
+      ft = {
+        "html",
+        "xhtml",
+        "xml",
+        "php",
+        "javascript",
+        "typescriptreact",
+        "javascriptreact",
+      },
+      event = "InsertEnter",
+      opts = {},
+    },
+
+    -- Auto-completes block-ending keywords:
+    -- like end in Lua/Ruby
+    {
+      "tpope/vim-endwise",
+      ft = {
+        "lua",
+        "ruby",
+        "elixir",
+        "sh",
+        "bash",
+        "zsh",
+      },
+      event = "InsertEnter",
+    },
+
+    -- Project / Folder tree
+    {
+      "nvim-tree/nvim-tree.lua",
+      config = function()
+        require("nvim-tree").setup({
+          -- example setup, tweak to your preference
+          view = {
+            width = 30,
+            side = "left",
+          },
+          renderer = {
+            icons = {
+              show = {
+                file = false,
+                folder = false,
+                folder_arrow = false,
+                git = false,
+              },
+            },
+          },
+          filters = {
+            dotfiles = false,
+          },
+        })
+        vim.keymap.set("n", "<leader>tp", ":NvimTreeToggle<CR>", { desc = ":NvimTreeToggle" })
+      end,
+    },
+
+    -- Provide context to code being read
+    {
+      "wellle/context.vim",
+      init = function()
+        vim.g.context_add_mappings = 0
+        vim.g.context_add_autocmds = 0
+        vim.g.context_filetype_blacklist = { "nerdtree" }
+
+        vim.api.nvim_create_autocmd("User", {
+          pattern = "VeryLazy",
+          callback = function()
+            vim.cmd("ContextActivate")
+          end,
+        })
+        vim.api.nvim_create_autocmd({ "CursorHold", "BufWritePost" }, {
+          callback = function()
+            vim.cmd("ContextUpdate")
+          end,
+        })
+      end,
+    },
+
+    -- Symbols outline
+    {
+      "stevearc/aerial.nvim",
+      config = function()
+        require("aerial").setup({
+          backends = { "lsp", "treesitter", "markdown" }, -- prioritize LSP, fallback to Treesitter
+          layout = {
+            min_width = 25,
+            max_width = 40,
+            default_direction = "prefer_right",
+          },
+          show_guides = true,
+          highlight_on_hover = true,
+        })
+
+        -- Keymap to toggle the aerial sidebar (symbols)
+        vim.keymap.set("n", "<leader>ts", ":AerialToggle!<CR>", { silent = true, desc = "Toggle Symbols outline" })
+      end,
+    },
+
+    -- TreeSJ for join/split blocks
+    {
+      "Wansmer/treesj",
+      keys = {
+        { "<leader>lt", ":TSJToggle<CR>", desc = "Toggle Split/Join format" },
+      },
+      cmd = { "TSJToggle", "TSJSplit", "TSJJoin" },
+      config = function()
+        require("treesj").setup({
+          use_default_keymaps = false,
+          check_syntax_error = true,
+          max_join_length = 2048,
+          cursor_behavior = "hold",
+          notify = true,
+          dot_repeat = true,
+        })
+      end,
+    },
+
+    -- Multi-cursor
+    {
+      "mg979/vim-visual-multi",
+      init = function()
+        vim.g.VM_default_mappings = 0
+        vim.g.VM_mouse_mappings = 0
+        vim.g.VM_silent_exit = 1
+        vim.g.VM_show_warnings = 0
+      end,
+      keys = {
+        { "<C-n>", desc = "Multi Cursor: add cursor" },
+        { "<C-x>", desc = "Multi Cursor: skip match" },
+      },
+    },
+
+    -- Tabular alignment
+    {
+      "godlygeek/tabular",
+      cmd = "Tabularize",
+    },
+
+    -- ===================
+    -- Search
+    -- ===================
+
+    -- Search by using *
+    {
+      "nelstrom/vim-visual-star-search",
+      keys = { "*", "#", "g*", "g#" },
+    },
+
+    -- Better search indexes shown
     {
       "kevinhwang91/nvim-hlslens",
+      keys = { "n", "N", "*", "#", "g*", "g#" },
       config = function()
         vim.keymap.set(
           "n",
@@ -731,244 +953,11 @@ require("lazy").setup({
           { silent = true }
         )
       end,
-      event = "VeryLazy",
-    },
-
-    { "tpope/vim-endwise", event = "InsertEnter" },
-    { "tpope/vim-repeat", event = "VeryLazy" },
-    { "nelstrom/vim-visual-star-search", event = "VeryLazy" },
-    { "conradirwin/vim-bracketed-paste" },
-
-    -- Text objects
-    { "michaeljsmith/vim-indent-object" },
-    { "kana/vim-textobj-user" },
-    {
-      "paradigm/TextObjectify",
-      dependencies = { "kana/vim-textobj-user" },
-    },
-    {
-      "Julian/vim-textobj-variable-segment",
-      dependencies = { "kana/vim-textobj-user" },
-    },
-    {
-      "rhysd/vim-textobj-anyblock",
-      dependencies = { "kana/vim-textobj-user" },
-    },
-
-    -- Troll stopper
-    { "vim-utils/vim-troll-stopper", event = "VeryLazy" },
-
-    -- Auto detect indentation
-    { "tpope/vim-sleuth" },
-
-    -- Markdown preview
-    {
-      "iamcco/markdown-preview.nvim",
-      build = "cd app && npm install",
-      ft = { "markdown", "mermaid", "ghmarkdown" },
-      init = function()
-        vim.g.mkdp_command_for_global = 1
-        vim.g.mkdp_refresh_slow = 1
-        vim.g.mkdp_preview_options = {
-          sync_scroll_type = "middle",
-        }
-
-        vim.keymap.set(
-          "n",
-          "<leader>vm",
-          "<Plug>MarkdownPreviewToggle",
-          { silent = true, desc = ":MarkdownPreviewToggle" }
-        )
-      end,
-    },
-
-    -- Context.vim
-    {
-      "wellle/context.vim",
-      init = function()
-        vim.g.context_add_mappings = 0
-        vim.g.context_add_autocmds = 0
-        vim.g.context_filetype_blacklist = { "nerdtree" }
-
-        vim.api.nvim_create_autocmd("User", {
-          pattern = "VeryLazy",
-          callback = function()
-            vim.cmd("ContextActivate")
-          end,
-        })
-        vim.api.nvim_create_autocmd({ "CursorHold", "BufWritePost" }, {
-          callback = function()
-            vim.cmd("ContextUpdate")
-          end,
-        })
-      end,
-    },
-
-    -- Treesitter
-    {
-      "nvim-treesitter/nvim-treesitter",
-      build = ":TSUpdate",
-      config = function()
-        require("nvim-treesitter.configs").setup({
-          ensure_installed = "all",
-          sync_install = true,
-          auto_install = true,
-          highlight = {
-            enable = true,
-            disable = function(_, buf)
-              local max_filesize = 100 * 1024 -- 100 KB
-              local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(buf))
-              return ok and stats and stats.size > max_filesize
-            end,
-            additional_vim_regex_highlighting = false, -- Keep disable to avoid redraw exceeded time issues
-          },
-          indent = { enable = true },
-          fold = { enable = false },
-        })
-      end,
-    },
-
-    -- Git blame
-    {
-      "f-person/git-blame.nvim",
-      cmd = "GitBlameToggle",
-      init = function()
-        vim.g.gitblame_enabled = 0
-
-        vim.keymap.set(
-          "n",
-          "<leader>tg",
-          ":GitBlameToggle<CR>",
-          { silent = true, desc = ":GitBlameToggle" }
-        )
-      end,
-    },
-
-    {
-      "lewis6991/gitsigns.nvim",
-      event = { "BufReadPre", "BufNewFile" },
-      config = function()
-        require("gitsigns").setup({
-          signs = {
-            add          = { text = "+" },
-            change       = { text = "~" },
-            delete       = { text = "-" },
-            topdelete    = { text = "-" },
-            changedelete = { text = "~" },
-          },
-          on_attach = function(bufnr)
-            local gs = package.loaded.gitsigns
-
-            -- Define a highlight group for the border
-            vim.api.nvim_set_hl(0, "GitsignsBlameBorder", { fg = "LightGreen" })
-
-            -- Navigation
-            vim.keymap.set(
-              "n",
-              "]c",
-              gs.next_hunk,
-              { buffer = bufnr, noremap = true, silent = true, desc = "Next git chunk" }
-            )
-
-            vim.keymap.set(
-              "n",
-              "[c",
-              gs.prev_hunk,
-              { buffer = bufnr, noremap = true, silent = true, desc = "Previous git chunk" }
-            )
-          end,
-        })
-      end,
-    },
-
-    -- Handle large files efficiently
-    {
-      "vim-scripts/LargeFile",
-      event = "BufReadPre",
-    },
-
-    -- Tmux focus event support
-    {
-      "tmux-plugins/vim-tmux-focus-events",
-      event = "VeryLazy",
-    },
-
-    -- Project / Folder tree
-    {
-      "nvim-tree/nvim-tree.lua",
-      config = function()
-        require("nvim-tree").setup({
-          -- example setup, tweak to your preference
-          view = {
-            width = 30,
-            side = "left",
-          },
-          renderer = {
-            icons = {
-              show = {
-                file = false,
-                folder = false,
-                folder_arrow = false,
-                git = false,
-              },
-            },
-          },
-          filters = {
-            dotfiles = false,
-          },
-        })
-        vim.keymap.set("n", "<leader>tp", ":NvimTreeToggle<CR>", { desc = ":NvimTreeToggle" })
-      end,
-    },
-
-    -- Multi-cursor
-    {
-      "mg979/vim-visual-multi",
-      init = function()
-        vim.g.VM_default_mappings = 0
-        vim.g.VM_mouse_mappings = 0
-        vim.g.VM_silent_exit = 1
-        vim.g.VM_show_warnings = 0
-      end,
-      event = "VeryLazy",
-    },
-
-    -- Smooth scrolling
-    {
-      "yuttie/comfortable-motion.vim",
-      event = "VeryLazy",
-    },
-
-    -- TreeSJ for join/split blocks
-    {
-      "Wansmer/treesj",
-      config = function()
-        require("treesj").setup({
-          use_default_keymaps = false,
-          check_syntax_error = true,
-          max_join_length = 2048,
-          cursor_behavior = "hold",
-          notify = true,
-          dot_repeat = true,
-        })
-
-        vim.keymap.set("n", "<leader>lt", ":TSJToggle<CR>", { silent = true, desc = "Toggle Split/Join format" })
-      end,
-    },
-
-    -- Tabular alignment
-    {
-      "godlygeek/tabular",
-      cmd = "Tabularize",
-    },
-
-    -- Space/tab converter
-    {
-      "rhlobo/vim-super-retab",
-      cmd = { "Space2Tab", "Tab2Space" },
     },
 
     -- Fuzzy search
+    { "nvim-lua/plenary.nvim" }, -- dependency
+
     {
       "nvim-telescope/telescope-fzf-native.nvim",
       build = "make",
@@ -980,6 +969,10 @@ require("lazy").setup({
     {
       "nvim-telescope/telescope.nvim",
       dependencies = { "nvim-lua/plenary.nvim" },
+      keys = {
+        { "gf", mode = { "n", "v" }, desc = "Fuzzy search for word/selection" },
+        { "gs", mode = { "n", "v" }, desc = "Exact search for word/selection" },
+      },
       config = function()
         local telescope = require("telescope")
 
@@ -1076,29 +1069,82 @@ require("lazy").setup({
       end,
     },
 
-    -- ChatGPT + dependencies
-    { "MunifTanjim/nui.nvim" },
-    { "nvim-lua/plenary.nvim" },
-    { "folke/trouble.nvim" },
+    -- ===================
+    -- Diff
+    -- ===================
 
+    -- Improves vim-diff
+    { "chrisbra/vim-diff-enhanced" },
+
+    -- On diff, shows it at character level
+    { "rickhowe/diffchar.vim" },
+
+    -- Allow comparing 2 pieces of text in the buffer
     {
-      "jackMort/ChatGPT.nvim",
-      config = function()
-        require("chatgpt").setup()
+      "AndrewRadev/linediff.vim",
+      cmd = { "Linediff", "LinediffReset" },
+      init = function()
+        vim.keymap.set("v", "<leader>d", ":Linediff<cr>", { silent = true, desc = ":Linediff" })
+        vim.keymap.set("n", "<leader>D", ":LinediffReset<cr>", { silent = true, desc = ":LinediffReset" })
+      end,
+    },
+
+    -- ===================
+    -- Git
+    -- ===================
+
+    -- Git blame
+    {
+      "f-person/git-blame.nvim",
+      cmd = "GitBlameToggle",
+      init = function()
+        vim.g.gitblame_enabled = 0
+
         vim.keymap.set(
-          { "n", "v" },
-          "<leader>e",
-          ":ChatGPTRun explain_code<CR>",
-          { silent = false, desc = ":ChatGPTRun explain_code" }
+          "n",
+          "<leader>tg",
+          ":GitBlameToggle<CR>",
+          { silent = true, desc = ":GitBlameToggle" }
         )
       end,
-      cmd = { "ChatGPT", "ChatGPTRun" },
-      dependencies = {
-        "MunifTanjim/nui.nvim",
-        "nvim-lua/plenary.nvim",
-        "folke/trouble.nvim",
-        "nvim-telescope/telescope.nvim",
-      },
+    },
+
+    -- Git chunks / signs
+    {
+      "lewis6991/gitsigns.nvim",
+      event = { "BufReadPre", "BufNewFile" },
+      config = function()
+        require("gitsigns").setup({
+          signs = {
+            add          = { text = "+" },
+            change       = { text = "~" },
+            delete       = { text = "-" },
+            topdelete    = { text = "-" },
+            changedelete = { text = "~" },
+          },
+          on_attach = function(bufnr)
+            local gs = package.loaded.gitsigns
+
+            -- Define a highlight group for the border
+            vim.api.nvim_set_hl(0, "GitsignsBlameBorder", { fg = "LightGreen" })
+
+            -- Navigation
+            vim.keymap.set(
+              "n",
+              "]c",
+              gs.next_hunk,
+              { buffer = bufnr, noremap = true, silent = true, desc = "Next git chunk" }
+            )
+
+            vim.keymap.set(
+              "n",
+              "[c",
+              gs.prev_hunk,
+              { buffer = bufnr, noremap = true, silent = true, desc = "Previous git chunk" }
+            )
+          end,
+        })
+      end,
     },
 
     -- ===================
@@ -1455,6 +1501,37 @@ require("lazy").setup({
             diagnostics.yamllint,
           },
         })
+      end,
+    },
+
+    -- ===================
+    -- AI
+    -- ===================
+
+    -- TODO
+
+    -- ===================
+    -- Previewers
+    -- ===================
+
+    -- Markdown preview
+    {
+      "iamcco/markdown-preview.nvim",
+      build = "cd app && npm install",
+      ft = { "markdown", "mermaid", "ghmarkdown" },
+      init = function()
+        vim.g.mkdp_command_for_global = 1
+        vim.g.mkdp_refresh_slow = 1
+        vim.g.mkdp_preview_options = {
+          sync_scroll_type = "middle",
+        }
+
+        vim.keymap.set(
+          "n",
+          "<leader>vm",
+          "<Plug>MarkdownPreviewToggle",
+          { silent = true, desc = ":MarkdownPreviewToggle" }
+        )
       end,
     },
   },
