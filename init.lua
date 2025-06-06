@@ -1474,12 +1474,51 @@ require("lazy").setup({
           { desc = "Rename symbol" }
         )
 
-        vim.keymap.set(
-          "n",
-          "<leader>f",
-          function() vim.lsp.buf.format({ async = true }) end,
-          { desc = "Format/Fix code with LSP/null-ls" }
-        )
+        vim.keymap.set("n", "<leader>f", function()
+          -- Auto fix imports first
+          local params = {
+            textDocument = vim.lsp.util.make_text_document_params(),
+            context = { only = { "source.addMissingImports.ts" } },
+            range = {
+              start = { line = 0, character = 0 },
+              ["end"] = { line = vim.fn.line("$") - 1, character = 0 },
+            },
+          }
+
+          vim.lsp.buf_request(0, "textDocument/codeAction", params, function(err, actions)
+            if err then
+              vim.notify("LSP error: " .. err.message, vim.log.levels.ERROR)
+              return
+            end
+
+            if not actions or vim.tbl_isempty(actions) then
+              vim.notify("No import fixes available", vim.log.levels.INFO)
+              -- Still format even if no imports found
+              vim.lsp.buf.format({ async = true })
+              return
+            end
+
+            local action = actions[1]
+
+            local function after_imports()
+              -- Delay formatting slightly to ensure edits are applied after
+              vim.defer_fn(function()
+                vim.lsp.buf.format({ async = true })
+              end, 10)
+            end
+
+            if action.edit then
+              vim.lsp.util.apply_workspace_edit(action.edit, "utf-16")
+            end
+
+            if action.command then
+              vim.lsp.buf.execute_command(action.command)
+              after_imports()
+            else
+              after_imports()
+            end
+          end)
+        end, { desc = "Auto Fix Lint/Formatting/Imports" })
 
         vim.keymap.set("n", "<leader>vd", function()
           local opts = {
