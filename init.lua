@@ -1394,9 +1394,16 @@ require("lazy").setup({
         local lspconfig = require("lspconfig")
         local capabilities = require("cmp_nvim_lsp").default_capabilities()
 
+        -- Disable tsserver formatting to let null-ls handle it
+        local on_attach = function(client, _)
+          if client.name == "ts_ls" then
+            client.server_capabilities.documentFormattingProvider = false
+          end
+        end
+
         -- List of LSP servers to enable
         local servers = {
-          "ts_ls",     -- JavaScript / TypeScript
+          "ts_ls",        -- JavaScript / TypeScript
           "pyright",      -- Python
           "gopls",        -- Go
           "dockerls",     -- Docker
@@ -1414,6 +1421,7 @@ require("lazy").setup({
         for _, server in ipairs(servers) do
           local opts = {
             capabilities = capabilities,
+            on_attach = on_attach,
           }
 
           -- If configuring lua_ls, set the "vim" global
@@ -1431,11 +1439,48 @@ require("lazy").setup({
         end
 
         -- Keymaps
-        vim.keymap.set("n", "gd", vim.lsp.buf.definition, { desc = "Go to definition" })
-        vim.keymap.set("n", "gi", vim.lsp.buf.implementation, { desc = "Go to implementation" })
-        vim.keymap.set("n", "gr", vim.lsp.buf.references, { desc = "Show references" })
-        vim.keymap.set("n", "<leader>vs", vim.lsp.buf.hover, { desc = "Show signature/doc" })
-        vim.keymap.set("n", "<leader>r", vim.lsp.buf.rename, { desc = "Rename symbol" })
+        vim.keymap.set(
+          "n",
+          "gd",
+          vim.lsp.buf.definition,
+          { desc = "Go to definition" }
+        )
+
+        vim.keymap.set(
+          "n",
+          "gi",
+          vim.lsp.buf.implementation,
+          { desc = "Go to implementation" }
+        )
+
+        vim.keymap.set(
+          "n",
+          "gr",
+          vim.lsp.buf.references,
+          { desc = "Show references" }
+        )
+
+        vim.keymap.set(
+          "n",
+          "<leader>vs",
+          vim.lsp.buf.hover,
+          { desc = "Show signature/doc" }
+        )
+
+        vim.keymap.set(
+          "n",
+          "<leader>r",
+          vim.lsp.buf.rename,
+          { desc = "Rename symbol" }
+        )
+
+        vim.keymap.set(
+          "n",
+          "<leader>f",
+          function() vim.lsp.buf.format({ async = true }) end,
+          { desc = "Format/Fix code with LSP/null-ls" }
+        )
+
         vim.keymap.set("n", "<leader>vd", function()
           local opts = {
             focusable = true,
@@ -1447,8 +1492,20 @@ require("lazy").setup({
           }
           vim.diagnostic.open_float(nil, opts)
         end, { noremap = true, silent = true , desc = "Show diagnostic for current line" })
-        vim.keymap.set("n", "[g", vim.diagnostic.goto_prev, { desc = "Previous diagnostic" })
-        vim.keymap.set("n", "]g", vim.diagnostic.goto_next, { desc = "Next diagnostic" })
+
+        vim.keymap.set(
+          "n",
+          "[g",
+          vim.diagnostic.goto_prev,
+          { desc = "Previous diagnostic" }
+        )
+
+        vim.keymap.set(
+          "n",
+          "]g",
+          vim.diagnostic.goto_next,
+          { desc = "Next diagnostic" }
+        )
       end,
     },
 
@@ -1469,12 +1526,25 @@ require("lazy").setup({
 
         -- Use eslint_d from none-ls-extras
         local eslint_d = require("none-ls.diagnostics.eslint_d")
+        local eslint_d_format = require("none-ls.formatting.eslint_d")
 
         null_ls.setup({
           debug = false,
           sources = {
-            -- ESLint (from none-ls-extras)
+            -- ESLint diagnostics (from none-ls-extras)
             eslint_d.with({
+              condition = function(utils)
+                return utils.root_has_file({
+                  ".eslintrc",
+                  ".eslintrc.js",
+                  ".eslintrc.json",
+                  "package.json",
+                })
+              end,
+            }),
+
+            -- ESLint formatting (also from none-ls-extras)
+            eslint_d_format.with({
               condition = function(utils)
                 return utils.root_has_file({
                   ".eslintrc",
