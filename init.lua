@@ -1120,7 +1120,7 @@ require("lazy").setup({
       end,
     },
 
-    -- Git chunks / signs
+    -- Git hunks / signs
     {
       "lewis6991/gitsigns.nvim",
       event = { "BufReadPre", "BufNewFile" },
@@ -1142,16 +1142,28 @@ require("lazy").setup({
             -- Navigation
             vim.keymap.set(
               "n",
-              "]c",
+              "]g",
               gs.next_hunk,
-              { buffer = bufnr, noremap = true, silent = true, desc = "Next git chunk" }
+              { buffer = bufnr, noremap = true, silent = true, desc = "Next git hunk" }
             )
 
             vim.keymap.set(
               "n",
-              "[c",
+              "[g",
               gs.prev_hunk,
-              { buffer = bufnr, noremap = true, silent = true, desc = "Previous git chunk" }
+              { buffer = bufnr, noremap = true, silent = true, desc = "Previous git hunk" }
+            )
+
+            -- Show full diff of the current hunk
+            vim.keymap.set('n', '<leader>gp', gs.preview_hunk, { buffer = bufnr, desc = 'Preview Git hunk' })
+
+            -- Reset (drop) the current hunk
+            vim.keymap.set('n', '<leader>gr', gs.reset_hunk, { buffer = bufnr, desc = 'Reset Git hunk' })
+            vim.keymap.set(
+              'v',
+              '<leader>gr',
+              function() gs.reset_hunk({vim.fn.line('.'), vim.fn.line('v')}) end,
+              { buffer = bufnr, desc = 'Reset selected Git hunk' }
             )
           end,
         })
