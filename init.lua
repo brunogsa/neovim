@@ -404,6 +404,17 @@ vim.keymap.set(
   { noremap = false, silent = true, desc = "Preview AsyncAPI spec" }
 )
 
+vim.keymap.set("n", "<leader>ai", function()
+  -- Insert 'ai' in a new line above
+  vim.cmd("normal! Oai: add to aider context")
+  -- Exit insert mode
+  vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<Esc>", true, false, true), "n", false)
+  -- Comment the line (assuming <leader><leader> is your comment hotkey)
+  vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<leader><leader>", true, false, true), "m", false)
+  -- Save the file
+  vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(":w<CR>", true, false, true), "n", false)
+end, { desc = "Include file in Aider context" })
+
 -- =======================================
 -- Plugins
 -- =======================================
