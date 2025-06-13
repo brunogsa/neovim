@@ -1153,6 +1153,30 @@ require("lazy").setup({
       end,
     },
 
+    {
+      "sindrets/diffview.nvim",
+      keys = {
+        {
+          "<leader>gt",
+          function()
+            local view = require("diffview.lib").get_current_view()
+            if view then
+              vim.cmd("DiffviewClose")
+            else
+              vim.cmd("DiffviewOpen")
+            end
+          end,
+          mode = { "n", "v" },
+          desc = "Git diff toggle (entire working tree)",
+        },
+      },
+      config = function()
+        require("diffview").setup({
+          use_icons = false,
+        })
+      end,
+    },
+
     -- ===================
     -- Snippets
     -- ===================
