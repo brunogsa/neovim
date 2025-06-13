@@ -1164,7 +1164,11 @@ require("lazy").setup({
             )
 
             -- Show full diff of the current hunk
-            vim.keymap.set('n', '<leader>gp', gs.preview_hunk, { buffer = bufnr, desc = 'Preview Git hunk' })
+            vim.keymap.set('n', '<leader>gp', gs.preview_hunk, { buffer = bufnr, desc = 'Preview Git hunk on current line' })
+
+            vim.keymap.set('v', '<leader>gp', function()
+              gs.preview_hunk({ vim.fn.line("v"), vim.fn.line(".") })
+            end, { buffer = bufnr, desc = 'Preview Git hunk on selection' })
 
             -- Reset (drop) the current hunk
             vim.keymap.set('n', '<leader>gr', gs.reset_hunk, { buffer = bufnr, desc = 'Reset Git hunk' })
@@ -1563,20 +1567,6 @@ require("lazy").setup({
           }
           vim.diagnostic.open_float(nil, opts)
         end, { noremap = true, silent = true , desc = "Show diagnostic for current line" })
-
-        vim.keymap.set(
-          "n",
-          "[g",
-          vim.diagnostic.goto_prev,
-          { desc = "Previous diagnostic" }
-        )
-
-        vim.keymap.set(
-          "n",
-          "]g",
-          vim.diagnostic.goto_next,
-          { desc = "Next diagnostic" }
-        )
       end,
     },
 
