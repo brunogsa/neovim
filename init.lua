@@ -1122,7 +1122,7 @@ require("lazy").setup({
 
         vim.keymap.set(
           "n",
-          "<leader>tg",
+          "<leader>tb",
           ":GitBlameToggle<CR>",
           { silent = true, desc = ":GitBlameToggle" }
         )
@@ -1157,7 +1157,7 @@ require("lazy").setup({
       "sindrets/diffview.nvim",
       keys = {
         {
-          "<leader>gt",
+          "<leader>td",
           function()
             local view = require("diffview.lib").get_current_view()
             if view then
@@ -1167,7 +1167,7 @@ require("lazy").setup({
             end
           end,
           mode = { "n", "v" },
-          desc = "Git diff toggle (entire working tree)",
+          desc = "Toggle git diff (entire working tree)",
         },
       },
       config = function()
