@@ -227,7 +227,7 @@ end
 
 -- General vision
 vim.opt.lbr = true
-vim.opt.scrolloff = 999  -- Cursor is always in the middle of screen
+-- vim.opt.scrolloff = 999  -- Cursor is always in the middle of screen
 
 -- Status Line
 vim.opt.ruler = false
@@ -522,8 +522,17 @@ require("lazy").setup({
 
     -- Smooth scrolling, for avoiding loosing where you are
     {
-      "yuttie/comfortable-motion.vim",
+      "karb94/neoscroll.nvim",
       event = "VeryLazy",
+      config = function()
+        require("neoscroll").setup({
+          mappings = { '<C-u>', '<C-d>', '<C-b>', '<C-f>', 'zz', 'zt', 'zb' },
+          hide_cursor = true,
+          stop_eof = true,
+          respect_scrolloff = true,
+          cursor_scrolls_alone = true,
+        })
+      end,
     },
 
     -- Treesitter
