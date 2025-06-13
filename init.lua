@@ -1129,7 +1129,7 @@ require("lazy").setup({
       end,
     },
 
-    -- Git hunks / signs
+    -- Git hunks navigation and Git signs
     {
       "mhinz/vim-signify",
       event = { "BufReadPre", "BufNewFile" },
@@ -1153,6 +1153,7 @@ require("lazy").setup({
       end,
     },
 
+    -- Good git diff preview on neovim
     {
       "sindrets/diffview.nvim",
       keys = {
