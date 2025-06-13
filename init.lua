@@ -1131,55 +1131,25 @@ require("lazy").setup({
 
     -- Git hunks / signs
     {
-      "lewis6991/gitsigns.nvim",
+      "mhinz/vim-signify",
       event = { "BufReadPre", "BufNewFile" },
-      config = function()
-        require("gitsigns").setup({
-          signs = {
-            add          = { text = "+" },
-            change       = { text = "~" },
-            delete       = { text = "-" },
-            topdelete    = { text = "-" },
-            changedelete = { text = "~" },
-          },
-          on_attach = function(bufnr)
-            local gs = package.loaded.gitsigns
+      init = function()
+        -- Only use Git as VCS
+        vim.g.signify_vcs_list = { "git" }
 
-            -- Define a highlight group for the border
-            vim.api.nvim_set_hl(0, "GitsignsBlameBorder", { fg = "LightGreen" })
+        -- Enable showing number of deleted lines
+        vim.g.signify_number_highlight = 1
+        vim.g.signify_sign_show_count = 0
+        vim.g.signify_line_highlight = 0 -- avoid background color highlight if you want minimalism
 
-            -- Navigation
-            vim.keymap.set(
-              "n",
-              "]g",
-              gs.next_hunk,
-              { buffer = bufnr, noremap = true, silent = true, desc = "Next git hunk" }
-            )
+        -- Change the sign symbols
+        vim.g.signify_sign_add    = '+'
+        vim.g.signify_sign_change = '~'
+        vim.g.signify_sign_delete = '-'
 
-            vim.keymap.set(
-              "n",
-              "[g",
-              gs.prev_hunk,
-              { buffer = bufnr, noremap = true, silent = true, desc = "Previous git hunk" }
-            )
-
-            -- Show full diff of the current hunk
-            vim.keymap.set('n', '<leader>gp', gs.preview_hunk, { buffer = bufnr, desc = 'Preview Git hunk on current line' })
-
-            vim.keymap.set('v', '<leader>gp', function()
-              gs.preview_hunk({ vim.fn.line("v"), vim.fn.line(".") })
-            end, { buffer = bufnr, desc = 'Preview Git hunk on selection' })
-
-            -- Reset (drop) the current hunk
-            vim.keymap.set('n', '<leader>gr', gs.reset_hunk, { buffer = bufnr, desc = 'Reset Git hunk' })
-            vim.keymap.set(
-              'v',
-              '<leader>gr',
-              function() gs.reset_hunk({vim.fn.line('.'), vim.fn.line('v')}) end,
-              { buffer = bufnr, desc = 'Reset selected Git hunk' }
-            )
-          end,
-        })
+        -- Keymaps for navigating between hunks
+        vim.keymap.set("n", "]g", "<Plug>(signify-next-hunk)", { desc = "Next Git hunk" })
+        vim.keymap.set("n", "[g", "<Plug>(signify-prev-hunk)", { desc = "Previous Git hunk" })
       end,
     },
 
