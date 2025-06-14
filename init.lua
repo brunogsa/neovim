@@ -456,6 +456,33 @@ vim.keymap.set("n", "<leader>ai", function()
   vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(":w<CR>", true, false, true), "n", false)
 end, { desc = "Include file in Aider context" })
 
+-- Jump to parent indentation: scan upward for first line with indent < current indent,
+-- then open folds (zv) and center screen (zz)
+local function jump_to_parent_indent()
+  local curr_lnum = vim.fn.line('.')
+  local curr_indent = vim.fn.indent('.')
+  for l = curr_lnum - 1, 1, -1 do
+    local indd = vim.fn.indent(l)
+    if indd < curr_indent and vim.fn.getline(l):match("%S") then
+      -- move cursor to first non-blank in that line
+      local col = vim.fn.match(vim.fn.getline(l), "\\S")
+      vim.api.nvim_win_set_cursor(0, { l, col })
+      -- open folds and center screen
+      vim.cmd('normal! zv')
+      vim.cmd('normal! zz')
+      return
+    end
+  end
+  -- fallback to first non-blank of file
+  local firstcol = vim.fn.match(vim.fn.getline(1), "\\S")
+  vim.api.nvim_win_set_cursor(0, { 1, firstcol })
+  vim.cmd('normal! zv')
+  vim.cmd('normal! zz')
+end
+
+-- Map in normal (and optionally visual) mode:
+vim.keymap.set({ "n", "v" }, "<C-p>", jump_to_parent_indent, { desc = "Jump to parent indent, open fold, center" })
+
 -- =======================================
 -- Plugins
 -- =======================================
@@ -545,6 +572,22 @@ require("lazy").setup({
         vim.g.lt_quickfix_list_toggle_map = "<leader>tq"
       end,
       cmd = { "LTLocationListToggle", "LTQuickfixListToggle" }, -- optional for lazy loading
+    },
+
+    -- Easier marks
+    {
+      "2KAbhishek/markit.nvim",
+      config = function()
+        require("markit").setup({
+          -- any options if needed
+        })
+        -- Mappings now assume the plugin is already loaded
+        vim.keymap.set("n", "<leader>md", require("markit").delete_line, { desc = "Delete marks on this line" })
+        vim.keymap.set("n", "<leader>M",  require("markit").delete_buf,  { desc = "Delete all marks in buffer" })
+        vim.keymap.set("n", "<leader>mt", require("markit").toggle,      { desc = "Toggle mark at this line" })
+        vim.keymap.set("n", "]m",         require("markit").next,        { desc = "Next mark in buffer" })
+        vim.keymap.set("n", "[m",         require("markit").prev,        { desc = "Prev mark in buffer" })
+      end,
     },
 
     {
