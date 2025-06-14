@@ -1200,22 +1200,6 @@ require("lazy").setup({
     -- Git
     -- ===================
 
-    -- Git blame
-    {
-      "f-person/git-blame.nvim",
-      cmd = "GitBlameToggle",
-      init = function()
-        vim.g.gitblame_enabled = 0
-
-        vim.keymap.set(
-          "n",
-          "<leader>tb",
-          ":GitBlameToggle<CR>",
-          { silent = true, desc = ":GitBlameToggle" }
-        )
-      end,
-    },
-
     -- Git hunks navigation and Git signs
     {
       "mhinz/vim-signify",
@@ -1257,11 +1241,40 @@ require("lazy").setup({
           mode = { "n", "v" },
           desc = "Toggle git diff (entire working tree)",
         },
+        {
+          "<leader>tm",
+          "<Cmd>DiffviewToggleFiles<CR>",
+          mode = "n",
+          desc = "Toggle git diff menu",
+        },
       },
       config = function()
         require("diffview").setup({
           use_icons = false,
         })
+      end,
+    },
+
+    -- Git conflict navigation and resolution
+    {
+      'akinsho/git-conflict.nvim',
+      version = "*",
+      config = true,
+    },
+
+    -- Git blame
+    {
+      "f-person/git-blame.nvim",
+      cmd = "GitBlameToggle",
+      init = function()
+        vim.g.gitblame_enabled = 0
+
+        vim.keymap.set(
+          "n",
+          "<leader>tb",
+          ":GitBlameToggle<CR>",
+          { silent = true, desc = ":GitBlameToggle" }
+        )
       end,
     },
 
