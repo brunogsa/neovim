@@ -1050,8 +1050,18 @@ require("lazy").setup({
 
     -- Tabular alignment
     {
-      "godlygeek/tabular",
-      cmd = "Tabularize",
+      "echasnovski/mini.nvim",
+      version = false,   -- track HEAD
+      event   = "VeryLazy",
+      config  = function()
+        -- Mini-Align defaults: hit ga, type delimiter, <Enter>
+        require("mini.align").setup({
+          -- example preset: align “key = value” on the = with one space padding
+          mappings = {
+            start = "ga",          -- normal/visual
+          },
+        })
+      end,
     },
 
     -- ===================
