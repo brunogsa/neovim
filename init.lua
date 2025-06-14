@@ -456,9 +456,12 @@ vim.keymap.set("n", "<leader>ai", function()
   vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(":w<CR>", true, false, true), "n", false)
 end, { desc = "Include file in Aider context" })
 
--- Jump to parent indentation: scan upward for first line with indent < current indent,
+-- Jump to parent indentation: record current position, scan upward for first line with indent < current indent,
 -- then open folds (zv) and center screen (zz)
 local function jump_to_parent_indent()
+  -- record current position for jumplist (<C-o> return)
+  vim.cmd("normal! m'")
+
   local curr_lnum = vim.fn.line('.')
   local curr_indent = vim.fn.indent('.')
   for l = curr_lnum - 1, 1, -1 do
@@ -479,9 +482,57 @@ local function jump_to_parent_indent()
   vim.cmd('normal! zv')
   vim.cmd('normal! zz')
 end
+vim.keymap.set(
+  { "n", "v" },
+  "<C-p>",
+  jump_to_parent_indent,
+  { desc = "Jump to parent indent, open fold, center" }
+)
 
--- Map in normal (and optionally visual) mode:
-vim.keymap.set({ "n", "v" }, "<C-p>", jump_to_parent_indent, { desc = "Jump to parent indent, open fold, center" })
+-- Jump to end of current indent block: record posição para jumplist, scan downward até encontrar indent < current
+local function jump_to_block_end()
+  -- registra posição atual para voltar com <C-o>
+  vim.cmd("normal! m'")
+
+  local curr_lnum = vim.fn.line('.')
+  local curr_indent = vim.fn.indent('.')  -- indent da linha atual
+  local last_lnum = vim.fn.line('$')
+  local target = curr_lnum
+
+  for l = curr_lnum + 1, last_lnum do
+    local text = vim.fn.getline(l)
+    if text:match("%S") then
+      local indd = vim.fn.indent(l)
+      if indd < curr_indent then
+        -- início de indent menor: fim do bloco anterior em target
+        break
+      else
+        -- ainda dentro do bloco (seja mesma indent ou indent maior)
+        target = l
+      end
+    else
+      -- linha em branco: ignorar (não interrompe o bloco)
+      -- mas não atualizar target, para não pular para linha em branco
+    end
+  end
+
+  -- mover cursor para primeira coluna não-branca da linha target
+  local line_text = vim.fn.getline(target)
+  local col = vim.fn.match(line_text, "\\S")
+  vim.api.nvim_win_set_cursor(0, { target, col })
+
+  -- abrir folds e centralizar
+  vim.cmd('normal! zv')
+  vim.cmd('normal! zz')
+end
+
+-- Mapear em normal e visual para <C-e>
+vim.keymap.set(
+  { "n", "v" },
+  "<C-e>",
+  jump_to_block_end,
+  { desc = "Jump to end of indent block, open fold, center" }
+)
 
 -- =======================================
 -- Plugins
