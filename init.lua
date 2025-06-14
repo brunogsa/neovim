@@ -980,6 +980,15 @@ require("lazy").setup({
             vim.cmd("ContextUpdate")
           end,
         })
+
+        vim.keymap.set(
+          "n",
+          "<leader>tc",
+          function()
+            vim.cmd("ContextToggle")
+          end,
+          { silent = true, desc = "Toggle Context plugin" }
+        )
       end,
     },
 
