@@ -1322,30 +1322,25 @@ require("lazy").setup({
     -- Good git diff preview on neovim
     {
       "sindrets/diffview.nvim",
-      keys = {
-        {
-          "<leader>td",
-          function()
-            local view = require("diffview.lib").get_current_view()
-            if view then
-              vim.cmd("DiffviewClose")
-            else
-              vim.cmd("DiffviewOpen")
-            end
-          end,
-          mode = { "n", "v" },
-          desc = "Toggle git diff (entire working tree)",
-        },
-        {
-          "<leader>tm",
-          "<Cmd>DiffviewToggleFiles<CR>",
-          mode = "n",
-          desc = "Toggle git diff menu",
-        },
-      },
+      lazy = false, -- disable lazy-loading so bash vimreview works
       config = function()
         require("diffview").setup({
           use_icons = false,
+        })
+
+        -- Toggle Diffview (open/close)
+        vim.keymap.set({ "n", "v" }, "<leader>td", function()
+          local view = require("diffview.lib").get_current_view()
+          if view then
+            vim.cmd("DiffviewClose")
+          else
+            vim.cmd("DiffviewOpen")
+          end
+        end, { desc = "Toggle git diff (entire working tree)" })
+
+        -- Toggle the file panel inside Diffview
+        vim.keymap.set("n", "<leader>tm", "<Cmd>DiffviewToggleFiles<CR>", {
+          desc = "Toggle git diff menu",
         })
       end,
     },
