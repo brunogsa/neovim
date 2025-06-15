@@ -1804,22 +1804,69 @@ require("lazy").setup({
       },
 
       config = function()
+        -- Choose which model to use here
+        -- They are defined on the "adapters" section below
+        local model = "openai_4o"
+
         require("codecompanion").setup({
+          adapters = {
+            opts = {
+              show_model_choices = true,
+              show_defaults = true,
+            },
+
+            -- OpenAI GPT-4o adapter
+            openai_4o = function()
+              return require("codecompanion.adapters").extend("openai", {
+                schema = {
+                  model = {
+                    default = "gpt-4o",
+                  },
+                },
+              })
+            end,
+
+            -- OpenAI GPT-o4-mini adapter (can be useful if throttling is happening)
+            openai_o4_mini = function()
+              return require("codecompanion.adapters").extend("openai", {
+                schema = {
+                  model = {
+                    default = "gpt-4o-mini",
+                  },
+                },
+              })
+            end,
+
+            -- Anthropic Sonnet 3.7 adapter (just in case)
+            anthropic_sonnet = function()
+              return require("codecompanion.adapters").extend("anthropic", {
+                schema = {
+                  model = {
+                    default = "claude-3-7-sonnet-20250219",
+                  },
+                },
+              })
+            end,
+          },
+
           strategies = {
             chat   = {
-              adapter = "openai",
+              adapter = model,
             },
 
             inline = {
-              adapter = "openai",
+              adapter = model,
             },
           },
+
           display = {
             inline = {
-              float = true,
+              layout = "vertical", -- vertical, horizontal, buffer
             },
             chat   = {
-              direction = "vertical",
+              window = {
+                layout = "float", -- float, vertical, horizontal, buffer
+              },
             },
             diff = {
               enabled = false,
@@ -1874,14 +1921,6 @@ require("lazy").setup({
           "<leader>ac",
           ":'<,'>CodeCompanion<CR>",
           vim.tbl_extend("force", opts, { desc = "AI Edit selection" })
-        )
-
-        -- AI Model chooser ----------------------------------------------
-        vim.keymap.set(
-          "n",
-          "<leader>a?",
-          "<cmd>CodeCompanionActions mode<CR>",
-          vim.tbl_extend("force", opts, { desc = "AI Pick Model" })
         )
       end,
     },
