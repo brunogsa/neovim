@@ -523,6 +523,33 @@ vim.keymap.set(
   { desc = "Jump to end of indent block, open fold, center" }
 )
 
+-- Aider Yank
+vim.keymap.set("n", "<leader>ay", function()
+  local absolute_path = vim.fn.expand("%:p")
+  local git_root = vim.fn.systemlist("git rev-parse --show-toplevel")[1]
+
+  if not git_root or git_root == "" then
+    vim.notify("Not inside a git repository", vim.log.levels.ERROR)
+    return
+  end
+
+  -- Use Python for reliable path relativization (works across OSes)
+  local relpath_cmd = string.format(
+    [[python3 -c "import os; print(os.path.relpath('%s', '%s'))"]],
+    absolute_path, git_root
+  )
+  local relative_path = vim.fn.systemlist(relpath_cmd)[1]
+
+  if not relative_path or relative_path == "" then
+    vim.notify("Failed to compute relative path", vim.log.levels.ERROR)
+    return
+  end
+
+  local final = "/add " .. relative_path
+  vim.fn.setreg("+", final)
+  vim.notify("Copied: " .. final)
+end, { desc = "Aider Yank: Copy /add path from git root", silent = true })
+
 -- =======================================
 -- Plugins
 -- =======================================
