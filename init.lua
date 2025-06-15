@@ -1885,11 +1885,13 @@ require("lazy").setup({
 
         local opts = { noremap = true, silent = true }
 
+        -- AI Abort: Just press 'q' inside the response buffer
+
         -- AI Ask —------------------------------------------------------
         vim.keymap.set("n", "<leader>aa", function()
           vim.ui.input({ prompt = "Ask AI: " }, function(q)
             if not q or q == "" then return end
-            vim.cmd("CodeCompanionChat #buffer " .. q)
+            vim.cmd("CodeCompanionChat #buffer " .. vim.fn.shellescape(q))
           end)
         end, vim.tbl_extend("force", opts, { desc = "AI Ask buffer" }))
 
@@ -1898,7 +1900,7 @@ require("lazy").setup({
           local e = vim.fn.line("'>")
           vim.ui.input({ prompt = "Ask AI: " }, function(q)
             if not q or q == "" then return end
-            vim.cmd(string.format("%d,%dCodeCompanionChat %s", s, e, q))
+            vim.cmd(string.format("%d,%dCodeCompanionChat %s", s, e, vim.fn.shellescape(q)))
           end)
         end, vim.tbl_extend("force", opts, { desc = "AI Ask selection" }))
 
@@ -1931,6 +1933,12 @@ require("lazy").setup({
           ":'<,'>CodeCompanion<CR>",
           vim.tbl_extend("force", opts, { desc = "AI Edit selection" })
         )
+
+        -- AI Diagnose Explain -------------------------------------------
+        vim.keymap.set("n", "<leader>ad", function()
+          local prompt = [[What are the issues in this code? Start with TL;DR H3 containing a bullet list, then explain each issue in detail below.]]
+          vim.cmd("CodeCompanionChat #buffer #lsp /quickfix " .. vim.fn.shellescape(prompt))
+        end, vim.tbl_extend("force", opts, { desc = "AI Diagnostic Explain (buffer + LSP + Quickfix)" }))
       end,
     },
 
