@@ -1793,7 +1793,98 @@ require("lazy").setup({
     -- AI
     -- ===================
 
-    -- TODO
+    {
+      "olimorris/codecompanion.nvim",
+      version = false,
+      event = "VeryLazy",
+
+      dependencies = {
+        "nvim-lua/plenary.nvim",
+        "nvim-treesitter/nvim-treesitter",
+      },
+
+      config = function()
+        require("codecompanion").setup({
+          strategies = {
+            chat   = {
+              adapter = "openai",
+            },
+
+            inline = {
+              adapter = "openai",
+            },
+          },
+          display = {
+            inline = {
+              float = true,
+            },
+            chat   = {
+              direction = "vertical",
+            },
+            diff = {
+              enabled = false,
+            },
+          },
+        })
+
+        local opts = { noremap = true, silent = true }
+
+        -- AI Ask —------------------------------------------------------
+        vim.keymap.set("n", "<leader>aa", function()
+          vim.ui.input({ prompt = "Ask AI: " }, function(q)
+            if not q or q == "" then return end
+            vim.cmd("CodeCompanionChat #buffer " .. q)
+          end)
+        end, vim.tbl_extend("force", opts, { desc = "AI Ask buffer" }))
+
+        vim.keymap.set("x", "<leader>aa", function()
+          local s = vim.fn.line("'<")
+          local e = vim.fn.line("'>")
+          vim.ui.input({ prompt = "Ask AI: " }, function(q)
+            if not q or q == "" then return end
+            vim.cmd(string.format("%d,%dCodeCompanionChat %s", s, e, q))
+          end)
+        end, vim.tbl_extend("force", opts, { desc = "AI Ask selection" }))
+
+        -- AI Explain -----------------------------------------------------
+        vim.keymap.set(
+          "n",
+          "<leader>ae",
+          "<cmd>%CodeCompanion /explain<CR>",
+          vim.tbl_extend("force", opts, { desc = "AI Explain buffer" })
+        )
+
+        vim.keymap.set(
+          "x",
+          "<leader>ae",
+          ":'<,'>CodeCompanion /explain<CR>",
+          vim.tbl_extend("force", opts, { desc = "AI Explain selection" })
+        )
+
+        -- AI Code Edit --------------------------------------------------
+        vim.keymap.set(
+          "n",
+          "<leader>ac",
+          "<cmd>%CodeCompanion<CR>",
+          vim.tbl_extend("force", opts, { desc = "AI Edit buffer" })
+        )
+
+        vim.keymap.set(
+          "x",
+          "<leader>ac",
+          ":'<,'>CodeCompanion<CR>",
+          vim.tbl_extend("force", opts, { desc = "AI Edit selection" })
+        )
+
+        -- AI Model chooser ----------------------------------------------
+        vim.keymap.set(
+          "n",
+          "<leader>a?",
+          "<cmd>CodeCompanionActions mode<CR>",
+          vim.tbl_extend("force", opts, { desc = "AI Pick Model" })
+        )
+      end,
+    },
 
     -- ===================
     -- Previewers
