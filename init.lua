@@ -581,6 +581,15 @@ require("lazy").setup({
       cmd = { "Space2Tab", "Tab2Space" },
     },
 
+    -- Make f/F/t/T hotkeys work across lines
+    {
+      "rhysd/clever-f.vim",
+      init = function()
+        -- Recommended defaults
+        vim.g.clever_f_across_no_line = 0
+      end,
+    },
+
     -- Helper to remember hotkeys
     {
       "folke/which-key.nvim",
