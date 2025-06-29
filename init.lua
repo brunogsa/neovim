@@ -262,9 +262,9 @@ vim.api.nvim_set_hl(0, "Normal", { ctermbg = "none" })
 vim.api.nvim_set_hl(0, "NonText", { ctermbg = "none" })
 
 -- Colorscheme for vimdiff
-if vim.opt.diff then
-  vim.cmd.colorscheme("jellybeans")
-end
+-- if vim.opt.diff then
+--   vim.cmd.colorscheme("jellybeans")
+-- end
 
 -- General vision
 vim.opt.lbr = true
