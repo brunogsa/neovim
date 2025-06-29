@@ -1374,6 +1374,24 @@ require("lazy").setup({
           end,
         })
 
+        -- Auto disable context plugin in diffview buffers
+        vim.api.nvim_create_autocmd("FileType", {
+          pattern = "DiffviewFiles,DiffviewFileHistory",
+          callback = function()
+            vim.cmd("ContextDisable")
+          end,
+        })
+        vim.api.nvim_create_autocmd("BufEnter", {
+          callback = function()
+            local bufname = vim.api.nvim_buf_get_name(0)
+            if bufname:match("DiffviewFilePanel") or 
+               bufname:match("DiffviewFiles") or 
+               bufname:match("DiffviewFileHistory") then
+              vim.cmd("ContextDisable")
+            end
+          end,
+        })
+
         -- Toggle Diffview (open/close)
         vim.keymap.set({ "n", "v" }, "<leader>td", function()
           local view = require("diffview.lib").get_current_view()
