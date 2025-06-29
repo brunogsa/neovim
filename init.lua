@@ -1327,6 +1327,18 @@ require("lazy").setup({
           use_icons = false,
         })
 
+        -- Automatically refresh diffview on focus regain
+        vim.api.nvim_create_autocmd("FocusGained", {
+          callback = function()
+            -- Check if diffview is open
+            local view = require("diffview.lib").get_current_view()
+            if view then
+              -- Refresh the diffview
+              vim.cmd("DiffviewRefresh")
+            end
+          end,
+        })
+
         -- Toggle Diffview (open/close)
         vim.keymap.set({ "n", "v" }, "<leader>td", function()
           local view = require("diffview.lib").get_current_view()
