@@ -715,7 +715,7 @@ require("lazy").setup({
           },
           indent = {
             enable = true,
-            disable = { "mermaid" },
+            disable = { "mermaid", "yaml", "json" },
           },
           fold = { enable = false },
         })

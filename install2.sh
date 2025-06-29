@@ -2,7 +2,7 @@
 set -e
 
 # Globally install Tern and Node stuff
-sudo npm install -g tern prettier @asyncapi/generator @asyncapi/html-template @mermaid-js/mermaid-cli redocly bash-language-server markdownlint-cli yaml-language-server
+sudo npm install -g tern prettier @asyncapi/generator @asyncapi/html-template @mermaid-js/mermaid-cli redocly bash-language-server markdownlint-cli yaml-language-server dockerfile-language-server-nodejs
 brew install yamllint vscode-langservers-extracted
 
 # Install pgFormatter
