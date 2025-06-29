@@ -549,6 +549,41 @@ vim.keymap.set("n", "<leader>ay", function()
   vim.notify("Copied: " .. relative_path)
 end, { desc = "Aider Yank: Copy path from git root", silent = true })
 
+-- AI Context Append
+vim.keymap.set("v", "<leader>ag", function()
+  -- Get the selected text
+  vim.cmd('normal! "zy')
+  local selected_text = vim.fn.getreg('z')
+  
+  if not selected_text or selected_text == "" then
+    vim.notify("No text selected", vim.log.levels.ERROR)
+    return
+  end
+  
+  -- Path to the global context file
+  local context_file = vim.fn.expand("~/.ai-context")
+  
+  -- Append the selected text to the file
+  local file = io.open(context_file, "a")
+  if not file then
+    vim.notify("Failed to open context file: " .. context_file, vim.log.levels.ERROR)
+    return
+  end
+  
+  -- Add separation lines if the file is not empty
+  local file_size = vim.fn.getfsize(context_file)
+  if file_size > 0 then
+    -- Add two empty lines for separation
+    file:write("\n\n")
+  end
+  
+  -- Write the selected text and close the file
+  file:write(selected_text)
+  file:close()
+  
+  vim.notify("Text appended to " .. context_file, vim.log.levels.INFO)
+end, { desc = "AI Grab Context: Append selected text to global context file", silent = true })
+
 -- =======================================
 -- Plugins
 -- =======================================
