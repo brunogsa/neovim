@@ -1458,7 +1458,7 @@ require("lazy").setup({
 
         luasnip.add_snippets("javascript", {
           s(
-            ":if_solo",
+            ";if_solo",
             fmt([[
               if ({}) {{
               }}
@@ -1466,7 +1466,7 @@ require("lazy").setup({
           ),
 
           s(
-            ":if_else", fmt([[
+            ";if_else", fmt([[
               if ({}) {{
               }} else {{
               }}
@@ -1474,7 +1474,7 @@ require("lazy").setup({
           ),
 
           s(
-            ":if_else_if",
+            ";if_else_if",
             fmt([[
               if ({}) {{
               }} else if () {{
@@ -1484,7 +1484,7 @@ require("lazy").setup({
           ),
 
           s(
-            ":switch",
+            ";switch",
             fmt([[
               switch ({}) {{
                 case '': {{
@@ -1496,21 +1496,21 @@ require("lazy").setup({
           ),
 
           s(
-            ":for_i", fmt([[
+            ";for_i", fmt([[
               for (let i = 0; i < {}; i++) {{
               }}
             ]], { i(1, " ") })
           ),
 
           s(
-            ":for_let", fmt([[
+            ";for_let", fmt([[
               for (let {} of []) {{
               }}
             ]], { i(1, " ") })
           ),
 
           s(
-            ":while",
+            ";while",
             fmt([[
               while ({}) {{
               }}
@@ -1518,7 +1518,7 @@ require("lazy").setup({
           ),
 
           s(
-            ":func_decl",
+            ";func_decl",
             fmt([[
               function ({}) {{
               }}
@@ -1526,14 +1526,14 @@ require("lazy").setup({
           ),
 
           s(
-            ":func_named", fmt([[
+            ";func_named", fmt([[
               const {} = function () {{
               }};
             ]], { i(1, " ") })
           ),
 
           s(
-            ":func_arr_decl",
+            ";func_arr_decl",
             fmt([[
               ({}) => {{
               }}
@@ -1541,7 +1541,7 @@ require("lazy").setup({
           ),
 
           s(
-            ":func_arr_named",
+            ";func_arr_named",
             fmt([[
               const {} = () => {{
               }};
@@ -1549,7 +1549,7 @@ require("lazy").setup({
           ),
 
           s(
-            ":class_decl",
+            ";class_decl",
             fmt([[
               class {} {{
                 constructor() {{
@@ -1559,7 +1559,7 @@ require("lazy").setup({
           ),
 
           s(
-            ":class_meth",
+            ";class_meth",
             fmt([[
               {}() {{
               }}
@@ -1567,7 +1567,7 @@ require("lazy").setup({
           ),
 
           s(
-            ":export",
+            ";export",
             fmt([[
               export default {{
                 {}
@@ -1576,14 +1576,14 @@ require("lazy").setup({
           ),
 
           s(
-            ":import",
+            ";import",
             fmt([[
               import {} from '';
             ]], { i(1, " ") })
           ),
 
           s(
-            ":required",
+            ";required",
             fmt([[
               const {} = require('');
             ]], { i(1, " ") })
