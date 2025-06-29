@@ -545,10 +545,9 @@ vim.keymap.set("n", "<leader>ay", function()
     return
   end
 
-  local final = "/add " .. relative_path
-  vim.fn.setreg("+", final)
-  vim.notify("Copied: " .. final)
-end, { desc = "Aider Yank: Copy /add path from git root", silent = true })
+  vim.fn.setreg("+", relative_path)
+  vim.notify("Copied: " .. relative_path)
+end, { desc = "Aider Yank: Copy path from git root", silent = true })
 
 -- =======================================
 -- Plugins
