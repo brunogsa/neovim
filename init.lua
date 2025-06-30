@@ -2058,4 +2058,66 @@ require("lazy").setup({
   },
 })
 
+-- Custom indentation conversion commands
+-- Convert spaces to tabs
+vim.api.nvim_create_user_command("ToTabs", function()
+  -- Save current position
+  local view = vim.fn.winsaveview()
+
+  -- Execute the conversion
+  vim.cmd([[set noexpandtab]])
+  vim.cmd([[retab!]])
+
+  -- Restore position
+  vim.fn.winrestview(view)
+
+  vim.notify("Converted spaces to tabs", vim.log.levels.INFO)
+end, {})
+
+-- Convert to 2 spaces
+vim.api.nvim_create_user_command("To2Spaces", function()
+  -- Save current position
+  local view = vim.fn.winsaveview()
+
+  -- Set values for 2-space indentation
+  vim.bo.tabstop = 2
+  vim.bo.shiftwidth = 2
+  vim.bo.softtabstop = 2
+  vim.bo.expandtab = true
+
+  -- Execute the conversion
+  vim.cmd([[retab]])
+  
+  -- Reindent the entire file
+  vim.cmd([[normal! gg=G]])
+
+  -- Restore position
+  vim.fn.winrestview(view)
+
+  vim.notify("Converted to 2-space indentation", vim.log.levels.INFO)
+end, {})
+
+-- Convert to 4 spaces
+vim.api.nvim_create_user_command("To4Spaces", function()
+  -- Save current position
+  local view = vim.fn.winsaveview()
+
+  -- Set values for 4-space indentation
+  vim.bo.tabstop = 4
+  vim.bo.shiftwidth = 4
+  vim.bo.softtabstop = 4
+  vim.bo.expandtab = true
+
+  -- Execute the conversion
+  vim.cmd([[retab]])
+  
+  -- Reindent the entire file
+  vim.cmd([[normal! gg=G]])
+
+  -- Restore position
+  vim.fn.winrestview(view)
+
+  vim.notify("Converted to 4-space indentation", vim.log.levels.INFO)
+end, {})
+
 vim.cmd.colorscheme(colorscheme)
