@@ -374,23 +374,35 @@ vim.keymap.set({ 'n', 'v' }, 'p', function()
   local win = 0
   local pos = vim.api.nvim_win_get_cursor(win)
   local originalConfig = vim.o.lazyredraw
+  local count = vim.v.count
   vim.o.lazyredraw = true
 
   if vim.fn.mode() == 'v' or vim.fn.mode() == 'V' then
     -- Visual paste and reindent
-    vim.cmd('normal! p')        -- paste
+    if count > 1 then
+      vim.cmd('normal! ' .. count .. 'p')
+    else
+      vim.cmd('normal! p')
+    end
     vim.cmd('normal! gv=gv')    -- reselect and reindent
   else
     -- Normal paste and reindent
-    vim.cmd("normal! p=']")   -- paste and reindent
+    if count > 1 then
+      vim.cmd('normal! ' .. count .. "p=']")
+    else
+      vim.cmd("normal! p=']")
+    end
   end
 
   -- Restore original cursor position
   vim.api.nvim_win_set_cursor(win, pos)
   vim.o.lazyredraw = originalConfig
-end, { silent = true })
+end, { silent = true, expr = false })
 
-vim.keymap.set('n', 'P', "P=']", { silent = true })
+vim.keymap.set('n', 'P', function()
+  local count = vim.v.count
+  return (count > 1 and (count .. "P=']") or "P=']")
+end, { silent = true, expr = true })
 
 -- Keep cursor position after yanking on visual selections
 -- Has an optimization to avoid 2 vim redraws, which cause a flicker
