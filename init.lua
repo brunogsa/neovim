@@ -752,8 +752,7 @@ require("lazy").setup({
             additional_vim_regex_highlighting = false, -- Keep disable to avoid redraw exceeded time issues
           },
           indent = {
-            enable = true,
-            disable = { "mermaid", "yaml", "json" },
+            enable = false, -- Disable Treesitter indentation for all filetypes
           },
           fold = { enable = false },
         })
