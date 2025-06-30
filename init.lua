@@ -559,10 +559,13 @@ vim.keymap.set("v", "<leader>ag", function()
     vim.notify("No text selected", vim.log.levels.ERROR)
     return
   end
-  
+
   -- Path to the global context file
   local context_file = vim.fn.expand("~/.ai-context")
-  
+
+  -- Get current buffer's file path
+  local file_path = vim.fn.expand("%:p")
+
   -- Append the selected text to the file
   local file = io.open(context_file, "a")
   if not file then
@@ -576,11 +579,12 @@ vim.keymap.set("v", "<leader>ag", function()
     -- Add two empty lines for separation
     file:write("\n\n")
   end
-  
-  -- Write the selected text and close the file
+
+  -- Write the file path comment and the selected text
+  file:write("// " .. vim.fn.expand("%") .. "\n")
   file:write(selected_text)
   file:close()
-  
+
   vim.notify("Text appended to " .. context_file, vim.log.levels.INFO)
 end, { desc = "AI Grab Context: Append selected text to global context file", silent = true })
 
