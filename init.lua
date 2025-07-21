@@ -652,12 +652,6 @@ require("lazy").setup({
     -- Auto detect indentation (2, 4 spaces, or tabs)
     { "tpope/vim-sleuth" },
 
-    -- Space/tab converter
-    {
-      "rhlobo/vim-super-retab",
-      cmd = { "Space2Tab", "Tab2Space" },
-    },
-
     -- Make f/F/t/T hotkeys work across lines
     {
       "rhysd/clever-f.vim",
