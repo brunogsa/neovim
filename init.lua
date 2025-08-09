@@ -1378,6 +1378,11 @@ require("lazy").setup({
           use_icons = false,
         })
 
+        -- User command to open Diffview for unstaged files
+        vim.api.nvim_create_user_command("CustomDiffviewOpen", function()
+          vim.cmd("DiffviewOpen --untracked-files=yes -- .")
+        end, { desc = "Open diffview for unstaged files only" })
+
         -- Automatically refresh diffview on focus regain
         vim.api.nvim_create_autocmd("FocusGained", {
           callback = function()
@@ -1414,9 +1419,9 @@ require("lazy").setup({
           if view then
             vim.cmd("DiffviewClose")
           else
-            vim.cmd("DiffviewOpen")
+            vim.cmd("CustomDiffviewOpen")
           end
-        end, { desc = "Toggle git diff (entire working tree)" })
+        end, { desc = "Toggle git diff (unstaged files only)" })
 
         -- Toggle the file panel inside Diffview
         vim.keymap.set("n", "<leader>tm", "<Cmd>DiffviewToggleFiles<CR>", {
