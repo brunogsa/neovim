@@ -1378,10 +1378,30 @@ require("lazy").setup({
           use_icons = false,
         })
 
-        -- User command to open Diffview for unstaged files
-        vim.api.nvim_create_user_command("CustomDiffviewOpen", function()
-          vim.cmd("DiffviewOpen --untracked-files=yes -- .")
-        end, { desc = "Open diffview for unstaged files only" })
+        local function diffview_unstaged_untracked()
+          -- get unstaged tracked files
+          local unstaged = vim.fn.systemlist("git diff --name-only")
+          -- get untracked files (respects .gitignore)
+          local untracked = vim.fn.systemlist("git ls-files --others --exclude-standard")
+
+          local files = {}
+          for _, f in ipairs(unstaged) do if f ~= "" then table.insert(files, vim.fn.fnameescape(f)) end end
+          for _, f in ipairs(untracked) do if f ~= "" then table.insert(files, vim.fn.fnameescape(f)) end end
+
+          if #files == 0 then
+            vim.notify("No unstaged or untracked files.", vim.log.levels.INFO)
+            return
+          end
+
+          -- Open Diffview only for those files
+          vim.cmd("DiffviewOpen -- " .. table.concat(files, " "))
+        end
+
+        vim.api.nvim_create_user_command(
+          "CustomDiffviewOpen",
+          diffview_unstaged_untracked,
+          { desc = "Open diffview for unstaged files only" }
+        )
 
         -- Automatically refresh diffview on focus regain
         vim.api.nvim_create_autocmd("FocusGained", {
@@ -1413,7 +1433,7 @@ require("lazy").setup({
           end,
         })
 
-        -- Toggle Diffview (open/close)
+        -- Toggle Diffview (open/close) CustomDiffviewOpen
         vim.keymap.set({ "n", "v" }, "<leader>td", function()
           local view = require("diffview.lib").get_current_view()
           if view then
@@ -1421,7 +1441,17 @@ require("lazy").setup({
           else
             vim.cmd("CustomDiffviewOpen")
           end
-        end, { desc = "Toggle git diff (unstaged files only)" })
+        end, { desc = "Toggle git diff (unstaged and untracked)" })
+
+        -- Toggle Diffview (open/close) DiffviewOpen
+        vim.keymap.set({ "n", "v" }, "<leader>tD", function()
+          local view = require("diffview.lib").get_current_view()
+          if view then
+            vim.cmd("DiffviewClose")
+          else
+            vim.cmd("DiffviewOpen")
+          end
+        end, { desc = "Toggle git diff (staged and unstaged)" })
 
         -- Toggle the file panel inside Diffview
         vim.keymap.set("n", "<leader>tm", "<Cmd>DiffviewToggleFiles<CR>", {
