@@ -1378,11 +1378,23 @@ require("lazy").setup({
           use_icons = false,
         })
 
+        -- AI, the function bellow is not working well
+        -- AI, <leader>td only work on the root dir of the git repo, but should work in any folder level inside of that git repo
         local function diffview_unstaged_untracked()
-          -- get unstaged tracked files
-          local unstaged = vim.fn.systemlist("git diff --name-only")
-          -- get untracked files (respects .gitignore)
-          local untracked = vim.fn.systemlist("git ls-files --others --exclude-standard")
+          -- Get the git root directory
+          local git_root = vim.fn.systemlist("git rev-parse --show-toplevel")[1]
+
+          if vim.v.shell_error ~= 0 then
+            vim.notify("Not in a git repository", vim.log.levels.ERROR)
+            return
+          end
+
+          -- Use git commands with the -C flag to run from the repository root
+          -- Get unstaged tracked files
+          local unstaged = vim.fn.systemlist("git -C " .. vim.fn.shellescape(git_root) .. " diff --name-only")
+
+          -- Get untracked files (respects .gitignore)
+          local untracked = vim.fn.systemlist("git -C " .. vim.fn.shellescape(git_root) .. " ls-files --others --exclude-standard")
 
           local files = {}
           for _, f in ipairs(unstaged) do if f ~= "" then table.insert(files, vim.fn.fnameescape(f)) end end
