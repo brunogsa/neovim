@@ -697,6 +697,7 @@ require("lazy").setup({
     -- Easier marks
     {
       "2KAbhishek/markit.nvim",
+      dependencies = { "2KAbhishek/pickme.nvim" },
       config = function()
         require("markit").setup({
           -- any options if needed
