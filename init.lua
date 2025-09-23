@@ -566,7 +566,7 @@ vim.keymap.set("v", "<leader>ag", function()
   -- Get the selected text
   vim.cmd('normal! "zy')
   local selected_text = vim.fn.getreg('z')
-  
+
   if not selected_text or selected_text == "" then
     vim.notify("No text selected", vim.log.levels.ERROR)
     return
@@ -584,7 +584,6 @@ vim.keymap.set("v", "<leader>ag", function()
     vim.notify("Failed to open context file: " .. context_file, vim.log.levels.ERROR)
     return
   end
-  
   -- Add separation lines if the file is not empty
   local file_size = vim.fn.getfsize(context_file)
   if file_size > 0 then
@@ -1401,8 +1400,8 @@ require("lazy").setup({
         vim.api.nvim_create_autocmd("BufEnter", {
           callback = function()
             local bufname = vim.api.nvim_buf_get_name(0)
-            if bufname:match("DiffviewFilePanel") or 
-               bufname:match("DiffviewFiles") or 
+            if bufname:match("DiffviewFilePanel") or
+               bufname:match("DiffviewFiles") or
                bufname:match("DiffviewFileHistory") then
               vim.cmd("ContextDisable")
             end
@@ -1692,20 +1691,37 @@ require("lazy").setup({
 
     {
       "neovim/nvim-lspconfig",
+      version = "^1.0.0",
       config = function()
-        local lspconfig = require("lspconfig")
         local capabilities = require("cmp_nvim_lsp").default_capabilities()
 
-        -- Disable tsserver formatting to let null-ls handle it
+        -- Native LSP setup for Neovim 0.11+
+        vim.api.nvim_create_autocmd("FileType", {
+          pattern = { "javascript", "typescript", "javascriptreact", "typescriptreact" },
+          callback = function()
+            vim.lsp.start({
+              name = "tsserver",
+              cmd = { "typescript-language-server", "--stdio" },
+              root_dir = vim.fs.root(0, { "package.json", "tsconfig.json", ".git" }),
+              capabilities = capabilities,
+              on_attach = function(client, _)
+                client.server_capabilities.documentFormattingProvider = false
+              end,
+            })
+          end,
+        })
+
+        -- For other servers, we still use lspconfig for now
+        local lspconfig = require("lspconfig")
+
         local on_attach = function(client, _)
           if client.name == "ts_ls" then
             client.server_capabilities.documentFormattingProvider = false
           end
         end
 
-        -- List of LSP servers to enable
+        -- Other LSP servers (keep these with lspconfig for now)
         local servers = {
-          "ts_ls",        -- JavaScript / TypeScript
           "pyright",      -- Python
           "gopls",        -- Go
           "dockerls",     -- Docker
@@ -1963,7 +1979,7 @@ vim.api.nvim_create_user_command("To2Spaces", function()
 
   -- Execute the conversion
   vim.cmd([[retab]])
-  
+
   -- Reindent the entire file
   vim.cmd([[normal! gg=G]])
 
@@ -1986,7 +2002,7 @@ vim.api.nvim_create_user_command("To4Spaces", function()
 
   -- Execute the conversion
   vim.cmd([[retab]])
-  
+
   -- Reindent the entire file
   vim.cmd([[normal! gg=G]])
 
