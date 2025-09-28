@@ -220,6 +220,7 @@ vim.g.html_indent_script1 = 'inc'
 vim.g.html_indent_style1 = 'inc'
 vim.g.html_indent_inctags = 'html,body,head'
 
+
 -- Automatically set wrap when starting a vim diff
 vim.api.nvim_create_autocmd('FilterWritePre', {
   pattern = '*',
@@ -758,7 +759,17 @@ require("lazy").setup({
             additional_vim_regex_highlighting = false, -- Keep disable to avoid redraw exceeded time issues
           },
           indent = {
-            enable = false, -- Disable Treesitter indentation for all filetypes
+            enable = true,
+            disable = function(lang, buf)
+              -- Enable only for specific languages that work well with treesitter indent
+              local allowed_languages = { "json", "javascript", "typescript", "html", "css", "python", "go", "xml", "yaml" }
+              for _, allowed in ipairs(allowed_languages) do
+                if lang == allowed then
+                  return false -- Don't disable for these languages
+                end
+              end
+              return true -- Disable for all other languages
+            end,
           },
           fold = { enable = false },
         })
