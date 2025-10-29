@@ -311,10 +311,10 @@ vim.keymap.set('n', ';;', 'mqA;<esc>`q', { silent = true })
 vim.keymap.set('n', ',,', 'mqA,<esc>`q', { silent = true })
 
 -- Efficient way to move through your code using the Arrow Keys
-vim.keymap.set('n', '<left>', 'h', { silent = true })
-vim.keymap.set('n', '<down>', 'gj', { silent = true })
-vim.keymap.set('n', '<up>', 'gk', { silent = true })
-vim.keymap.set('n', '<right>', 'l', { silent = true })
+vim.keymap.set({ 'n', 'v' }, '<left>', 'h', { silent = true })
+vim.keymap.set({ 'n', 'v' }, '<down>', 'gj', { silent = true })
+vim.keymap.set({ 'n', 'v' }, '<up>', 'gk', { silent = true })
+vim.keymap.set({ 'n', 'v' }, '<right>', 'l', { silent = true })
 
 -- Move to the beginning of the indentation level
 vim.keymap.set('', '<S-left>', '^', { silent = true })
