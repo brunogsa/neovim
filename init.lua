@@ -574,7 +574,7 @@ vim.keymap.set("v", "<leader>ag", function()
   end
 
   -- Path to the global context file
-  local context_file = vim.fn.expand("~/.ai-context")
+  local context_file = vim.fn.expand("~/.claude/CLAUDE.md")
 
   -- Get current buffer's file path
   local file_path = vim.fn.expand("%:p")
