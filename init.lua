@@ -86,47 +86,6 @@ vim.api.nvim_create_autocmd("CursorHold", {
   end,
 })
 
--- Treesitter currently doesnot support mermaid files
--- So, this is an workaround until there
--- Define inline Mermaid indent logic
-function _G.MermaidIndent()
-  local lnum = vim.v.lnum
-  if lnum == 1 then return 0 end
-
-  local block_stack = {}
-  for i = 1, lnum - 1 do
-    local line = vim.fn.getline(i):match("^%s*(.*)")
-    if line:match("^(alt)%s") or line:match("^(opt)%s") or
-      line:match("^(loop)%s") or line:match("^(critical)%s") or
-      line:match("^(par)%s") then
-      table.insert(block_stack, line)
-    elseif line == "end" and #block_stack > 0 then
-      table.remove(block_stack)
-    end
-  end
-
-  local current = vim.fn.getline(lnum):match("^%s*(.*)")
-
-  if current == "sequenceDiagram" then
-    return 0
-  elseif current == "end" and #block_stack > 0 then
-    return (#block_stack - 1) * 2
-  elseif current:match("^(alt)%s") or current:match("^(opt)%s") or
-    current:match("^(loop)%s") or current:match("^(critical)%s") or
-    current:match("^(par)%s") then
-    return (#block_stack) * 2
-  else
-    return (#block_stack) * 2
-  end
-end
-
-vim.api.nvim_create_autocmd("FileType", {
-  pattern = { "mermaid", "mmd" },
-  callback = function()
-    vim.opt_local.indentexpr = "v:lua.MermaidIndent()"
-  end,
-})
-
 -- =======================================
 -- Core Settings
 -- =======================================
@@ -781,7 +740,7 @@ require("lazy").setup({
             enable = true,
             disable = function(lang, buf)
               -- Enable only for specific languages that work well with treesitter indent
-              local allowed_languages = { "json", "javascript", "typescript", "html", "css", "python", "go", "xml", "yaml" }
+              local allowed_languages = { "json", "javascript", "typescript", "html", "css", "python", "go", "xml", "yaml", "markdown", "mermaid" }
               for _, allowed in ipairs(allowed_languages) do
                 if lang == allowed then
                   return false -- Don't disable for these languages
