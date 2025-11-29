@@ -1,0 +1,15 @@
+sequenceDiagram
+participant User
+participant API
+participant DB
+User->>API: Request data
+alt Success
+  API->>DB: Query
+  DB-->>API: Return data
+  API-->>User: 200 OK
+else Error
+  API-->>User: 500 Error
+end
+opt Retry
+  User->>API: Retry
+end

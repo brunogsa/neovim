@@ -66,6 +66,47 @@ No manual installation of the plugin manager is required.
 - Snippets and autocompletion
 - Markdown and code previews
 
+## Testing
+
+This configuration includes automated tests for auto-indentation across multiple file formats.
+
+### Running Tests
+
+```sh
+cd tests
+
+# Run full test suite (all formats)
+./agentic-nvim-autoformat-test.sh
+
+# Test a single file
+./agentic-nvim-autoformat-test.sh test.md
+```
+
+### Supported Formats
+
+The test suite validates indentation for:
+
+**Markdown** (`.md`)
+- Nested lists with Treesitter indentation
+
+**XML** (`.xml`)
+- Nested tags with Treesitter indentation
+
+**Mermaid** (`.mmd`)
+- **Sequence Diagrams**: `alt`, `else`, `opt`, `loop`, `par`, `and`, `critical`, `option`, `rect`, `break`
+- **Flowcharts**: `subgraph` with nested subgraphs
+- **State Diagrams**: Composite states with `{}` syntax
+
+### Test Files
+
+All test files are located in the `tests/` directory:
+- `test.md` - Markdown with nested lists
+- `test.xml` - XML with nested tags
+- `test.mmd` - Basic sequence diagram
+- `test_sequence_full.mmd` - All sequence diagram block types
+- `test_flowchart.mmd` - Flowchart with subgraphs
+- `test_state.mmd` - State diagram with composite states
+
 ## How to profile its performance
 
 ```sh

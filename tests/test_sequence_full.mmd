@@ -1,0 +1,31 @@
+sequenceDiagram
+participant User
+participant API
+User->>API: Request
+alt Success
+  API->>User: 200 OK
+else Error
+  API->>User: 500 Error
+end
+opt Retry
+  User->>API: Retry
+end
+loop Every minute
+  API->>User: Ping
+end
+par Parallel requests
+  User->>API: Request A
+and
+  User->>API: Request B
+end
+critical Critical section
+  API->>User: Lock acquired
+option Timeout
+  API->>User: Lock timeout
+end
+rect rgb(200, 200, 200)
+  User->>API: In box
+end
+break Error occurred
+  User->>API: Stop
+end

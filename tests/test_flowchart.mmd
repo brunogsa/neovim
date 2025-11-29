@@ -1,0 +1,15 @@
+flowchart TD
+A[Start]
+B[Process]
+subgraph Section1
+  C[Step 1]
+  D[Step 2]
+end
+subgraph Section2
+  E[Step 3]
+  subgraph Nested
+    F[Nested step]
+  end
+end
+A --> B
+B --> C

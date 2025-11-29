@@ -86,6 +86,65 @@ vim.api.nvim_create_autocmd("CursorHold", {
   end,
 })
 
+-- Mermaid indent: Custom implementation supporting flowchart, sequenceDiagram, and stateDiagram
+function _G.MermaidIndent()
+  local lnum = vim.v.lnum
+  if lnum == 1 then return 0 end
+
+  local block_stack = {}
+  for i = 1, lnum - 1 do
+    local line = vim.fn.getline(i):match("^%s*(.*)")
+    -- Sequence diagram blocks
+    if line:match("^alt%s") or line:match("^opt%s") or
+       line:match("^loop%s") or line:match("^critical%s") or
+       line:match("^par%s") or line:match("^rect%s") or
+       line:match("^box%s") or line:match("^break%s") then
+      table.insert(block_stack, line)
+    -- Flowchart blocks
+    elseif line:match("^subgraph%s") then
+      table.insert(block_stack, line)
+    -- State diagram blocks (using {} syntax)
+    elseif line:match("state%s.*{$") then
+      table.insert(block_stack, line)
+    -- Closing blocks
+    elseif (line == "end" or line == "}") and #block_stack > 0 then
+      table.remove(block_stack)
+    end
+  end
+
+  local current = vim.fn.getline(lnum):match("^%s*(.*)")
+
+  -- Diagram type declarations should not be indented
+  if current:match("^sequenceDiagram") or current:match("^flowchart") or
+     current:match("^stateDiagram") or current:match("^graph%s") then
+    return 0
+  -- Closing keywords at same level as opening block
+  elseif (current == "end" or current == "}") and #block_stack > 0 then
+    return (#block_stack - 1) * 2
+  -- else/and/option are at same level as their parent block
+  elseif (current:match("^else%s") or current:match("^and%s") or
+          current:match("^option%s")) and #block_stack > 0 then
+    return (#block_stack - 1) * 2
+  -- Opening block keywords
+  elseif current:match("^alt%s") or current:match("^opt%s") or
+         current:match("^loop%s") or current:match("^critical%s") or
+         current:match("^par%s") or current:match("^rect%s") or
+         current:match("^box%s") or current:match("^break%s") or
+         current:match("^subgraph%s") then
+    return (#block_stack) * 2
+  -- Everything else gets indented based on block depth
+  else
+    return (#block_stack) * 2
+  end
+end
+
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = { "mermaid", "mmd" },
+  callback = function()
+    vim.opt_local.indentexpr = "v:lua.MermaidIndent()"
+  end,
+})
+
 -- =======================================
 -- Core Settings
 -- =======================================
@@ -740,7 +799,7 @@ require("lazy").setup({
             enable = true,
             disable = function(lang, buf)
               -- Enable only for specific languages that work well with treesitter indent
-              local allowed_languages = { "json", "javascript", "typescript", "html", "css", "python", "go", "xml", "yaml", "markdown", "mermaid" }
+              local allowed_languages = { "json", "javascript", "typescript", "html", "css", "python", "go", "xml", "yaml", "markdown" }
               for _, allowed in ipairs(allowed_languages) do
                 if lang == allowed then
                   return false -- Don't disable for these languages
