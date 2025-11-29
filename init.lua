@@ -198,6 +198,25 @@ vim.opt.backup = false
 vim.opt.writebackup = false
 vim.opt.swapfile = false
 
+-- Auto-reload files when changed externally
+vim.opt.autoread = true
+
+-- Check for file changes when cursor stops moving or when entering buffer
+vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI", "FocusGained", "BufEnter" }, {
+  callback = function()
+    if vim.fn.mode() ~= 'c' then
+      vim.cmd('checktime')
+    end
+  end,
+})
+
+-- Notify when file is auto-reloaded
+vim.api.nvim_create_autocmd("FileChangedShellPost", {
+  callback = function()
+    vim.notify("File reloaded: " .. vim.fn.expand("%"), vim.log.levels.INFO)
+  end,
+})
+
 -- Indentation options
 vim.opt.autoindent = true
 vim.opt.smartindent = true
