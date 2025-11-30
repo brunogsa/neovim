@@ -1349,10 +1349,7 @@ require("lazy").setup({
           local word = vim.fn.expand("<cword>")
           telescope_no_folds_search(require("telescope.builtin").live_grep, {
             default_text = word,
-            additional_args = function(args)
-              table.insert(args, "--fixed-strings")
-              return args
-            end,
+            additional_args = { "--fixed-strings" },
           })
         end, { desc = "Exact search for word under cursor (folds disabled)" })
 
@@ -1360,10 +1357,7 @@ require("lazy").setup({
           local text = vim.fn.getreg("v")
           telescope_no_folds_search(require("telescope.builtin").live_grep, {
             default_text = text,
-            additional_args = function(args)
-              table.insert(args, "--fixed-strings")
-              return args
-            end,
+            additional_args = { "--fixed-strings" },
           })
         end, { desc = "Exact search for selected text (folds disabled)" })
       end,
