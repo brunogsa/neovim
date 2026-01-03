@@ -2,13 +2,9 @@
 set -e
 set -x
 
-# Install integrations..
-
-# Globally install Tern stuff
-sudo npm install -g tern prettier @asyncapi/generator @asyncapi/html-template
-
-# golint installation
-# sudo apt-get install -y golint
+# Globally install Tern and Node stuff
+sudo npm install -g tern prettier @asyncapi/generator @asyncapi/html-template @mermaid-js/mermaid-cli redocly bash-language-server markdownlint-cli yaml-language-server dockerfile-language-server-nodejs
+brew install yamllint vscode-langservers-extracted terraform-ls
 
 # Install pgFormatter
 sudo rm -fr pgFormatter && git clone https://github.com/darold/pgFormatter
@@ -17,37 +13,25 @@ perl Makefile.PL
 make && sudo make install
 cd -
 
-# Install it
-sudo add-apt-repository ppa:neovim-ppa/unstable
-sudo apt-get update || echo "Done"
-sudo apt-get install -y neovim
+# Install nerd-fonts
+brew tap homebrew/cask-fonts
+brew install --cask font-hack-nerd-font
 
-sudo apt install python3-neovim
-sudo gem install neovim
+# Install it
+brew install neovim
+
+pip3 install --upgrade neovim --break-system-packages
 sudo npm i -g neovim
 
-# Install vim-plug
-curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+# Install lazy.nvim (plugin manager nvim)
+mkdir -p ~/.config/nvim/lua/plugins
 
 # Use my configs
 mkdir -p ~/.config/nvim/
-ln -s ~/neovim/init.vim ~/.config/nvim/
-ln -s ~/neovim/colors ~/.config/nvim/
-ln -s ~/neovim/.tern-project ~
-
-echo "alias sudo=sudo " >> ~/.bashrc
-echo "alias vim=nvim" >> ~/.bashrc
-git config --global core.editor "nvim"
-
-# Install nerd-fonts
-if [ ! -d "nerd-fonts" ]; then
-  git clone https://github.com/ryanoasis/nerd-fonts.git
-else
-  cd nerd-fonts
-  git pull
-  sudo chmod +x install.sh
-  ./install.sh
-  cd -
-fi
+ln -sf ~/neovim/init.vim ~/.config/nvim/
+ln -sf ~/neovim/init.lua ~/.config/nvim/
+ln -sf ~/neovim/colors ~/.config/nvim/
+ln -sf ~/neovim/.tern-project ~
+ln -sf ~/neovim/coc-settings.json ~/.config/nvim/
 
 echo "Done!"

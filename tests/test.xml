@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+  <config>
+    <database>
+      <host>localhost</host>
+      <port>5432</port>
+    </database>
+    <cache>
+      <enabled>true</enabled>
+    </cache>
+  </config>
+</root>
