@@ -26,10 +26,10 @@ if [[ "$OS" == "macos" ]]; then
 elif [[ "$OS" == "linux" ]]; then
     sudo apt-get update
     sudo apt install -y build-essential zlib1g-dev libncurses5-dev libgdbm-dev libnss3-dev libssl-dev libreadline-dev libffi-dev wget
-    sudo apt-get install -y python3 python3-pip
-    pip3 install --user pynvim
-    pip3 install --user --upgrade pynvim
-    sudo apt-get install -y ruff python3-flake8
+    sudo apt-get install -y python3 python3-pip python3-flake8
+    pip3 install --user --break-system-packages pynvim
+    pip3 install --user --break-system-packages --upgrade pynvim
+    pip3 install --user --break-system-packages ruff
 fi
 
 # Install Ruby
@@ -59,12 +59,13 @@ fi
 # Install Lua
 if [[ "$OS" == "macos" ]]; then
     brew install lua luarocks
+    luarocks install luacheck
 elif [[ "$OS" == "linux" ]]; then
     sudo apt-get install -y lua5.3 liblua5.3-dev luarocks
+    luarocks install --local luacheck
 fi
 
-# Install Lua tools (common)
-luarocks install luacheck
+# Install Lua tools (common, requires Rust from earlier step)
 cargo install selene
 
 # Install perl
@@ -84,7 +85,7 @@ fi
 # Node version management and global packages (common)
 node -v && npm -v
 npm i -g n
-n lts
+sudo n lts
 npm i -g npm yarn node-gyp
 
 # Setup npm directory
