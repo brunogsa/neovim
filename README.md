@@ -30,16 +30,17 @@ git clone https://github.com/brunogsa/neovim.git ~/neovim
 cd ~/neovim
 ```
 
-2. Run the installation scripts:
+2. Run the installation script:
 ```sh
-./install.sh    # Installs language dependencies (Node, Python, Ruby, Rust, Lua)
-./install2.sh   # Installs Neovim and related tools
+./install.sh
 ```
 
-The scripts will:
+The script will:
 - Auto-detect your OS (macOS or Linux)
-- Install packages using the appropriate package manager (brew or apt)
-- Configure platform-specific settings as needed
+- Install all language dependencies (Python, Ruby, Rust, Lua, Perl, Node.js)
+- Install Neovim and LSP servers
+- Install fonts and development tools
+- Set up configuration symlinks
 
 3. Launch Neovim:
 ```sh

@@ -108,7 +108,7 @@ This configuration supports both macOS and Linux (Debian/Ubuntu).
 
 ### OS Detection
 
-**Installation Scripts (install.sh, install2.sh):**
+**Installation Script (install.sh):**
 - Use `$OSTYPE` environment variable for OS detection
 - Pattern: `darwin*` for macOS, `linux-gnu*` for Linux
 - Function: `detect_os()` returns "macos" or "linux"
