@@ -102,6 +102,44 @@ Key plugins:
 - vim-tmux-focus-events: Focus event support in tmux
 - vim-sleuth: Auto-detect indentation
 
+## Cross-Platform Support
+
+This configuration supports both macOS and Linux (Debian/Ubuntu).
+
+### OS Detection
+
+**Installation Scripts (install.sh, install2.sh):**
+- Use `$OSTYPE` environment variable for OS detection
+- Pattern: `darwin*` for macOS, `linux-gnu*` for Linux
+- Function: `detect_os()` returns "macos" or "linux"
+
+**Neovim Configuration (init.lua):**
+- Preview commands use `open` command, which is aliased in ~/.zshrc:
+  - macOS: native `open` command
+  - Linux: `alias open='xdg-open'` in ~/.zshrc
+
+### Platform Differences
+
+**Package Managers:**
+- macOS: Homebrew (`brew install`)
+- Linux: apt (`sudo apt-get install`)
+
+**Python pip:**
+- macOS: Requires `--break-system-packages` flag
+- Linux: Uses `--user` flag instead
+
+**Ruby:**
+- macOS: Includes RVM setup for stable Ruby versions
+- Linux: Uses system Ruby packages
+
+**Fonts:**
+- macOS: Installed via Homebrew cask (`brew install --cask font-hack-nerd-font`)
+- Linux: Cloned from nerd-fonts repo and installed via script
+
+**LSP Tools:**
+- terraform-ls: brew on macOS, wget binary on Linux
+- yamllint: brew on macOS, pip3 on Linux
+
 ## Notes for AI Assistants
 
 - Always read init.lua before making changes

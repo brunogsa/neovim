@@ -1,21 +1,32 @@
 # Neovim Configuration
 
-A modern Neovim configuration with LSP support, Git integration, AI assistance, and more.
+A modern, cross-platform Neovim configuration with LSP support, Git integration, AI assistance, and more.
+
+**Supported Platforms:**
+- macOS (Homebrew)
+- Debian/Ubuntu Linux (apt)
 
 ## How to install
 
 ### Prerequisites
 
+**macOS:**
 - Git
-- Node.js and npm
-- Python 3
-- Homebrew (for macOS users)
+- Homebrew
+- Xcode Command Line Tools
+
+**Linux (Debian/Ubuntu):**
+- Git
+- sudo access
+- build-essential
+
+**Note:** The installation scripts automatically detect your operating system and install the appropriate packages.
 
 ### Installation Steps
 
 1. Clone this repository:
 ```sh
-git clone https://github.com/yourusername/neovim-config.git ~/neovim
+git clone https://github.com/brunogsa/neovim.git ~/neovim
 cd ~/neovim
 ```
 
@@ -24,6 +35,11 @@ cd ~/neovim
 ./install.sh    # Installs language dependencies (Node, Python, Ruby, Rust, Lua)
 ./install2.sh   # Installs Neovim and related tools
 ```
+
+The scripts will:
+- Auto-detect your OS (macOS or Linux)
+- Install packages using the appropriate package manager (brew or apt)
+- Configure platform-specific settings as needed
 
 3. Launch Neovim:
 ```sh
