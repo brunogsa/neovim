@@ -777,6 +777,66 @@ require("lazy").setup({
       end,
     },
 
+    -- Tree-sitter (syntax highlighting & code analysis)
+    {
+      "nvim-treesitter/nvim-treesitter",
+      branch = "master",  -- Use master for configs API compatibility
+      build = ":TSUpdate",
+      config = function()
+        require("nvim-treesitter.configs").setup({
+          -- Only install parsers for languages user actually uses
+          ensure_installed = {
+            -- Core
+            "lua", "vim", "vimdoc",
+            -- Web
+            "javascript", "typescript", "tsx",
+            "html", "css", "json",
+            -- Markup & Config
+            "xml", "yaml", "markdown", "markdown_inline",
+            -- Backend
+            "python", "go", "bash",
+            -- DevOps
+            "dockerfile", "terraform",
+            -- Data
+            "csv", "sql",
+          },
+          sync_install = false,  -- Install parsers asynchronously
+          auto_install = false,  -- Don't auto-install unknown parsers
+
+          highlight = {
+            enable = true,
+            -- Disable for large files (performance)
+            disable = function(_, buf)
+              local max_filesize = 100 * 1024 -- 100 KB
+              local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(buf))
+              return ok and stats and stats.size > max_filesize
+            end,
+            additional_vim_regex_highlighting = false,
+          },
+
+          indent = {
+            enable = true,
+            -- Enable only for languages that work well with treesitter indent
+            disable = function(lang, buf)
+              local allowed_languages = {
+                "json", "javascript", "typescript", "tsx",
+                "html", "css", "python", "go",
+                "xml", "yaml", "markdown"
+              }
+              for _, allowed in ipairs(allowed_languages) do
+                if lang == allowed then
+                  return false  -- Enable for these languages
+                end
+              end
+              return true  -- Disable for all others
+            end,
+          },
+
+          fold = { enable = false },  -- Use LSP folding instead
+        })
+      end,
+    },
+
     -- Icons (required by many plugins)
     {
       "nvim-tree/nvim-web-devicons",
@@ -1101,7 +1161,7 @@ require("lazy").setup({
       "stevearc/aerial.nvim",
       config = function()
         require("aerial").setup({
-          backends = { "lsp", "markdown" }, -- prioritize LSP, fallback to markdown
+          backends = { "lsp", "treesitter", "markdown" }, -- in order of priority
           layout = {
             min_width = 25,
             max_width = 40,
@@ -1490,6 +1550,7 @@ require("lazy").setup({
         "delphinus/cmp-ctags", -- tags completions
         "hrsh7th/cmp-omni", -- Omni completions
         "andersevenrud/cmp-tmux", -- Tmux completions
+        "ray-x/cmp-treesitter", -- Treesitter completions
         -- TODO: completion from browser
       },
       config = function()
@@ -1675,6 +1736,7 @@ require("lazy").setup({
             { name = "buffer" },
             { name = "path" },
             { name = "cmp_zsh" },
+            { name = "treesitter" },
             { name = "omni" },
             { name = "tmux" }
           }),
@@ -1688,6 +1750,7 @@ require("lazy").setup({
                 path = "[Path]",
                 nvim_lua = "[Lua]",
                 cmp_zsh = "[Zsh]",
+                treesitter = "[Tree]",
                 omni = "[Omni]",
                 tmux = "[Tmux]"
               })[entry.source.name] or ""
