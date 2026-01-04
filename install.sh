@@ -108,7 +108,7 @@ npm i -g eslint_d typescript
 ################################################################################
 
 # Globally install Node tools for development (common)
-npm install -g tern prettier @asyncapi/generator @asyncapi/html-template @mermaid-js/mermaid-cli redocly bash-language-server markdownlint-cli yaml-language-server dockerfile-language-server-nodejs
+npm install -g tern prettier @asyncapi/generator @asyncapi/html-template @mermaid-js/mermaid-cli redocly bash-language-server markdownlint-cli yaml-language-server dockerfile-language-server-nodejs tree-sitter-cli
 
 # LSP servers and linters
 if [[ "$OS" == "macos" ]]; then
