@@ -1821,7 +1821,17 @@ require("lazy").setup({
                 diagnostics = {
                   globals = { "vim" },
                 },
+                workspace = {
+                  -- Use user-writable cache directory instead of /opt
+                  checkThirdParty = false,
+                },
               },
+            }
+            -- Override cache directory to user's home
+            opts.cmd = {
+              "lua-language-server",
+              "--logpath=" .. vim.fn.stdpath("cache") .. "/lua-language-server",
+              "--metapath=" .. vim.fn.stdpath("cache") .. "/lua-language-server/meta",
             }
           end
 
