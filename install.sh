@@ -150,6 +150,11 @@ elif [[ "$OS" == "linux" ]]; then
     sudo apt-get update
     sudo apt-get install -y neovim python3-neovim
     pip3 install --user --break-system-packages --upgrade neovim
+
+    # Symlink system bundled parsers to user location
+    # PPA builds include parsers in /usr/lib but nvim looks in ~/.local/share
+    mkdir -p ~/.local/share/nvim/site
+    ln -sf /usr/lib/x86_64-linux-gnu/nvim/parser ~/.local/share/nvim/site/parser
 fi
 
 # Install neovim npm package (common)
