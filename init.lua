@@ -777,48 +777,6 @@ require("lazy").setup({
       end,
     },
 
-    -- Treesitter
-    {
-      "nvim-treesitter/nvim-treesitter",
-      branch = "master", -- Use master branch for backward compatibility with configs API
-      build = ":TSUpdate",
-      config = function()
-        require("nvim-treesitter.configs").setup({
-          ensure_installed = {
-            -- Core (required for nvim)
-            "lua", "vim", "vimdoc",
-            -- Web development
-            "javascript", "typescript", "tsx",
-            "html", "css", "json", "yaml",
-            -- Backend
-            "python", "go", "bash",
-            -- DevOps
-            "dockerfile", "terraform"
-          },
-          sync_install = false,
-          auto_install = false,
-          highlight = {
-            enable = false, -- Temporarily disabled due to query compatibility issues
-            additional_vim_regex_highlighting = false,
-          },
-          indent = {
-            enable = true,
-            disable = function(lang, buf)
-              -- Enable only for specific languages that work well with treesitter indent
-              local allowed_languages = { "json", "javascript", "typescript", "html", "css", "python", "go", "xml", "yaml", "markdown" }
-              for _, allowed in ipairs(allowed_languages) do
-                if lang == allowed then
-                  return false -- Don't disable for these languages
-                end
-              end
-              return true -- Disable for all other languages
-            end,
-          },
-          fold = { enable = false },
-        })
-      end,
-    },
-
     -- Icons (required by many plugins)
     {
       "nvim-tree/nvim-web-devicons",
@@ -1143,7 +1101,7 @@ require("lazy").setup({
       "stevearc/aerial.nvim",
       config = function()
         require("aerial").setup({
-          backends = { "lsp", "treesitter", "markdown" }, -- prioritize LSP, fallback to Treesitter
+          backends = { "lsp", "markdown" }, -- prioritize LSP, fallback to markdown
           layout = {
             min_width = 25,
             max_width = 40,
@@ -1524,7 +1482,6 @@ require("lazy").setup({
         "saadparwaiz1/cmp_luasnip",
         "hrsh7th/cmp-nvim-lua",
         "hrsh7th/cmp-nvim-lsp-signature-help",
-        "ray-x/cmp-treesitter",
         "petertriho/cmp-git", -- git completions
         "f3fora/cmp-spell", -- spelling suggestions
         "kristijanhusak/vim-dadbod-completion", -- SQL DB completions
@@ -1718,7 +1675,6 @@ require("lazy").setup({
             { name = "buffer" },
             { name = "path" },
             { name = "cmp_zsh" },
-            { name = "treesitter" },
             { name = "omni" },
             { name = "tmux" }
           }),
@@ -1732,7 +1688,6 @@ require("lazy").setup({
                 path = "[Path]",
                 nvim_lua = "[Lua]",
                 cmp_zsh = "[Zsh]",
-                treesitter = "[TS]",
                 omni = "[Omni]",
                 tmux = "[Tmux]"
               })[entry.source.name] or ""
