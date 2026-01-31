@@ -182,7 +182,7 @@ vim.cmd('syntax sync maxlines=2000')
 vim.opt.timeoutlen = 512
 vim.opt.ttimeoutlen = 16
 
--- Fold options. I prefer fold by identation
+-- Fold options. I prefer fold by indentation
 
 vim.opt.foldmethod = 'indent'
 vim.opt.foldlevelstart = 2
@@ -1489,7 +1489,14 @@ require("lazy").setup({
         vim.keymap.set({ "n", "v" }, "<leader>td", function()
           local view = require("diffview.lib").get_current_view()
           if view then
+            local current_file = vim.fn.expand("%:p")
+            local cursor_line = vim.fn.line(".")
             vim.cmd("DiffviewClose")
+            if current_file ~= "" and vim.fn.filereadable(current_file) == 1 then
+              vim.cmd("edit " .. vim.fn.fnameescape(current_file))
+              vim.api.nvim_win_set_cursor(0, { cursor_line, 0 })
+              vim.cmd("normal! zz")
+            end
           else
             vim.cmd("DiffviewOpen")
           end
