@@ -17,6 +17,11 @@ vim.api.nvim_create_autocmd("VimEnter", {
 
       if ignore[ft] then return end
 
+      -- Skip if nvim was opened with a +line argument
+      for _, arg in ipairs(vim.v.argv) do
+        if arg:match("^%+%d+$") then return end
+      end
+
       local mark = vim.api.nvim_buf_get_mark(0, '"')
       local lcount = vim.api.nvim_buf_line_count(0)
 
