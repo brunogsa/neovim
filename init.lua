@@ -1506,6 +1506,31 @@ require("lazy").setup({
         vim.keymap.set("n", "<leader>tm", "<Cmd>DiffviewToggleFiles<CR>", {
           desc = "Toggle git diff menu",
         })
+
+        -- Toggle Diffview for current file only (unstaged only, no file panel)
+        vim.keymap.set("n", "<leader>tD", function()
+          local view = require("diffview.lib").get_current_view()
+          if view then
+            local current_file = vim.fn.expand("%:p")
+            local cursor_line = vim.fn.line(".")
+            vim.cmd("DiffviewClose")
+            if current_file ~= "" and vim.fn.filereadable(current_file) == 1 then
+              vim.cmd("edit " .. vim.fn.fnameescape(current_file))
+              vim.api.nvim_win_set_cursor(0, { cursor_line, 0 })
+              vim.cmd("normal! zz")
+            end
+          else
+            local current_file = vim.fn.expand("%")
+            if current_file == "" then
+              vim.notify("No file to diff", vim.log.levels.WARN)
+              return
+            end
+            vim.cmd("DiffviewOpen -- " .. vim.fn.fnameescape(current_file))
+            vim.defer_fn(function()
+              vim.cmd("DiffviewToggleFiles")
+            end, 50)
+          end
+        end, { desc = "Toggle git diff (current file only, unstaged)" })
       end,
     },
 
