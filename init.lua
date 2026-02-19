@@ -634,7 +634,34 @@ vim.keymap.set("v", "<leader>ay", function()
   vim.notify("Copied: " .. result, vim.log.levels.INFO)
 end, { desc = "Aider Yank: Copy path:lines from git root", silent = true })
 
--- AI Context Append
+-- AI Context Append (normal mode: entire file)
+vim.keymap.set("n", "<leader>aa", function()
+  local context_file = vim.fn.expand("~/.ai-context.txt")
+
+  local content = table.concat(vim.api.nvim_buf_get_lines(0, 0, -1, false), "\n")
+  if content == "" then
+    vim.notify("Buffer is empty", vim.log.levels.ERROR)
+    return
+  end
+
+  local file = io.open(context_file, "a")
+  if not file then
+    vim.notify("Failed to open context file: " .. context_file, vim.log.levels.ERROR)
+    return
+  end
+
+  if vim.fn.getfsize(context_file) > 0 then
+    file:write("\n\n")
+  end
+
+  file:write("// " .. vim.fn.expand("%") .. "\n")
+  file:write(content)
+  file:close()
+
+  vim.notify("File appended to " .. context_file, vim.log.levels.INFO)
+end, { desc = "AI Context Append: Append entire file to context file", silent = true })
+
+-- AI Context Append (visual mode: selected text)
 vim.keymap.set("v", "<leader>aa", function()
   -- Get the selected text
   vim.cmd('normal! "zy')
