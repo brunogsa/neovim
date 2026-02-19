@@ -578,7 +578,7 @@ vim.keymap.set(
   { desc = "Jump to end of indent block, open fold, center" }
 )
 
--- Aider Yank
+-- AI Yank
 vim.keymap.set("n", "<leader>ay", function()
   local absolute_path = vim.fn.expand("%:p")
   local git_root = vim.fn.systemlist("git rev-parse --show-toplevel")[1]
@@ -604,8 +604,38 @@ vim.keymap.set("n", "<leader>ay", function()
   vim.notify("Copied: " .. relative_path)
 end, { desc = "Aider Yank: Copy path from git root", silent = true })
 
+vim.keymap.set("v", "<leader>ay", function()
+  local absolute_path = vim.fn.expand("%:p")
+  local git_root = vim.fn.systemlist("git rev-parse --show-toplevel")[1]
+
+  if not git_root or git_root == "" then
+    vim.notify("Not inside a git repository", vim.log.levels.ERROR)
+    return
+  end
+
+  local relpath_cmd = string.format(
+    [[python3 -c "import os; print(os.path.relpath('%s', '%s'))"]],
+    absolute_path, git_root
+  )
+  local relative_path = vim.fn.systemlist(relpath_cmd)[1]
+
+  if not relative_path or relative_path == "" then
+    vim.notify("Failed to compute relative path", vim.log.levels.ERROR)
+    return
+  end
+
+  -- Exit visual mode so that '< and '> marks are set, then read them
+  vim.cmd('normal! \x1b')
+  local start_line = vim.fn.line("'<")
+  local end_line = vim.fn.line("'>")
+  local result = relative_path .. ":" .. start_line .. "-" .. end_line
+
+  vim.fn.setreg("+", result)
+  vim.notify("Copied: " .. result, vim.log.levels.INFO)
+end, { desc = "Aider Yank: Copy path:lines from git root", silent = true })
+
 -- AI Context Append
-vim.keymap.set("v", "<leader>ag", function()
+vim.keymap.set("v", "<leader>aa", function()
   -- Get the selected text
   vim.cmd('normal! "zy')
   local selected_text = vim.fn.getreg('z')
@@ -616,7 +646,7 @@ vim.keymap.set("v", "<leader>ag", function()
   end
 
   -- Path to the global context file
-  local context_file = vim.fn.expand("~/.claude/CLAUDE.md")
+  local context_file = vim.fn.expand("~/.ai-context.txt")
 
   -- Get current buffer's file path
   local file_path = vim.fn.expand("%:p")
@@ -640,7 +670,7 @@ vim.keymap.set("v", "<leader>ag", function()
   file:close()
 
   vim.notify("Text appended to " .. context_file, vim.log.levels.INFO)
-end, { desc = "AI Grab Context: Append selected text to global context file", silent = true })
+end, { desc = "AI Grab Append: Append selected text to global context file", silent = true })
 
 -- =======================================
 -- Plugins

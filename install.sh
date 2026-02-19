@@ -172,6 +172,7 @@ mkdir -p ~/.config/nvim/
 ln -sf ~/neovim/init.lua ~/.config/nvim/
 ln -sf ~/neovim/colors ~/.config/nvim/
 ln -sf ~/neovim/.tern-project ~
+touch ~/.ai-context.txt
 
 # Git configuration (cross-platform)
 git config --global core.editor "nvim"
