@@ -1,140 +1,33 @@
-# Neovim Configuration
+# neovim
 
-A modern, cross-platform Neovim configuration with LSP support, Git integration, AI assistance, and more.
+Cross-platform Neovim configuration and installer. Single-file `init.lua` with LSP, Treesitter, Telescope, Git integration, AI assistance, and custom Mermaid indentation.
 
-**Supported Platforms:**
-- macOS (Homebrew)
-- Debian/Ubuntu Linux (apt)
+## Setup
 
-## How to install
-
-### Prerequisites
-
-**macOS:**
-- Git
-- Homebrew
-- Xcode Command Line Tools
-
-**Linux (Debian/Ubuntu):**
-- Git
-- sudo access
-- build-essential
-
-**Note:** The installation scripts automatically detect your operating system and install the appropriate packages.
-
-### Installation Steps
-
-1. Clone this repository:
-```sh
-git clone https://github.com/brunogsa/neovim.git ~/neovim
-cd ~/neovim
+```bash
+# Prerequisite: ~/oh-my-zsh/ must be set up first (provides detect-os.sh)
+./install.sh && ./install2.sh
 ```
 
-2. Run the installation script:
-```sh
-./install.sh
-```
+The scripts install language runtimes (Python, Ruby, Rust, Lua, Perl, Node.js), Neovim, LSP servers, fonts, and symlink the config to `~/.config/nvim/`. Plugins auto-install via lazy.nvim on first launch. All steps are idempotent.
 
-The script will:
-- Auto-detect your OS (macOS or Linux)
-- Install all language dependencies (Python, Ruby, Rust, Lua, Perl, Node.js)
-- Install Neovim and LSP servers
-- Install fonts and development tools
-- Set up configuration symlinks
+## What It Can Configure
 
-3. Launch Neovim:
-```sh
-nvim
-```
-
-The configuration will automatically install lazy.nvim (plugin manager) on first launch. The bootstrap code in `init.lua` handles this process by:
-
-- Checking if lazy.nvim exists at `~/.local/share/nvim/lazy/lazy.nvim`
-- If not, cloning it from GitHub
-- Adding it to the runtime path
-- Setting up all plugins defined in the configuration
-
-No manual installation of the plugin manager is required.
-
-### Configuration Structure
-
-- **Main configuration files**:
-  - `init.lua` - Main Neovim configuration with plugins, keymaps, and settings
-  - `.tern-project` - JavaScript/TypeScript configuration
-  - `tsconfig.json` - TypeScript configuration
-
-- **Installation scripts**:
-  - `install.sh` - Installs language dependencies
-  - `install2.sh` - Installs Neovim and related tools
-
-- **Configuration location**:
-  - All configurations are symlinked from this repo to `~/.config/nvim/`
-  - Global AI context file is stored at `~/.ai-context`
-
-### Key Features
-
-- Modern Lua-based configuration
-- Plugin management with lazy.nvim (auto-installed)
-- LSP support for multiple languages (TypeScript, Python, Go, etc.)
-- Fuzzy finding with Telescope
-- Git integration with Diffview and Signify
-- AI coding assistance with CodeCompanion
-- Treesitter for better syntax highlighting
-- Snippets and autocompletion
-- Markdown and code previews
+LSP servers, keymaps, plugins, color scheme, indentation rules, and more. See [init.lua](./init.lua) for current settings.
 
 ## Testing
 
-This configuration includes automated tests for auto-indentation across multiple file formats.
-
-### Running Tests
+Auto-indentation tests for Markdown, XML, and Mermaid diagrams:
 
 ```sh
-cd tests
-
-# Run full test suite (all formats)
-./agentic-nvim-autoformat-test.sh
-
-# Test a single file
-./agentic-nvim-autoformat-test.sh test.md
+cd tests && ./agentic-nvim-autoformat-test.sh
 ```
 
-### Supported Formats
+## Platforms
 
-The test suite validates indentation for:
+- **macOS**: Neovim and dependencies via Homebrew
+- **Linux**: Neovim and dependencies via apt
 
-**Markdown** (`.md`)
-- Nested lists with Treesitter indentation
+## Part of
 
-**XML** (`.xml`)
-- Nested tags with Treesitter indentation
-
-**Mermaid** (`.mmd`)
-- **Sequence Diagrams**: `alt`, `else`, `opt`, `loop`, `par`, `and`, `critical`, `option`, `rect`, `break`
-- **Flowcharts**: `subgraph` with nested subgraphs
-- **State Diagrams**: Composite states with `{}` syntax
-
-### Test Files
-
-All test files are located in the `tests/` directory:
-- `test.md` - Markdown with nested lists
-- `test.xml` - XML with nested tags
-- `test.mmd` - Basic sequence diagram
-- `test_sequence_full.mmd` - All sequence diagram block types
-- `test_flowchart.mmd` - Flowchart with subgraphs
-- `test_state.mmd` - State diagram with composite states
-
-## How to profile its performance
-
-```sh
-# Open a file
-
-:profile start profile.log
-:profile func*
-:profile file*
-
-# Do slow actions here
-
-:profile pause
-:noautocmd qa!
-```
+Five-repo tooling stack: [unix-utils](https://github.com/brunogsa/unix-utils) | [oh-my-zsh](https://github.com/brunogsa/oh-my-zsh) | [tmux](https://github.com/brunogsa/tmux) | **neovim** | [ghostty](https://github.com/brunogsa/ghostty)
