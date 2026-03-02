@@ -140,6 +140,10 @@ This configuration supports both macOS and Linux (Debian/Ubuntu).
 - terraform-ls: brew on macOS, wget binary on Linux
 - yamllint: brew on macOS, pip3 on Linux
 
+## Why Not claudecode.nvim
+
+claudecode.nvim (`coder/claudecode.nvim`) provides native WebSocket-based bidirectional neovim ↔ Claude Code communication -- architecturally superior to the current file-bridge patterns (`~/.nvim_last_file`, `~/.ai-context.txt`). However, it assumes a 1:1 relationship between neovim and Claude Code instances. The user runs multiple neovim and Claude Code processes in parallel, which breaks the plugin's single-connection model. If multi-instance support is added in the future, re-evaluate this decision.
+
 ## Notes for AI Assistants
 
 - Always read init.lua before making changes
