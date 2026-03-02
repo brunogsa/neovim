@@ -602,7 +602,7 @@ vim.keymap.set("n", "<leader>ay", function()
 
   vim.fn.setreg("+", relative_path)
   vim.notify("Copied: " .. relative_path)
-end, { desc = "Aider Yank: Copy path from git root", silent = true })
+end, { desc = "AI Yank: Copy path from git root", silent = true })
 
 vim.keymap.set("v", "<leader>ay", function()
   local absolute_path = vim.fn.expand("%:p")
@@ -632,7 +632,7 @@ vim.keymap.set("v", "<leader>ay", function()
 
   vim.fn.setreg("+", result)
   vim.notify("Copied: " .. result, vim.log.levels.INFO)
-end, { desc = "Aider Yank: Copy path:lines from git root", silent = true })
+end, { desc = "AI Yank: Copy path:lines from git root", silent = true })
 
 -- AI Context Append (normal mode: entire file)
 vim.keymap.set("n", "<leader>aa", function()
