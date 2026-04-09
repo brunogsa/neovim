@@ -182,6 +182,25 @@ vim.cmd('syntax sync maxlines=2000')
 vim.opt.timeoutlen = 512
 vim.opt.ttimeoutlen = 16
 
+-- Large file guard: disable vim regex syntax for files >100KB.
+-- Vim's regex syntax (typescriptcommon.vim) has catastrophic backtracking
+-- on complex TS files (vim/vim#18782). Treesitter highlight handles these fine.
+vim.api.nvim_create_autocmd("FileType", {
+  callback = function(args)
+    local max_filesize = 100 * 1024 -- 100 KB
+    local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(args.buf))
+    if not (ok and stats and stats.size > max_filesize) then
+      return
+    end
+
+    vim.schedule(function()
+      if vim.api.nvim_buf_is_valid(args.buf) then
+        vim.bo[args.buf].syntax = ""
+      end
+    end)
+  end,
+})
+
 -- Fold options. I prefer fold by indentation
 
 vim.opt.foldmethod = 'indent'
@@ -867,12 +886,9 @@ require("lazy").setup({
 
           highlight = {
             enable = true,
-            -- Disable for large files (performance)
-            disable = function(_, buf)
-              local max_filesize = 100 * 1024 -- 100 KB
-              local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(buf))
-              return ok and stats and stats.size > max_filesize
-            end,
+            -- Treesitter highlight stays enabled for large files. Disabling it
+            -- causes vim to fall back to regex syntax (typescriptcommon.vim) which
+            -- has catastrophic backtracking on complex TS (vim/vim#18782).
             additional_vim_regex_highlighting = false,
           },
 
