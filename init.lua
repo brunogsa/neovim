@@ -1195,15 +1195,14 @@ require("lazy").setup({
         vim.g.context_add_autocmds = 0
         vim.g.context_filetype_blacklist = { "nerdtree" }
 
-        vim.api.nvim_create_autocmd("User", {
-          pattern = "VeryLazy",
-          callback = function()
-            vim.cmd("ContextActivate")
-          end,
-        })
+        -- Disabled by default for performance on large files.
+        -- Toggle on with <leader>tc when needed.
+        vim.g.context_enabled = 0
         vim.api.nvim_create_autocmd({ "CursorHold", "BufWritePost" }, {
           callback = function()
-            vim.cmd("ContextUpdate")
+            if vim.g.context_enabled == 1 then
+              vim.cmd("ContextUpdate")
+            end
           end,
         })
 
