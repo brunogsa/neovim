@@ -154,7 +154,7 @@ elif [[ "$OS" == "linux" ]]; then
     # Symlink system bundled parsers to user location
     # PPA builds include parsers in /usr/lib but nvim looks in ~/.local/share
     mkdir -p ~/.local/share/nvim/site
-    ln -sf /usr/lib/x86_64-linux-gnu/nvim/parser ~/.local/share/nvim/site/parser
+    sudo ln -sf /usr/lib/x86_64-linux-gnu/nvim/parser ~/.local/share/nvim/site/parser
 fi
 
 # Install neovim npm package (common)
@@ -169,10 +169,9 @@ mkdir -p ~/.config/nvim/lua/plugins
 
 # Use my configs
 mkdir -p ~/.config/nvim/
-ln -sf ~/neovim/init.lua ~/.config/nvim/
-ln -sf ~/neovim/colors ~/.config/nvim/
-ln -sf ~/neovim/.tern-project ~
-touch ~/.ai-context.txt
+sudo ln -sf ~/neovim/init.lua ~/.config/nvim/
+sudo ln -sf ~/neovim/colors ~/.config/nvim/
+sudo ln -sf ~/neovim/.tern-project ~
 
 # Git configuration (cross-platform)
 git config --global core.editor "nvim"
