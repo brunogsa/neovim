@@ -153,8 +153,11 @@ elif [[ "$OS" == "linux" ]]; then
 
     # Symlink system bundled parsers to user location
     # PPA builds include parsers in /usr/lib but nvim looks in ~/.local/share
-    mkdir -p ~/.local/share/nvim/site
-    sudo ln -sf /usr/lib/x86_64-linux-gnu/nvim/parser ~/.local/share/nvim/site/parser
+    # Skip if parser dir already exists (nvim-treesitter will manage parsers)
+    if [ ! -d ~/.local/share/nvim/site/parser ]; then
+        mkdir -p ~/.local/share/nvim/site
+        sudo ln -sf /usr/lib/x86_64-linux-gnu/nvim/parser ~/.local/share/nvim/site/parser
+    fi
 fi
 
 # Install neovim npm package (common)
