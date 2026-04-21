@@ -1494,27 +1494,34 @@ require("lazy").setup({
     -- Git
     -- ===================
 
-    -- Git hunks navigation and Git signs
+    -- Git gutter signs, hunk navigation, hunk reset
     {
-      "mhinz/vim-signify",
+      "lewis6991/gitsigns.nvim",
       event = { "BufReadPre", "BufNewFile" },
-      init = function()
-        -- Only use Git as VCS
-        vim.g.signify_vcs_list = { "git" }
+      config = function()
+        require("gitsigns").setup({
+          signs = {
+            add          = { text = "+" },
+            change       = { text = "~" },
+            delete       = { text = "-" },
+            topdelete    = { text = "-" },
+            changedelete = { text = "~" },
+          },
+          numhl = true, -- highlight line numbers for changed lines
+        })
 
-        -- Enable showing number of deleted lines
-        vim.g.signify_number_highlight = 1
-        vim.g.signify_sign_show_count = 0
-        vim.g.signify_line_highlight = 0 -- avoid background color highlight if you want minimalism
+        local gs = require("gitsigns")
 
-        -- Change the sign symbols
-        vim.g.signify_sign_add    = '+'
-        vim.g.signify_sign_change = '~'
-        vim.g.signify_sign_delete = '-'
+        -- Hunk navigation
+        vim.keymap.set("n", "]h", function() gs.nav_hunk("next") end, { desc = "Next Git hunk" })
+        vim.keymap.set("n", "[h", function() gs.nav_hunk("prev") end, { desc = "Previous Git hunk" })
 
-        -- Keymaps for navigating between hunks
-        vim.keymap.set("n", "]g", "<Plug>(signify-next-hunk)", { desc = "Next Git hunk" })
-        vim.keymap.set("n", "[g", "<Plug>(signify-prev-hunk)", { desc = "Previous Git hunk" })
+        -- Reset hunk / buffer (discard unstaged changes; native `u` undoes the reset)
+        vim.keymap.set("n", "<leader>hr", gs.reset_hunk, { desc = "Reset Git hunk" })
+        vim.keymap.set("v", "<leader>hr", function()
+          gs.reset_hunk({ vim.fn.line("."), vim.fn.line("v") })
+        end, { desc = "Reset Git hunk (visual range)" })
+        vim.keymap.set("n", "<leader>hR", gs.reset_buffer, { desc = "Reset Git buffer" })
       end,
     },
 
