@@ -317,7 +317,7 @@ vim.opt.number = true
 
 vim.opt.wrap = true
 vim.opt.whichwrap:append("<,>")
-vim.opt.textwidth = 213
+vim.opt.textwidth = 0 -- disable hard wrap; rely on soft wrap above
 
 -- Transparency in some terminals
 vim.api.nvim_set_hl(0, "Normal", { ctermbg = "none" })
