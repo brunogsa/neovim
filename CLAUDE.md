@@ -1,153 +1,31 @@
-# Neovim Configuration - AI Context
+# CLAUDE.md
 
 This file provides context for AI assistants (Claude, Aider, etc.) working with this Neovim configuration.
 
-## Configuration Overview
+## What This Repo Is
 
-This is a single-file Neovim configuration (`init.lua`) with the following key features:
+Single-file Neovim configuration (`init.lua`) with a test suite. Part of a five-repo tooling stack (`unix-utils`, `oh-my-zsh`, `tmux`, `neovim`, `ghostty`).
 
-### Auto-Reload
-- Files automatically reload when changed externally (e.g., by aider in --watch-files mode)
-- Uses native Neovim `autoread` + `checktime` functionality
-- Works for ALL file types, not just init.lua
-- Triggers on cursor hold, focus gain, and buffer enter
+Cross-platform (macOS + Debian/Ubuntu); `install.sh` handles platform branches.
 
-### Auto-Indentation Support
+## Editing Constraints
 
-**Markdown (`.md`)**
-- Uses Treesitter indent (native)
-- Handles nested lists automatically
+- **Keep it a single file.** Maintain `init.lua` as one giant file -- user preference.
+- **Prefer native/plugin solutions.** Only use custom implementations when plugins don't work well (like `MermaidIndent`).
 
-**XML (`.xml`)**
-- Uses Treesitter indent (native)
-- Handles nested tags automatically
+## Load-Bearing Custom Code
 
-**Mermaid (`.mmd`)**
-- Custom `MermaidIndent()` function (lines 89-139 in init.lua)
-- Supports three diagram types you use most:
-  - **Sequence Diagrams**: alt, else, opt, loop, par, and, critical, option, rect, break
-  - **Flowcharts**: subgraph with nesting
-  - **State Diagrams**: composite states with {} syntax
-- Tracks block nesting using a stack-based approach
-- More sophisticated than mermaid.vim plugin (which doesn't handle nested blocks properly)
-
-## Important Constraints
-
-When modifying this configuration:
-
-1. **Keep it a single file** - User preference is to maintain init.lua as one giant file
-2. **Prefer native/plugin solutions** - Only use custom implementations when plugins don't work well (like Mermaid indent)
-3. **Preserve formatting** - NEVER modify indentation, whitespace, or formatting unless explicitly requested
-4. **Test thoroughly** - Use the test suite in `tests/` directory
-
-## File Structure
-
-```
-/Users/brunoagostini/neovim/
-├── init.lua                           # Main configuration (single file)
-├── README.md                          # User documentation
-├── CLAUDE.md                          # This file (AI context)
-├── tests/                             # Test suite
-│   ├── agentic-nvim-autoformat-test.sh   # Main test script
-│   ├── test.md                        # Markdown test
-│   ├── test.xml                       # XML test
-│   ├── test.mmd                       # Basic Mermaid sequence
-│   ├── test_sequence_full.mmd         # Full Mermaid sequence
-│   ├── test_flowchart.mmd             # Mermaid flowchart
-│   └── test_state.mmd                 # Mermaid state diagram
-```
-
-## Key Code Locations in init.lua
-
-- **Lines 201-218**: Auto-reload configuration (autoread + checktime)
-- **Lines 89-139**: MermaidIndent() function (custom implementation)
-- **Lines 123-127**: FileType autocmd for Mermaid files
-- **Lines 743**: Treesitter allowed_languages (markdown, xml, etc.)
+- **`MermaidIndent()` in `init.lua`** -- custom stack-based indenter for `.mmd` files. Handles sequence diagrams, flowcharts, and state diagrams with proper nested-block tracking. Kept despite `mermaid.vim` existing because that plugin doesn't handle nesting correctly. If a better plugin emerges, re-evaluate.
+- **Auto-reload via native `autoread` + `checktime`** -- works for all file types, not just `init.lua`. Enables aider's `--watch-files` flow.
 
 ## Testing
 
-Run the test suite to verify indentation works:
-
 ```bash
-cd tests
-./agentic-nvim-autoformat-test.sh
+cd tests && ./agentic-nvim-autoformat-test.sh
 ```
 
-This tests all supported formats (Markdown, XML, and all Mermaid diagram types).
+Tests all supported formats (Markdown, XML, Mermaid variants). Run after any indent-related change.
 
-## Common Tasks
+## Rejected: `claudecode.nvim`
 
-### Adding a new Mermaid keyword
-1. Add to the appropriate section in `MermaidIndent()` function
-2. Consider if it's an opening keyword (needs stack push) or closing (needs stack pop)
-3. Add test case to `test_sequence_full.mmd` or create new test file
-4. Run test suite to verify
-
-### Modifying auto-reload behavior
-1. Look at lines 201-218 in init.lua
-2. Modify the autocmd triggers (CursorHold, FocusGained, etc.)
-3. Test with aider in --watch-files mode
-
-### Enabling Treesitter indent for new language
-1. Add language to `allowed_languages` array (around line 743)
-2. Ensure Treesitter parser is installed for that language
-3. Test indentation behavior
-
-## Plugin Management
-
-Uses lazy.nvim for plugin management. Plugins are automatically installed on first launch.
-
-Key plugins:
-- nvim-treesitter: Syntax highlighting and indentation
-- vim-tmux-focus-events: Focus event support in tmux
-- vim-sleuth: Auto-detect indentation
-
-## Cross-Platform Support
-
-This configuration supports both macOS and Linux (Debian/Ubuntu).
-
-### OS Detection
-
-**Installation Script (install.sh):**
-- Use `$OSTYPE` environment variable for OS detection
-- Pattern: `darwin*` for macOS, `linux-gnu*` for Linux
-- Function: `detect_os()` returns "macos" or "linux"
-
-**Neovim Configuration (init.lua):**
-- Preview commands use `open` command, which is aliased in ~/.zshrc:
-  - macOS: native `open` command
-  - Linux: `alias open='xdg-open'` in ~/.zshrc
-
-### Platform Differences
-
-**Package Managers:**
-- macOS: Homebrew (`brew install`)
-- Linux: apt (`sudo apt-get install`)
-
-**Python pip:**
-- macOS: Requires `--break-system-packages` flag
-- Linux: Uses `--user` flag instead
-
-**Ruby:**
-- macOS: Includes RVM setup for stable Ruby versions
-- Linux: Uses system Ruby packages
-
-**Fonts:**
-- macOS: Installed via Homebrew cask (`brew install --cask font-hack-nerd-font`)
-- Linux: Cloned from nerd-fonts repo and installed via script
-
-**LSP Tools:**
-- terraform-ls: brew on macOS, wget binary on Linux
-- yamllint: brew on macOS, pip3 on Linux
-
-## Why Not claudecode.nvim
-
-claudecode.nvim (`coder/claudecode.nvim`) provides native WebSocket-based bidirectional neovim ↔ Claude Code communication -- architecturally superior to the current file-bridge patterns (`~/.nvim_last_file`, `~/.ai-context.txt`). However, it assumes a 1:1 relationship between neovim and Claude Code instances. The user runs multiple neovim and Claude Code processes in parallel, which breaks the plugin's single-connection model. If multi-instance support is added in the future, re-evaluate this decision.
-
-## Notes for AI Assistants
-
-- Always read init.lua before making changes
-- Test changes with the test suite in tests/
-- Follow the user's coding conventions (see ~/.claude/CLAUDE.md for global conventions)
-- When in doubt, ask before implementing - user values correctness over speed
-- The MermaidIndent() function is more sophisticated than available plugins - keep it unless a better plugin emerges
+[coder/claudecode.nvim](https://github.com/coder/claudecode.nvim) provides native WebSocket-based bidirectional neovim ↔ Claude Code communication -- architecturally superior to the current file-bridge pattern (`~/.nvim_last_file`, `~/.ai-context.txt`). But it assumes a 1:1 relationship between neovim and Claude Code instances, and the user runs multiple of each in parallel. If multi-instance support is added upstream, re-evaluate.
