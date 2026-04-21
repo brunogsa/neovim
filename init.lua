@@ -2106,7 +2106,9 @@ require("lazy").setup({
             -- Done via LSP
 
             -- Markdown
-            diagnostics.markdownlint,
+            diagnostics.markdownlint.with({
+              extra_args = { "--config", vim.fn.expand("~/neovim/.markdownlint.json") },
+            }),
 
             -- YAML
             diagnostics.yamllint,
