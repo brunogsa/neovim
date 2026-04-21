@@ -63,6 +63,7 @@ elif [[ "$OS" == "macos" ]]; then
     rustup-init -y
 elif [[ "$OS" == "linux" ]]; then
     curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+    # shellcheck source=/dev/null
     source "$HOME/.cargo/env"
 fi
 
@@ -105,9 +106,9 @@ npm i -g yarn node-gyp
 # Setup npm directory
 mkdir -p ~/.npm
 if [[ "$OS" == "macos" ]]; then
-    chown -R $USER:$GROUP ~/.npm
+    chown -R "$USER":"$GROUP" ~/.npm
 elif [[ "$OS" == "linux" ]]; then
-    chown -R $USER ~/.npm
+    chown -R "$USER" ~/.npm
 fi
 
 # Install global npm packages (common)
