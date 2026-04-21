@@ -45,16 +45,22 @@ fi
 
 # Install RVM (macOS only, for stable Ruby)
 if [[ "$OS" == "macos" ]]; then
-    command curl -sSL https://rvm.io/mpapis.asc | gpg --import -
-    command curl -sSL https://rvm.io/pkuczynski.asc | gpg --import -
-    curl -sSL https://get.rvm.io | bash
-    rvm get stable --ruby
+    if [ -d "$HOME/.rvm" ]; then
+        echo "RVM already installed, skipping"
+    else
+        command curl -sSL https://rvm.io/mpapis.asc | gpg --import -
+        command curl -sSL https://rvm.io/pkuczynski.asc | gpg --import -
+        curl -sSL https://get.rvm.io | bash
+        rvm get stable --ruby
+    fi
 fi
 
 # Install Rust
-if [[ "$OS" == "macos" ]]; then
+if command -v rustc &> /dev/null; then
+    echo "Rust already installed, skipping"
+elif [[ "$OS" == "macos" ]]; then
     brew install rustup
-    rustup-init
+    rustup-init -y
 elif [[ "$OS" == "linux" ]]; then
     curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
     source "$HOME/.cargo/env"
@@ -70,7 +76,11 @@ elif [[ "$OS" == "linux" ]]; then
 fi
 
 # Install Lua tools (common, requires Rust from earlier step)
-cargo install selene
+if command -v selene &> /dev/null; then
+    echo "selene already installed, skipping"
+else
+    cargo install selene
+fi
 
 # Install perl
 if [[ "$OS" == "macos" ]]; then
@@ -117,18 +127,27 @@ elif [[ "$OS" == "linux" ]]; then
     pip3 install --user --break-system-packages yamllint
     npm install -g vscode-langservers-extracted
     # terraform-ls
-    wget -O /tmp/terraform-ls.zip https://releases.hashicorp.com/terraform-ls/0.32.7/terraform-ls_0.32.7_linux_amd64.zip
-    sudo unzip -o /tmp/terraform-ls.zip -d /usr/local/bin/
-    sudo chmod +x /usr/local/bin/terraform-ls
-    rm /tmp/terraform-ls.zip
+    TERRAFORM_LS_VERSION="0.32.7"
+    if command -v terraform-ls &> /dev/null && terraform-ls --version 2>/dev/null | grep -q "${TERRAFORM_LS_VERSION}"; then
+        echo "terraform-ls ${TERRAFORM_LS_VERSION} already installed, skipping"
+    else
+        wget -O /tmp/terraform-ls.zip "https://releases.hashicorp.com/terraform-ls/${TERRAFORM_LS_VERSION}/terraform-ls_${TERRAFORM_LS_VERSION}_linux_amd64.zip"
+        sudo unzip -o /tmp/terraform-ls.zip -d /usr/local/bin/
+        sudo chmod +x /usr/local/bin/terraform-ls
+        rm /tmp/terraform-ls.zip
+    fi
 fi
 
 # Install pgFormatter (Postgres SQL formatter)
-sudo rm -fr pgFormatter && git clone https://github.com/darold/pgFormatter
-cd pgFormatter
-perl Makefile.PL
-make && sudo make install
-cd -
+if command -v pg_format &> /dev/null; then
+    echo "pgFormatter already installed, skipping"
+else
+    sudo rm -fr pgFormatter && git clone https://github.com/darold/pgFormatter
+    cd pgFormatter
+    perl Makefile.PL
+    make && sudo make install
+    cd -
+fi
 
 # Install nerd-fonts
 if [[ "$OS" == "macos" ]]; then
