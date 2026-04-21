@@ -11,6 +11,8 @@ Cross-platform (macOS + Debian/Ubuntu); `install.sh` handles platform branches.
 ## Editing Constraints
 
 - **Keep it a single file.** Maintain `init.lua` as one giant file -- user preference.
+- **Plugin manager is lazy.nvim.** Add new plugins as specs inside `require("lazy").setup({ ... })`.
+- **Prefer modern lua plugins.** Avoid vimscript-only plugins unless no lua alternative exists.
 - **Prefer native/plugin solutions.** Only use custom implementations when plugins don't work well (like `MermaidIndent`).
 
 ## Load-Bearing Custom Code
