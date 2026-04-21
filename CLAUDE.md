@@ -1,6 +1,6 @@
 # CLAUDE.md
 
-This file provides context for AI assistants (Claude, Aider, etc.) working with this Neovim configuration.
+This file provides context for Claude Code working with this Neovim configuration.
 
 ## What This Repo Is
 
@@ -18,7 +18,7 @@ Cross-platform (macOS + Debian/Ubuntu); `install.sh` handles platform branches.
 ## Load-Bearing Custom Code
 
 - **`MermaidIndent()` in `init.lua`** -- custom stack-based indenter for `.mmd` files. Handles sequence diagrams, flowcharts, and state diagrams with proper nested-block tracking. Kept despite `mermaid.vim` existing because that plugin doesn't handle nesting correctly. If a better plugin emerges, re-evaluate.
-- **Auto-reload via native `autoread` + `checktime`** -- works for all file types, not just `init.lua`. Enables aider's `--watch-files` flow.
+- **Auto-reload via native `autoread` + `checktime`** -- works for all file types, not just `init.lua`. Keeps buffers in sync with files Claude Code edits externally.
 
 ## Testing
 
