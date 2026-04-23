@@ -12,6 +12,7 @@ Cross-platform (macOS + Debian/Ubuntu); `install.sh` handles platform branches.
 
 - **Keep it a single file.** Maintain `init.lua` as one giant file -- user preference.
 - **Plugin manager is lazy.nvim.** Add new plugins as specs inside `require("lazy").setup({ ... })`.
+- **Tree-sitter parsers via `romus204/tree-sitter-manager.nvim`** (replaces archived `nvim-treesitter/nvim-treesitter`). Requires `tree-sitter` CLI in PATH. Parser list lives in the plugin's `ensure_installed` option. Run `:TSManager` to install/update parsers interactively. Note: TS-based indent is not supported; built-in filetype indent is used.
 - **Prefer modern lua plugins.** Avoid vimscript-only plugins unless no lua alternative exists.
 - **Prefer native/plugin solutions.** Only use custom implementations when plugins don't work well (like `MermaidIndent`).
 

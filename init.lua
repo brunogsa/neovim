@@ -858,59 +858,27 @@ require("lazy").setup({
       end,
     },
 
-    -- Tree-sitter (syntax highlighting & code analysis)
+    -- Tree-sitter parser manager. Replaces archived nvim-treesitter/nvim-treesitter
+    -- (master branch unsupported on Neovim 0.12+; full plugin archived Apr 3 2026).
+    -- Requires tree-sitter CLI in PATH. TS indent not supported; built-in filetype
+    -- indent is used instead. Large-file guard (~line 188) disables regex syntax
+    -- but leaves TS highlight active -- same behavior as before.
     {
-      "nvim-treesitter/nvim-treesitter",
-      branch = "master",  -- Use master for configs API compatibility
-      build = ":TSUpdate",
+      "romus204/tree-sitter-manager.nvim",
+      lazy = false,
       config = function()
-        require("nvim-treesitter.configs").setup({
-          -- Only install parsers for languages user actually uses
+        require("tree-sitter-manager").setup({
           ensure_installed = {
-            -- Core
             "lua", "vim", "vimdoc",
-            -- Web
             "javascript", "typescript", "tsx",
             "html", "css", "json",
-            -- Markup & Config
             "xml", "yaml", "markdown", "markdown_inline",
-            -- Backend
             "python", "go", "bash",
-            -- DevOps
             "dockerfile", "terraform",
-            -- Data
             "csv", "sql",
           },
-          sync_install = false,  -- Install parsers asynchronously
-          auto_install = false,  -- Don't auto-install unknown parsers
-
-          highlight = {
-            enable = true,
-            -- Treesitter highlight stays enabled for large files. Disabling it
-            -- causes vim to fall back to regex syntax (typescriptcommon.vim) which
-            -- has catastrophic backtracking on complex TS (vim/vim#18782).
-            additional_vim_regex_highlighting = false,
-          },
-
-          indent = {
-            enable = true,
-            -- Enable only for languages that work well with treesitter indent
-            disable = function(lang, buf)
-              local allowed_languages = {
-                "json", "javascript", "typescript", "tsx",
-                "html", "css", "python", "go",
-                "xml", "yaml", "markdown"
-              }
-              for _, allowed in ipairs(allowed_languages) do
-                if lang == allowed then
-                  return false  -- Enable for these languages
-                end
-              end
-              return true  -- Disable for all others
-            end,
-          },
-
-          fold = { enable = false },  -- Use LSP folding instead
+          highlight = true,
+          auto_install = false,
         })
       end,
     },
