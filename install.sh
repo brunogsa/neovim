@@ -67,13 +67,11 @@ elif [[ "$OS" == "linux" ]]; then
     source "$HOME/.cargo/env"
 fi
 
-# Install Lua
+# Install Lua (luacheck via distro package manager — luarocks.org blocks wget with 403)
 if [[ "$OS" == "macos" ]]; then
-    brew install lua luarocks
-    luarocks install luacheck
+    brew install lua luarocks luacheck
 elif [[ "$OS" == "linux" ]]; then
-    sudo apt-get install -y lua5.3 liblua5.3-dev luarocks
-    luarocks install --local luacheck
+    sudo apt-get install -y lua5.3 liblua5.3-dev luarocks lua-check
 fi
 
 # Install Lua tools (common, requires Rust from earlier step)
@@ -98,15 +96,22 @@ elif [[ "$OS" == "linux" ]]; then
 fi
 
 # Node version management and global packages (common)
+# N_PREFIX keeps `n` out of /usr/local so no sudo is needed.
 node -v && npm -v
+export N_PREFIX="$HOME/.n"
+mkdir -p "$N_PREFIX/bin"
+export PATH="$N_PREFIX/bin:$PATH"
 npm i -g n
-sudo n lts
+n lts
 npm i -g yarn node-gyp
 
 # Setup npm directory
+# Purge stale root-owned files left over from legacy `sudo npm` runs — the user
+# can unlink them (parent dirs are user-owned) even though chown would fail.
 mkdir -p ~/.npm
+find ~/.npm -not -user "$USER" -delete 2>/dev/null || true
 if [[ "$OS" == "macos" ]]; then
-    chown -R "$USER":"$GROUP" ~/.npm
+    chown -R "$USER":"$(id -gn)" ~/.npm
 elif [[ "$OS" == "linux" ]]; then
     chown -R "$USER" ~/.npm
 fi
@@ -142,17 +147,18 @@ fi
 # Install pgFormatter (Postgres SQL formatter)
 if command -v pg_format &> /dev/null; then
     echo "pgFormatter already installed, skipping"
+elif [[ "$OS" == "macos" ]]; then
+    brew install pgformatter
 else
-    sudo rm -fr pgFormatter && git clone https://github.com/darold/pgFormatter
+    rm -fr pgFormatter && git clone https://github.com/darold/pgFormatter
     cd pgFormatter
     perl Makefile.PL
     make && sudo make install
     cd -
 fi
 
-# Install nerd-fonts
+# Install nerd-fonts (homebrew/cask-fonts was deprecated; font casks live in homebrew/cask now)
 if [[ "$OS" == "macos" ]]; then
-    brew tap homebrew/cask-fonts
     brew install --cask font-hack-nerd-font
 elif [[ "$OS" == "linux" ]]; then
     if [ ! -d "nerd-fonts" ]; then
@@ -192,9 +198,8 @@ mkdir -p ~/.config/nvim/lua/plugins
 
 # Use my configs
 mkdir -p ~/.config/nvim/
-sudo ln -sf ~/neovim/init.lua ~/.config/nvim/
-sudo ln -sf ~/neovim/colors ~/.config/nvim/
-sudo ln -sf ~/neovim/.tern-project ~
+ln -sf ~/neovim/init.lua ~/.config/nvim/
+ln -sf ~/neovim/.tern-project ~
 
 # Git configuration (cross-platform)
 git config --global core.editor "nvim"
