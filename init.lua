@@ -1532,52 +1532,104 @@ require("lazy").setup({
           end,
         })
 
-        -- Toggle Diffview (open/close) CustomDiffviewOpen
-        vim.keymap.set({ "n", "v" }, "<leader>td", function()
-          local view = require("diffview.lib").get_current_view()
-          if view then
-            local current_file = vim.fn.expand("%:p")
-            local cursor_line = vim.fn.line(".")
-            vim.cmd("DiffviewClose")
-            if current_file ~= "" and vim.fn.filereadable(current_file) == 1 then
-              vim.cmd("edit " .. vim.fn.fnameescape(current_file))
-              vim.api.nvim_win_set_cursor(0, { cursor_line, 0 })
-              vim.cmd("normal! zz")
-            end
-          else
-            vim.cmd("DiffviewOpen")
+        -- Diffview toggle helpers
+        local function close_diffview_and_restore_cursor()
+          local current_file = vim.fn.expand("%:p")
+          local cursor_line = vim.fn.line(".")
+          vim.cmd("DiffviewClose")
+          if current_file ~= "" and vim.fn.filereadable(current_file) == 1 then
+            vim.cmd("edit " .. vim.fn.fnameescape(current_file))
+            vim.api.nvim_win_set_cursor(0, { cursor_line, 0 })
+            vim.cmd("normal! zz")
           end
-        end, { desc = "Toggle git diff" })
+        end
+
+        -- Detect base branch: origin's default → local main → local master.
+        -- Why: PR-style "vs base" workflows need a stable target even when
+        -- origin/HEAD is missing (fresh init, partial clone).
+        local function get_base_branch()
+          local origin_head = vim.fn.systemlist(
+            "git symbolic-ref --short refs/remotes/origin/HEAD 2>/dev/null"
+          )
+          if vim.v.shell_error == 0 and #origin_head > 0 and origin_head[1] ~= "" then
+            return (origin_head[1]:gsub("^origin/", ""))
+          end
+          for _, branch in ipairs({ "main", "master" }) do
+            vim.fn.system("git rev-parse --verify " .. branch .. " 2>/dev/null")
+            if vim.v.shell_error == 0 then
+              return branch
+            end
+          end
+          return nil
+        end
+
+        local function get_repo_root()
+          local root = vim.fn.systemlist("git rev-parse --show-toplevel 2>/dev/null")
+          if vim.v.shell_error == 0 and #root > 0 and root[1] ~= "" then
+            return root[1]
+          end
+          return nil
+        end
+
+        local function diffview_toggle(open_fn)
+          if require("diffview.lib").get_current_view() then
+            close_diffview_and_restore_cursor()
+          else
+            open_fn()
+          end
+        end
+
+        -- <leader>td: full-repo diff of all uncommitted changes
+        -- (working tree vs HEAD: untracked + unstaged + staged), file panel open.
+        vim.keymap.set({ "n", "v" }, "<leader>td", function()
+          diffview_toggle(function()
+            vim.cmd("DiffviewOpen")
+          end)
+        end, { desc = "Toggle git diff (uncommitted, full repo)" })
 
         -- Toggle the file panel inside Diffview
         vim.keymap.set("n", "<leader>tm", "<Cmd>DiffviewToggleFiles<CR>", {
           desc = "Toggle git diff menu",
         })
 
-        -- Toggle Diffview for current file only (unstaged only, no file panel)
+        -- <leader>tD: full-repo diff of working tree vs base branch
+        -- (untracked + unstaged + staged + committed-on-branch), single combined diff.
         vim.keymap.set("n", "<leader>tD", function()
-          local view = require("diffview.lib").get_current_view()
-          if view then
-            local current_file = vim.fn.expand("%:p")
-            local cursor_line = vim.fn.line(".")
-            vim.cmd("DiffviewClose")
-            if current_file ~= "" and vim.fn.filereadable(current_file) == 1 then
-              vim.cmd("edit " .. vim.fn.fnameescape(current_file))
-              vim.api.nvim_win_set_cursor(0, { cursor_line, 0 })
-              vim.cmd("normal! zz")
-            end
-          else
-            local current_file = vim.fn.expand("%")
-            if current_file == "" then
-              vim.notify("No file to diff", vim.log.levels.WARN)
+          diffview_toggle(function()
+            local base = get_base_branch()
+            if not base then
+              vim.notify("Could not detect base branch (main/master)", vim.log.levels.WARN)
               return
             end
-            vim.cmd("DiffviewOpen -- " .. vim.fn.fnameescape(current_file))
-            vim.defer_fn(function()
-              vim.cmd("DiffviewToggleFiles")
-            end, 50)
-          end
-        end, { desc = "Toggle git diff (current file only, unstaged)" })
+            vim.cmd("DiffviewOpen " .. base)
+          end)
+        end, { desc = "Toggle git diff (working tree vs base branch)" })
+
+        -- <leader>th: chronological commit history of current branch since base.
+        -- Two-dot range = commits reachable from HEAD but not base (your branch's commits).
+        vim.keymap.set("n", "<leader>th", function()
+          diffview_toggle(function()
+            local base = get_base_branch()
+            if not base then
+              vim.notify("Could not detect base branch (main/master)", vim.log.levels.WARN)
+              return
+            end
+            vim.cmd("DiffviewFileHistory --range=" .. base .. "..HEAD")
+          end)
+        end, { desc = "Toggle git history (commits since base branch)" })
+
+        -- <leader>tH: full commit history reachable from HEAD across the repo.
+        -- Passing repo root as path filters to "any commit touching the tree".
+        vim.keymap.set("n", "<leader>tH", function()
+          diffview_toggle(function()
+            local repo_root = get_repo_root()
+            if not repo_root then
+              vim.notify("Not in a git repository", vim.log.levels.WARN)
+              return
+            end
+            vim.cmd("DiffviewFileHistory " .. vim.fn.fnameescape(repo_root))
+          end)
+        end, { desc = "Toggle git history (entire repo)" })
       end,
     },
 
