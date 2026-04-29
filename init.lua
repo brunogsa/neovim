@@ -694,9 +694,6 @@ vim.keymap.set("v", "<leader>aa", function()
   -- Path to the global context file
   local context_file = vim.fn.expand("~/.ai-context.txt")
 
-  -- Get current buffer's file path
-  local file_path = vim.fn.expand("%:p")
-
   -- Append the selected text to the file
   local file = io.open(context_file, "a")
   if not file then
@@ -1950,20 +1947,10 @@ require("lazy").setup({
             on_attach = on_attach,
           }
 
-          -- If configuring lua_ls, set the "vim" global
+          -- lua_ls: redirect cache to a user-writable path.
+          -- Globals/workspace settings live in `.luarc.json` so every lua_ls
+          -- invoker (nvim, CLI, CI linters, IDE harnesses) gets the same config.
           if server == "lua_ls" then
-            opts.settings = {
-              Lua = {
-                diagnostics = {
-                  globals = { "vim" },
-                },
-                workspace = {
-                  -- Use user-writable cache directory instead of /opt
-                  checkThirdParty = false,
-                },
-              },
-            }
-            -- Override cache directory to user's home
             opts.cmd = {
               "lua-language-server",
               "--logpath=" .. vim.fn.stdpath("cache") .. "/lua-language-server",
