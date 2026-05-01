@@ -65,6 +65,25 @@ function _G.toggle_foldmethod()
   end
 end
 
+-- Diagnostics: don't recompute on every keystroke, and don't render virtual
+-- text while typing. The CursorHold float below + InsertLeave refresh keep
+-- diagnostics visible where it matters; the per-keystroke redraw is what
+-- causes felt lag on TS/JS files with eslint_d via none-ls.
+vim.diagnostic.config({
+  virtual_text = { current_line = true },
+  update_in_insert = false,
+})
+vim.api.nvim_create_autocmd("InsertEnter", {
+  callback = function()
+    vim.diagnostic.config({ virtual_text = false })
+  end,
+})
+vim.api.nvim_create_autocmd("InsertLeave", {
+  callback = function()
+    vim.diagnostic.config({ virtual_text = { current_line = true } })
+  end,
+})
+
 -- Create an autocommand for CursorHold to show diagnostics
 vim.api.nvim_create_autocmd("CursorHold", {
   callback = function()
@@ -172,12 +191,18 @@ vim.opt.mouse = 'a'
 
 -- Improve Performance
 vim.opt.ttyfast = true
-vim.opt.regexpengine = 1
 vim.opt.modelines = 0
 
+-- regexpengine left at default (0 = auto). =1 forces the legacy BT engine,
+-- which has catastrophic backtracking on TS/JS/RST syntax patterns; =2 (NFA)
+-- is not universally faster either. The 100KB guard below also kills vim regex
+-- syntax on big files, so this only mattered on small/medium ones — and there
+-- the default's per-pattern choice wins.
+
 vim.opt.synmaxcol = 213
-vim.cmd('syntax sync minlines=250')
-vim.cmd('syntax sync maxlines=2000')
+-- syntax sync minlines/maxlines left at defaults. With Treesitter highlight
+-- active, vim syntax sync rarely matters; the previous 250/2000 forced legacy
+-- syntax to scan up to 2000 lines back on every change in legacy buffers.
 
 vim.opt.timeoutlen = 512
 vim.opt.ttimeoutlen = 16
@@ -260,9 +285,13 @@ vim.api.nvim_create_autocmd("FileChangedShellPost", {
 })
 
 -- Indentation options
+-- smartindent + cindent left OFF globally. Filetype indent plugins (loaded by
+-- Neovim's runtime, plus Treesitter where applicable) handle real indentation;
+-- enabling cindent globally re-indents on every cinkeys character (`{`, `}`,
+-- `:`, `e` in `else`...) even in non-C languages, which is per-keystroke cost
+-- with no benefit. smartindent is documented as obsolete when filetype indent
+-- is on. Re-enable per filetype if a specific one regresses.
 vim.opt.autoindent = true
-vim.opt.smartindent = true
-vim.opt.cindent = true
 vim.opt.preserveindent = true
 vim.opt.copyindent = true
 
@@ -980,6 +1009,20 @@ require("lazy").setup({
         vim.api.nvim_set_hl(0, "illuminatedWord",     { underline = true })
         vim.api.nvim_set_hl(0, "illuminatedCurWord",  { underline = true })
         vim.api.nvim_set_hl(0, "illuminatedWordText", { underline = true })
+
+        -- Skip insert/visual modes (per-cursor-move highlight is what costs;
+        -- underline-while-typing has no value). Drop the "lsp" provider:
+        -- documentHighlight is a network round-trip per CursorMoved;
+        -- treesitter does the same job locally for identifier matching.
+        -- min_count_to_highlight=2 skips highlight when the cursor word has
+        -- no other occurrences (no useful signal anyway).
+        require("illuminate").configure({
+          providers = { "treesitter", "regex" },
+          delay = 200,
+          modes_denylist = { "i", "v", "V", "\22" }, -- \22 = <C-v>
+          large_file_cutoff = 2000,
+          min_count_to_highlight = 2,
+        })
       end,
     },
 
@@ -1849,6 +1892,17 @@ require("lazy").setup({
         })
 
         cmp.setup({
+          -- Performance budget for the per-keystroke source poll. Without
+          -- fetching_timeout a single slow source (process-spawning ones, or
+          -- treesitter on a huge buffer) blocks the whole completion menu.
+          performance = {
+            debounce = 60,
+            throttle = 30,
+            fetching_timeout = 200,
+            confirm_resolve_timeout = 80,
+            async_budget = 1,
+            max_view_entries = 30,
+          },
           snippet = {
             expand = function(args)
               luasnip.lsp_expand(args.body)
@@ -1861,6 +1915,13 @@ require("lazy").setup({
             ["<C-Space>"] = cmp.mapping.complete(),
             ["<C-e>"] = cmp.mapping.abort()
           }),
+          -- cmp_zsh and tmux gated, not dropped: both spawn a subprocess per
+          -- keystroke and are documented hot spots. keyword_length=2 delays
+          -- the first query until the 2nd char of the current word; cap each
+          -- to max_item_count=8 to bound result-set work.
+          -- cmp-tmux defaults: all_panes=false (adjacent panes only — matches
+          -- "current window's panes"), capture_history=false (visible text
+          -- only), trigger_characters={'.'}.
           sources = cmp.config.sources({
             { name = "nvim_lsp" },
             { name = "nvim_lsp_signature_help" },
@@ -1868,10 +1929,10 @@ require("lazy").setup({
             { name = "nvim_lua" },
             { name = "buffer" },
             { name = "path" },
-            { name = "cmp_zsh" },
             { name = "treesitter" },
             { name = "omni" },
-            { name = "tmux" }
+            { name = "cmp_zsh", keyword_length = 2, max_item_count = 8 },
+            { name = "tmux",    keyword_length = 2, max_item_count = 8 },
           }),
           formatting = {
             format = function(entry, vim_item)
@@ -1882,10 +1943,10 @@ require("lazy").setup({
                 buffer = "[Buf]",
                 path = "[Path]",
                 nvim_lua = "[Lua]",
-                cmp_zsh = "[Zsh]",
                 treesitter = "[Tree]",
                 omni = "[Omni]",
-                tmux = "[Tmux]"
+                cmp_zsh = "[Zsh]",
+                tmux = "[Tmux]",
               })[entry.source.name] or ""
               return vim_item
             end
