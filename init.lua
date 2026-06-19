@@ -55,7 +55,6 @@ vim.api.nvim_create_autocmd({"BufEnter", "FocusGained"}, {
   end
 })
 
--- Toggle foldmethod between "indent" and "syntax"
 function _G.toggle_foldmethod()
   local current_foldmethod = vim.wo.foldmethod
   if current_foldmethod == 'indent' then
@@ -200,9 +199,8 @@ vim.opt.modelines = 0
 -- the default's per-pattern choice wins.
 
 vim.opt.synmaxcol = 213
--- syntax sync minlines/maxlines left at defaults. With Treesitter highlight
--- active, vim syntax sync rarely matters; the previous 250/2000 forced legacy
--- syntax to scan up to 2000 lines back on every change in legacy buffers.
+-- syntax sync minlines/maxlines left at defaults: with Treesitter highlight
+-- active, vim's legacy syntax-sync rarely runs, so tuning it buys nothing.
 
 vim.opt.timeoutlen = 512
 vim.opt.ttimeoutlen = 16
@@ -820,7 +818,6 @@ require("lazy").setup({
           plugins = {
             spelling = { enabled = true },
           },
-          -- Fix deprecation: use `win` instead of `window`
           win = {
             border = "rounded",
           },
@@ -2184,7 +2181,81 @@ require("lazy").setup({
     -- AI
     -- ===================
 
-    -- No plugins.
+    -- VS Code-parity Claude Code integration (editable diffs).
+    -- See CLAUDE.md for the /ide separate-pane and multi-instance workflow.
+    {
+      "coder/claudecode.nvim",
+      -- VeryLazy, not command-lazy: the WebSocket server must be up for `/ide`
+      -- discovery to find this neovim before any command is invoked.
+      event = "VeryLazy",
+      config = function()
+        require("claudecode").setup({
+          -- claude runs in a separate tmux pane, never inside neovim;
+          -- "none" also avoids the otherwise-required snacks.nvim dependency.
+          terminal = { provider = "none" },
+          -- vertical | horizontal
+          diff_opts = { layout = "vertical" },
+        })
+
+        -- After a diff closes (accept OR reject), the plugin leaves the cursor
+        -- at its pre-diff spot -- jump to the first changed line instead, so
+        -- review continues where the edit was. No built-in cursor option exists,
+        -- so this rides the plugin's Opened/Closed User events.
+        local first_changed = {}
+        local function resolve(p) return (p and vim.loop.fs_realpath(p)) or p end
+        local jump_grp = vim.api.nvim_create_augroup("ClaudeCodeAcceptJump", { clear = true })
+
+        -- On open, record where the change starts: proposed buffer vs the
+        -- original on disk. The plugin refuses to diff a dirty file, so disk
+        -- still holds the original here. Pure comparison -- never moves the cursor.
+        vim.api.nvim_create_autocmd("User", {
+          group = jump_grp,
+          pattern = "ClaudeCodeDiffOpened",
+          callback = function(ev)
+            local d = ev.data or {}
+            if not (d.file_path and d.diff_window and vim.api.nvim_win_is_valid(d.diff_window)) then
+              return
+            end
+            local orig = vim.fn.filereadable(d.file_path) == 1 and vim.fn.readfile(d.file_path) or {}
+            local prop = vim.api.nvim_buf_get_lines(vim.api.nvim_win_get_buf(d.diff_window), 0, -1, false)
+            local first = 1
+            for i = 1, math.max(#orig, #prop) do
+              if orig[i] ~= prop[i] then
+                first = i
+                break
+              end
+            end
+            first_changed[resolve(d.file_path)] = first
+          end,
+        })
+
+        -- On close (any reason), focus the file's window and jump to that line.
+        -- Deferred so it runs after the plugin's own layout/cursor cleanup.
+        vim.api.nvim_create_autocmd("User", {
+          group = jump_grp,
+          pattern = "ClaudeCodeDiffClosed",
+          callback = function(ev)
+            local d = ev.data or {}
+            local key = resolve(d.file_path)
+            local line = first_changed[key]
+            first_changed[key] = nil
+            if not (key and line) then return end
+            vim.defer_fn(function()
+              for _, w in ipairs(vim.api.nvim_list_wins()) do
+                local b = vim.api.nvim_win_get_buf(w)
+                if resolve(vim.api.nvim_buf_get_name(b)) == key then
+                  vim.api.nvim_set_current_win(w)
+                  local lc = vim.api.nvim_buf_line_count(b)
+                  vim.api.nvim_win_set_cursor(w, { math.min(line, lc), 0 })
+                  vim.api.nvim_win_call(w, function() vim.cmd("normal! zvzz") end)
+                  return
+                end
+              end
+            end, 50)
+          end,
+        })
+      end,
+    },
 
     -- ===================
     -- Previewers
@@ -2280,7 +2351,6 @@ vim.api.nvim_create_user_command("To4Spaces", function()
   -- Reindent the entire file
   vim.cmd([[normal! gg=G]])
 
-  -- Restore position
   vim.fn.winrestview(view)
 
   vim.notify("Converted to 4-space indentation", vim.log.levels.INFO)
