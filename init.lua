@@ -1,6 +1,6 @@
--- =======================================
--- Auxiliar Functions and Values
--- =======================================
+-- ================================================================
+-- Auxiliary Functions and Values
+-- ================================================================
 
 HOME = os.getenv('HOME')
 local colorscheme = "kanagawa-wave"
@@ -83,7 +83,6 @@ vim.api.nvim_create_autocmd("InsertLeave", {
   end,
 })
 
--- Create an autocommand for CursorHold to show diagnostics
 vim.api.nvim_create_autocmd("CursorHold", {
   callback = function()
     local opts = {
@@ -99,7 +98,7 @@ vim.api.nvim_create_autocmd("CursorHold", {
     local col = cursor_pos[2]
     local diagnostics = vim.diagnostic.get(bufnr, { lnum = line })
 
-    -- Check if there’s a diagnostic under the cursor (by comparing ranges)
+    -- Only open the float when a diagnostic covers the cursor column
     for _, diagnostic in ipairs(diagnostics) do
       if diagnostic.col <= col and col < (diagnostic.end_col or diagnostic.col + 1) then
         vim.diagnostic.open_float(nil, opts)
@@ -168,9 +167,9 @@ vim.api.nvim_create_autocmd("FileType", {
   end,
 })
 
--- =======================================
+-- ================================================================
 -- Core Settings
--- =======================================
+-- ================================================================
 
 vim.opt.encoding='utf-8'
 
@@ -293,7 +292,7 @@ vim.opt.autoindent = true
 vim.opt.preserveindent = true
 vim.opt.copyindent = true
 
--- Spaces for identation
+-- Spaces for indentation
 vim.opt.expandtab = true
 vim.opt.smarttab = true
 
@@ -325,9 +324,9 @@ vim.opt.virtualedit = 'block'
 -- Colorscheme
 vim.opt.background = 'dark'
 
--- =======================================
+-- ================================================================
 -- Interface
--- =======================================
+-- ================================================================
 
 -- Don't pass messages to |ins-completion-menu|.
 vim.opt.shortmess:append("c")
@@ -370,9 +369,9 @@ vim.api.nvim_set_hl(0, "IncSearch", {
 })
 
 
--- =======================================
+-- ================================================================
 -- Hotkeys
--- =======================================
+-- ================================================================
 
 -- Map to <space>
 vim.g.mapleader = ' '
@@ -496,17 +495,15 @@ end, { silent = true, expr = true })
 -- Keep cursor position after yanking on visual selections
 -- Has an optimization to avoid 2 vim redraws, which cause a flicker
 vim.keymap.set('v', 'y', function()
-  -- save cursor position (row, col) before the yank
-  local win   = 0                              -- 0 = current window
-  local pos   = vim.api.nvim_win_get_cursor(win)
-  local originalConfig  = vim.o.lazyredraw               -- remember current setting
-  vim.o.lazyredraw = true                      -- suppress interim screen updates
+  local win = 0
+  local pos = vim.api.nvim_win_get_cursor(win)
+  local originalConfig = vim.o.lazyredraw
+  vim.o.lazyredraw = true
 
-  vim.cmd('normal! y')                         -- real yank (no remaps)
+  vim.cmd('normal! y')
 
-  -- restore cursor to saved position
   vim.api.nvim_win_set_cursor(win, pos)
-  vim.o.lazyredraw = originalConfig                      -- restore original option
+  vim.o.lazyredraw = originalConfig
 end, { silent = true })
 
 -- Keep cursor position after reindenting visually selected text
@@ -546,8 +543,6 @@ vim.keymap.set(
   { noremap = false, silent = true, desc = "Preview AsyncAPI spec" }
 )
 
--- Jump to parent indentation: record current position, scan upward for first line with indent < current indent,
--- then open folds (zv) and center screen (zz)
 local function jump_to_parent_indent()
   -- record current position for jumplist (<C-o> return)
   vim.cmd("normal! m'")
@@ -557,10 +552,8 @@ local function jump_to_parent_indent()
   for l = curr_lnum - 1, 1, -1 do
     local indd = vim.fn.indent(l)
     if indd < curr_indent and vim.fn.getline(l):match("%S") then
-      -- move cursor to first non-blank in that line
       local col = vim.fn.match(vim.fn.getline(l), "\\S")
       vim.api.nvim_win_set_cursor(0, { l, col })
-      -- open folds and center screen
       vim.cmd('normal! zv')
       vim.cmd('normal! zz')
       return
@@ -579,13 +572,12 @@ vim.keymap.set(
   { desc = "Jump to parent indent, open fold, center" }
 )
 
--- Jump to end of current indent block: record posição para jumplist, scan downward até encontrar indent < current
 local function jump_to_block_end()
-  -- registra posição atual para voltar com <C-o>
+  -- record current position for jumplist (<C-o> return)
   vim.cmd("normal! m'")
 
   local curr_lnum = vim.fn.line('.')
-  local curr_indent = vim.fn.indent('.')  -- indent da linha atual
+  local curr_indent = vim.fn.indent('.')
   local last_lnum = vim.fn.line('$')
   local target = curr_lnum
 
@@ -594,29 +586,24 @@ local function jump_to_block_end()
     if text:match("%S") then
       local indd = vim.fn.indent(l)
       if indd < curr_indent then
-        -- início de indent menor: fim do bloco anterior em target
         break
       else
-        -- ainda dentro do bloco (seja mesma indent ou indent maior)
         target = l
       end
     else
-      -- linha em branco: ignorar (não interrompe o bloco)
-      -- mas não atualizar target, para não pular para linha em branco
+      -- Blank line: skip it. Blanks don't end the block,
+      -- and not advancing target keeps us off a blank line.
     end
   end
 
-  -- mover cursor para primeira coluna não-branca da linha target
   local line_text = vim.fn.getline(target)
   local col = vim.fn.match(line_text, "\\S")
   vim.api.nvim_win_set_cursor(0, { target, col })
 
-  -- abrir folds e centralizar
   vim.cmd('normal! zv')
   vim.cmd('normal! zz')
 end
 
--- Mapear em normal e visual para <C-e>
 vim.keymap.set(
   { "n", "v" },
   "<C-e>",
@@ -709,7 +696,6 @@ end, { desc = "AI Context Append: Append entire file to context file", silent = 
 
 -- AI Context Append (visual mode: selected text)
 vim.keymap.set("v", "<leader>aa", function()
-  -- Get the selected text
   vim.cmd('normal! "zy')
   local selected_text = vim.fn.getreg('z')
 
@@ -718,23 +704,19 @@ vim.keymap.set("v", "<leader>aa", function()
     return
   end
 
-  -- Path to the global context file
   local context_file = vim.fn.expand("~/.ai-context.txt")
 
-  -- Append the selected text to the file
   local file = io.open(context_file, "a")
   if not file then
     vim.notify("Failed to open context file: " .. context_file, vim.log.levels.ERROR)
     return
   end
-  -- Add separation lines if the file is not empty
+
   local file_size = vim.fn.getfsize(context_file)
   if file_size > 0 then
-    -- Add two empty lines for separation
     file:write("\n\n")
   end
 
-  -- Write the file path comment and the selected text
   file:write("// " .. vim.fn.expand("%") .. "\n")
   file:write(selected_text)
   file:close()
@@ -742,11 +724,11 @@ vim.keymap.set("v", "<leader>aa", function()
   vim.notify("Text appended to " .. context_file, vim.log.levels.INFO)
 end, { desc = "AI Grab Append: Append selected text to global context file", silent = true })
 
--- =======================================
+-- ================================================================
 -- Plugins
--- =======================================
+-- ================================================================
 
--- Botstrap lazy.nvim
+-- Bootstrap lazy.nvim
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not (vim.uv or vim.loop).fs_stat(lazypath) then
   local lazyrepo = "https://github.com/folke/lazy.nvim.git"
@@ -775,9 +757,9 @@ require("lazy").setup({
 
   spec = {
 
-    -- ===================
+    -- ================================
     -- Core / Essentials
-    -- ===================
+    -- ================================
 
     -- Tmux focus event support
     {
@@ -843,7 +825,7 @@ require("lazy").setup({
         require("markit").setup({
           -- any options if needed
         })
-        -- Mappings now assume the plugin is already loaded
+        -- Set in config (post-setup) so require("markit") is loaded
         vim.keymap.set("n", "<leader>md", require("markit").delete_line, { desc = "Delete marks on this line" })
         vim.keymap.set("n", "<leader>M",  require("markit").delete_buf,  { desc = "Delete all marks in buffer" })
         vim.keymap.set("n", "<leader>mt", require("markit").toggle,      { desc = "Toggle mark at this line" })
@@ -881,11 +863,8 @@ require("lazy").setup({
       end,
     },
 
-    -- Tree-sitter parser manager. Replaces archived nvim-treesitter/nvim-treesitter
-    -- (master branch unsupported on Neovim 0.12+; full plugin archived Apr 3 2026).
-    -- Requires tree-sitter CLI in PATH. TS indent not supported; built-in filetype
-    -- indent is used instead. Large-file guard (~line 188) disables regex syntax
-    -- but leaves TS highlight active -- same behavior as before.
+    -- Tree-sitter parser manager. Requires the tree-sitter CLI in PATH.
+    -- TS-based indent is unsupported; built-in filetype indent handles it.
     {
       "romus204/tree-sitter-manager.nvim",
       lazy = false,
@@ -1308,9 +1287,9 @@ require("lazy").setup({
       end,
     },
 
-    -- ===================
+    -- ================================
     -- Search
-    -- ===================
+    -- ================================
 
     -- Search by using *
     {
@@ -1427,7 +1406,6 @@ require("lazy").setup({
           -- Disable folds for maximum performance
           vim.wo.foldenable = false
 
-          -- Run Telescope
           search_fn(opts)
 
           -- Restore fold settings after closing Telescope
@@ -1475,9 +1453,9 @@ require("lazy").setup({
       end,
     },
 
-    -- ===================
+    -- ================================
     -- Diff
-    -- ===================
+    -- ================================
 
     -- Improves vim-diff
     { "chrisbra/vim-diff-enhanced" },
@@ -1495,9 +1473,9 @@ require("lazy").setup({
       end,
     },
 
-    -- ===================
+    -- ================================
     -- Git
-    -- ===================
+    -- ================================
 
     -- Git gutter signs, hunk navigation, hunk reset
     {
@@ -1542,10 +1520,8 @@ require("lazy").setup({
         -- Automatically refresh diffview on focus regain
         vim.api.nvim_create_autocmd("FocusGained", {
           callback = function()
-            -- Check if diffview is open
             local view = require("diffview.lib").get_current_view()
             if view then
-              -- Refresh the diffview
               vim.cmd("DiffviewRefresh")
             end
           end,
@@ -1693,15 +1669,15 @@ require("lazy").setup({
       end,
     },
 
-    -- ===================
+    -- ================================
     -- Snippets
-    -- ===================
+    -- ================================
 
-    -- Inside nvm-cmp completion engine, since I trigger snippet in completion, after : is typed
+    -- Inside nvim-cmp completion engine, since I trigger snippet in completion, after : is typed
 
-    -- ===================
+    -- ================================
     -- Auto Completion
-    -- ===================
+    -- ================================
 
     -- Main completion plugin
     {
@@ -1974,7 +1950,7 @@ require("lazy").setup({
           end,
         })
 
-        -- For other servers, we still use lspconfig for now
+        -- Remaining servers are configured through lspconfig
         local lspconfig = require("lspconfig")
 
         local on_attach = function(client, _)
@@ -1983,7 +1959,7 @@ require("lazy").setup({
           end
         end
 
-        -- Other LSP servers (keep these with lspconfig for now)
+        -- LSP servers handled by lspconfig
         local servers = {
           "pyright",      -- Python
           "gopls",        -- Go
@@ -2115,9 +2091,9 @@ require("lazy").setup({
       end,
     },
 
-    -- ===================
+    -- ================================
     -- Lint
-    -- ===================
+    -- ================================
 
     {
       "nvimtools/none-ls-extras.nvim",
@@ -2177,9 +2153,9 @@ require("lazy").setup({
       end,
     },
 
-    -- ===================
+    -- ================================
     -- AI
-    -- ===================
+    -- ================================
 
     -- VS Code-parity Claude Code integration (editable diffs).
     -- See CLAUDE.md for the /ide separate-pane and multi-instance workflow.
@@ -2257,9 +2233,9 @@ require("lazy").setup({
       end,
     },
 
-    -- ===================
+    -- ================================
     -- Previewers
-    -- ===================
+    -- ================================
 
     -- Markdown preview
     {
@@ -2282,9 +2258,9 @@ require("lazy").setup({
       end,
     },
 
-    -- ===================
+    -- ================================
     -- Text Alignment
-    -- ===================
+    -- ================================
 
     {
       "junegunn/vim-easy-align",
@@ -2298,14 +2274,11 @@ require("lazy").setup({
 -- Custom indentation conversion commands
 -- Convert spaces to tabs
 vim.api.nvim_create_user_command("ToTabs", function()
-  -- Save current position
   local view = vim.fn.winsaveview()
 
-  -- Execute the conversion
   vim.cmd([[set noexpandtab]])
   vim.cmd([[retab!]])
 
-  -- Restore position
   vim.fn.winrestview(view)
 
   vim.notify("Converted spaces to tabs", vim.log.levels.INFO)
@@ -2313,7 +2286,6 @@ end, {})
 
 -- Convert to 2 spaces
 vim.api.nvim_create_user_command("To2Spaces", function()
-  -- Save current position
   local view = vim.fn.winsaveview()
 
   -- Set values for 2-space indentation
@@ -2322,13 +2294,11 @@ vim.api.nvim_create_user_command("To2Spaces", function()
   vim.bo.softtabstop = 2
   vim.bo.expandtab = true
 
-  -- Execute the conversion
   vim.cmd([[retab]])
 
   -- Reindent the entire file
   vim.cmd([[normal! gg=G]])
 
-  -- Restore position
   vim.fn.winrestview(view)
 
   vim.notify("Converted to 2-space indentation", vim.log.levels.INFO)
@@ -2336,7 +2306,6 @@ end, {})
 
 -- Convert to 4 spaces
 vim.api.nvim_create_user_command("To4Spaces", function()
-  -- Save current position
   local view = vim.fn.winsaveview()
 
   -- Set values for 4-space indentation
@@ -2345,7 +2314,6 @@ vim.api.nvim_create_user_command("To4Spaces", function()
   vim.bo.softtabstop = 4
   vim.bo.expandtab = true
 
-  -- Execute the conversion
   vim.cmd([[retab]])
 
   -- Reindent the entire file
