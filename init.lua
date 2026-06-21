@@ -2173,6 +2173,46 @@ require("lazy").setup({
           diff_opts = { layout = "vertical" },
         })
 
+        -- Full-screen 2-pane diff when Claude edits a file that isn't on screen.
+        -- The plugin reuses the current window for a clean 2-pane diff only when
+        -- that window already shows the diff's original file; for any other file
+        -- it opens the original in a 3rd split, leaving the previous file beside
+        -- the diff. Pre-loading the original into the target window makes the
+        -- plugin's own reuse path fire, so the diff replaces the current buffer
+        -- and fills the screen with just the two panes.
+        --
+        -- Rides a private (_-prefixed) plugin function. The plugin's reuse-vs-
+        -- split decision is a raw string compare of the window's buffer name
+        -- against old_file_path; `:edit` resolves symlinks (e.g. /tmp ->
+        -- /private/tmp on macOS), so we resolve old_file_path to its real path
+        -- on both sides to keep that compare true. Write-back is unaffected --
+        -- the plugin records the diff against the websocket's own path, not this.
+        -- On a plugin rewrite the override silently stops applying; worst case is
+        -- the stock 3-pane layout, never a broken diff.
+        local ok_ccdiff, ccdiff = pcall(require, "claudecode.diff")
+        if ok_ccdiff and type(ccdiff._create_diff_view_from_window) == "function" then
+          local orig_create_diff_view = ccdiff._create_diff_view_from_window
+          ccdiff._create_diff_view_from_window = function(
+            target_window, old_file_path, new_buffer, tab_name,
+            is_new_file, terminal_win_in_new_tab, existing_buffer
+          )
+            if not is_new_file and old_file_path and vim.fn.filereadable(old_file_path) == 1 then
+              old_file_path = vim.fn.resolve(vim.fn.fnamemodify(old_file_path, ":p"))
+              if target_window
+                 and vim.api.nvim_win_is_valid(target_window)
+                 and vim.api.nvim_buf_get_name(vim.api.nvim_win_get_buf(target_window)) ~= old_file_path then
+                pcall(vim.api.nvim_win_call, target_window, function()
+                  vim.cmd("edit " .. vim.fn.fnameescape(old_file_path))
+                end)
+              end
+            end
+            return orig_create_diff_view(
+              target_window, old_file_path, new_buffer, tab_name,
+              is_new_file, terminal_win_in_new_tab, existing_buffer
+            )
+          end
+        end
+
         -- After a diff closes (accept OR reject), the plugin leaves the cursor
         -- at its pre-diff spot -- jump to the first changed line instead, so
         -- review continues where the edit was. No built-in cursor option exists,

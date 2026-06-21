@@ -56,3 +56,10 @@ Configured with `terminal = { provider = "none" }` because claude runs in a sepa
 
 - An autocmd on the plugin's `ClaudeCodeDiffOpened` event re-enables `wrap` on both panes; the global `FilterWritePre` wrap-on-diff handler covers only external vimdiff, never `:diffthis`.
 - The same event also drives the cursor-jump-to-first-change behavior; both are load-bearing customizations riding the plugin's `User` events.
+
+**Full-screen 2-pane diff override:** when Claude edits a file not currently on screen, the plugin opens its original in a 3rd split, leaving the previous file beside the diff.
+
+- A wrapper around the plugin's private `_create_diff_view_from_window` pre-loads the original into the target window, so the plugin's own reuse path fires and the diff fills the screen with just 2 panes.
+- It mirrors the plugin's raw `buffer-name == old_file_path` equality check.
+- On a plugin rewrite the override silently stops applying and the stock 3-pane layout returns -- it can never break the diff.
+- This is intentional, not dead code: do not remove it as a stray monkey-patch.
