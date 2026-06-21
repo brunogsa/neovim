@@ -334,10 +334,10 @@ vim.opt.shortmess:append("c")
 -- Height of bottom command panel
 vim.opt.cmdheight = 1
 
--- Add a line above the cursor - Disable for better performance
+-- Highlight current line (disable to reduce redraw cost)
 vim.opt.cursorline = true
 
--- Line numbers - Disable for better performance
+-- Show line numbers (disable to reduce redraw cost)
 vim.opt.number = true
 -- set relativenumber
 
@@ -348,11 +348,6 @@ vim.opt.textwidth = 0 -- disable hard wrap; rely on soft wrap above
 -- Transparency in some terminals
 vim.api.nvim_set_hl(0, "Normal", { ctermbg = "none" })
 vim.api.nvim_set_hl(0, "NonText", { ctermbg = "none" })
-
--- Colorscheme for vimdiff
--- if vim.opt.diff then
---   vim.cmd.colorscheme("jellybeans")
--- end
 
 -- General vision
 vim.opt.lbr = true
@@ -421,12 +416,6 @@ vim.keymap.set('', 'g<C-a>', '<Nop>', { noremap = false, silent = true })
 vim.keymap.set('', '<C-x>', '<Nop>', { noremap = false, silent = true })
 vim.keymap.set('', 'g<C-x>', '<Nop>', { noremap = false, silent = true })
 
--- Resize windows
--- nnoremap <silent><leader><right> :vertical resize -5<cr>
--- nnoremap <silent><leader><left> :vertical resize +5<cr>
--- nnoremap <silent><leader><up> :resize +5<cr>
--- nnoremap <silent><leader><down> :resize -5<cr>
-
 -- Toggles the number lines
 vim.keymap.set(
   'n',
@@ -457,7 +446,8 @@ vim.keymap.set(
 -- Selected last pasted text
 vim.keymap.set('n', 'gp', "V']", { silent = true })
 
--- Autoformat pasted text, and keep cursor in the best place
+-- Autoformat pasted text.
+-- Keep the cursor in the best place.
 vim.keymap.set({ 'n', 'v' }, 'p', function()
   local win = 0
   local pos = vim.api.nvim_win_get_cursor(win)
@@ -657,7 +647,8 @@ vim.keymap.set("v", "<leader>ay", function()
     return
   end
 
-  -- Exit visual mode so that '< and '> marks are set, then read them
+  -- Exit visual mode so the '< and '> marks are set.
+  -- Then read them.
   vim.cmd('normal! \x1b')
   local start_line = vim.fn.line("'<")
   local end_line = vim.fn.line("'>")
@@ -848,7 +839,8 @@ require("lazy").setup({
     -- Better paste behavior
     { "conradirwin/vim-bracketed-paste" },
 
-    -- Smooth scrolling, for avoiding loosing where you are
+    -- Smooth scrolling.
+    -- Avoids losing your place while moving.
     {
       "karb94/neoscroll.nvim",
       event = "VeryLazy",
@@ -864,7 +856,8 @@ require("lazy").setup({
     },
 
     -- Tree-sitter parser manager. Requires the tree-sitter CLI in PATH.
-    -- TS-based indent is unsupported; built-in filetype indent handles it.
+    -- TS-based indent is unsupported.
+    -- Built-in filetype indent handles it.
     {
       "romus204/tree-sitter-manager.nvim",
       lazy = false,
@@ -1499,7 +1492,8 @@ require("lazy").setup({
         vim.keymap.set("n", "]h", function() gs.nav_hunk("next") end, { desc = "Next Git hunk" })
         vim.keymap.set("n", "[h", function() gs.nav_hunk("prev") end, { desc = "Previous Git hunk" })
 
-        -- Reset hunk / buffer (discard unstaged changes; native `u` undoes the reset)
+        -- Reset hunk / buffer (discards unstaged changes).
+        -- Native `u` undoes the reset.
         vim.keymap.set("n", "<leader>hr", gs.reset_hunk, { desc = "Reset Git hunk" })
         vim.keymap.set("v", "<leader>hr", function()
           gs.reset_hunk({ vim.fn.line("."), vim.fn.line("v") })
@@ -1673,7 +1667,8 @@ require("lazy").setup({
     -- Snippets
     -- ================================
 
-    -- Inside nvim-cmp completion engine, since I trigger snippet in completion, after : is typed
+    -- Snippets live inside the nvim-cmp completion engine below.
+    -- I trigger them from completion, after : is typed.
 
     -- ================================
     -- Auto Completion
