@@ -51,3 +51,8 @@ Configured with `terminal = { provider = "none" }` because claude runs in a sepa
 
 - It blocks the very edits that would remove it, and hook changes reload only on Claude restart.
 - claudecode.nvim installs no hook, so it cannot lock the session out.
+
+**Diff-window soft wrap:** the plugin builds its diff with `:diffthis`, which force-resets `wrap` to off, so long lines run off-screen during review.
+
+- An autocmd on the plugin's `ClaudeCodeDiffOpened` event re-enables `wrap` on both panes; the global `FilterWritePre` wrap-on-diff handler covers only external vimdiff, never `:diffthis`.
+- The same event also drives the cursor-jump-to-first-change behavior; both are load-bearing customizations riding the plugin's `User` events.

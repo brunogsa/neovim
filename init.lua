@@ -2205,6 +2205,23 @@ require("lazy").setup({
           end,
         })
 
+        -- Re-enable soft wrap on both diff panes. `:diffthis` (used by the
+        -- plugin) force-resets 'wrap' to off, so long lines run off-screen and
+        -- are hard to review. The global FilterWritePre wrap-on-diff handler only
+        -- covers external vimdiff, never :diffthis -- this covers claudecode's.
+        vim.api.nvim_create_autocmd("User", {
+          group = jump_grp,
+          pattern = "ClaudeCodeDiffOpened",
+          callback = function(ev)
+            local d = ev.data or {}
+            for _, win in ipairs({ d.diff_window, d.target_window }) do
+              if win and vim.api.nvim_win_is_valid(win) then
+                vim.api.nvim_set_option_value("wrap", true, { win = win })
+              end
+            end
+          end,
+        })
+
         -- On close (any reason), focus the file's window and jump to that line.
         -- Deferred so it runs after the plugin's own layout/cursor cleanup.
         vim.api.nvim_create_autocmd("User", {
