@@ -509,11 +509,15 @@ vim.keymap.set('v', '=', function()
   vim.o.lazyredraw = originalConfig
 end, { silent = true })
 
+-- Cross-OS file opener for the preview keymaps below.
+-- A `:!` shell is non-interactive, so the user's `open` alias isn't loaded; call the real binary.
+local preview_open = vim.fn.has('mac') == 1 and 'open' or 'xdg-open'
+
 -- Preview for HTML
 vim.keymap.set(
   'n',
   '<leader>vh',
-  ':!open % &<cr>',
+  ':!' .. preview_open .. ' % &<cr>',
   { noremap = false, silent = true, desc = "Preview HTML file" }
 )
 
@@ -521,7 +525,7 @@ vim.keymap.set(
 vim.keymap.set(
   'n',
   '<leader>vo',
-  ':!rm -fr /tmp/brunogsa-vim-openapi-preview.html && npx redocly build-docs % --output /tmp/brunogsa-vim-openapi-preview.html && open /tmp/brunogsa-vim-openapi-preview.html &<cr>',
+  ':!rm -fr /tmp/brunogsa-vim-openapi-preview.html && npx redocly build-docs % --output /tmp/brunogsa-vim-openapi-preview.html && ' .. preview_open .. ' /tmp/brunogsa-vim-openapi-preview.html &<cr>',
   { noremap = false, silent = true, desc = "Preview OpenAPI spec" }
 )
 
@@ -529,9 +533,27 @@ vim.keymap.set(
 vim.keymap.set(
   'n',
   '<leader>va',
-  ':!rm -fr /tmp/brunogsa-vim-asyncapi-preview && ag % @asyncapi/html-template -o /tmp/brunogsa-vim-asyncapi-preview && open /tmp/brunogsa-vim-asyncapi-preview/index.html &<cr>',
+  ':!rm -fr /tmp/brunogsa-vim-asyncapi-preview && ag % @asyncapi/html-template -o /tmp/brunogsa-vim-asyncapi-preview && ' .. preview_open .. ' /tmp/brunogsa-vim-asyncapi-preview/index.html &<cr>',
   { noremap = false, silent = true, desc = "Preview AsyncAPI spec" }
 )
+
+-- Preview for Markdown (render current buffer to a single-file HTML in /tmp, then open)
+vim.keymap.set('n', '<leader>vM', function()
+  vim.cmd('write')
+  local src = vim.fn.expand('%:p')
+  if not src:match('%.md$') then
+    vim.notify('md-to-html: current buffer is not a .md file', vim.log.levels.WARN)
+    return
+  end
+  local out = '/tmp/' .. vim.fn.expand('%:t:r') .. '.html'
+  local res = vim.fn.system({ vim.fn.expand('~/.local/bin/md-to-html'), src, out })
+  if vim.v.shell_error ~= 0 then
+    vim.notify('md-to-html failed:\n' .. res, vim.log.levels.ERROR)
+    return
+  end
+  vim.fn.jobstart({ preview_open, out }, { detach = true })
+  vim.notify('md-to-html -> ' .. out)
+end, { noremap = true, silent = true, desc = "Preview Markdown as single-file HTML" })
 
 local function jump_to_parent_indent()
   -- record current position for jumplist (<C-o> return)
